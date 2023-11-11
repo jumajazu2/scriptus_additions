@@ -222,12 +222,12 @@ class _$_SettingsModel extends _SettingsModel {
       this.themeBrightness = Brightness.light,
       this.showSlovak = false,
       this.showSearch = false,
-      this.showFound = false,
+      this.showFound = true,
       this.showAssignedOne = false,
       this.showAssignedAll = false,
       this.showSavedFromApi = false,
       this.showObject = false,
-      this.exportHtmlWithOriginalVerse = false})
+      this.exportHtmlWithOriginalVerse = true})
       : super._();
 
   factory _$_SettingsModel.fromJson(Map<String, dynamic> json) =>

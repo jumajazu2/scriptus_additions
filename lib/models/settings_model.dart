@@ -26,12 +26,12 @@ class SettingsModel with _$SettingsModel {
     @Default(Brightness.light) Brightness themeBrightness,
     @Default(false) bool showSlovak,
     @Default(false) bool showSearch,
-    @Default(false) bool showFound,
+    @Default(true) bool showFound,
     @Default(false) bool showAssignedOne,
     @Default(false) bool showAssignedAll,
     @Default(false) bool showSavedFromApi,
     @Default(false) bool showObject,
-    @Default(false) bool exportHtmlWithOriginalVerse,
+    @Default(true) bool exportHtmlWithOriginalVerse,
   }) = _SettingsModel;
   // ({
   //   required this.themeMode,
