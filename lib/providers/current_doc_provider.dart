@@ -255,6 +255,68 @@ void replaceSegmentTextWithVerse(WidgetRef ref, BibleVerse verse) {
   //   reference: '${verse.bookAbb} ${verse.bibleChapter}:${verse.verse}',))
 }
 
+void assignVerseToSegment(WidgetRef ref, BibleVerse verse) {
+  final segmentIndex = ref.watch(editedSegmentIndexProvider);
+  final segment = ref.watch(sentenceProvider);
+  // Place newPlace = Place(
+  //   bookName: (verse.bookAbb ?? '').trim(),
+  //   bookId: verse.bookId ?? 0,
+  //   segmentId: 0,
+  //   chapterNumber: verse.bibleChapter ?? 0,
+  //   verseStartNumber: verse.verse ?? 0,
+  //   verseEndNumber: verse.verse ?? 0,
+  //   verseText: verse.content,
+  //   meetingId: ref.watch(selectedMeetingProvider).id ?? 0,
+  //   timePosition: segment.startTime,
+  // );
+
+  // ref.read(placeRepositoryProvider).savePlace(newPlace);
+  // ref.read(currentTranscriptProvider.notifier).addPlace(segmentIndex, newPlace);
+  if (segmentIndex != null) {
+    ref
+        .read(currentTranscriptProvider.notifier)
+        .assignBibleVerse(segmentIndex, verse);
+    assignVerseToSegmentPlaces(ref, verse);
+  }
+
+  // ref.read(placeRepositoryProvider).createPlace(place: Place(
+  //   name: verse.content,
+  //   type: 'scripture',
+  //   reference: '${verse.bookAbb} ${verse.bibleChapter}:${verse.verse}',))
+}
+
+void assignVerseToSegmentPlaces(WidgetRef ref, BibleVerse verse) {
+  final segmentIndex = ref.watch(editedSegmentIndexProvider);
+  if (segmentIndex == null) {
+    return;
+  }
+  final segment = ref.watch(sentenceProvider);
+  Place newPlace = Place(
+    bookName: (verse.bookAbb ?? '').trim(),
+    bookId: verse.bookId ?? 0,
+    segmentId: 0,
+    chapterNumber: verse.bibleChapter ?? 0,
+    verseStartNumber: verse.verse ?? 0,
+    verseEndNumber: verse.verse ?? 0,
+    verseText: verse.content,
+    meetingId: ref.watch(selectedMeetingProvider).id ?? 0,
+    timePosition: segment.startTime,
+  );
+  if (segment.places.contains(newPlace)) {
+    return;
+  }
+  ref.read(placeRepositoryProvider).savePlace(newPlace);
+  ref.read(currentTranscriptProvider.notifier).addPlace(segmentIndex, newPlace);
+  ref
+      .read(currentTranscriptProvider.notifier)
+      .assignBibleVerse(segmentIndex, verse);
+
+  // ref.read(placeRepositoryProvider).createPlace(place: Place(
+  //   name: verse.content,
+  //   type: 'scripture',
+  //   reference: '${verse.bookAbb} ${verse.bibleChapter}:${verse.verse}',))
+}
+
 void saveId(WidgetRef ref, int id) {
   ref.read(currentTranscriptProvider.notifier).saveId(id);
 }
