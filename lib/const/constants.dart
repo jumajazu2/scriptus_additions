@@ -1,0 +1,242 @@
+class BookNameConverter {
+  static final BookNameConverter _singleton = BookNameConverter._internal();
+
+  factory BookNameConverter() {
+    return _singleton;
+  }
+
+  BookNameConverter._internal();
+
+  static const List<String> deBookNames = [
+    "1Mo",
+    "2Mo",
+    "3Mo",
+    "4Mo",
+    "5Mo",
+    "Jos",
+    "Ri",
+    "Rt",
+    "1Sam",
+    "2Sam",
+    "1Kö",
+    "2Kö",
+    "1Chr",
+    "2Chr",
+    "Esr",
+    "Neh",
+    "Est",
+    "Hi",
+    "Ps",
+    "Spr",
+    "Pred",
+    "Hl",
+    "Jes",
+    "Jer",
+    "Kla",
+    "Hes",
+    "Dan",
+    "Hos",
+    "Joe",
+    "Am",
+    "Ob",
+    "Jon",
+    "Mi",
+    "Nah",
+    "Hab",
+    "Zeph",
+    "Hag",
+    "Sach",
+    "Mal",
+    "Mt",
+    "Mk",
+    "Lk",
+    "Joh",
+    "Apg",
+    "Röm",
+    "1Kor ",
+    "2Kor ",
+    "Gal ",
+    "Eph ",
+    "Phil ",
+    "Kol ",
+    "1Th",
+    "2Th",
+    "1Tim ",
+    "2Tim ",
+    "Tit ",
+    "Phlm ",
+    "Hebr ",
+    "Jak ",
+    "1Pt",
+    "2Pt",
+    "1Jo",
+    "2Jo",
+    "3Jo",
+    "Jud",
+    "Offb"
+  ];
+
+  static const List<String> gigiRoBookNames = [
+    "Gen",
+    "Ex",
+    "Lev",
+    "Num",
+    "Deut",
+    "Ios",
+    "Jud",
+    "Rut",
+    "1 Sam",
+    "2 Sam",
+    "1 Împ",
+    "2  Împ",
+    "1 Cron",
+    "2 Cron",
+    "Ezra",
+    "Neem",
+    "Est",
+    "Iov",
+    "Ps",
+    "Prov",
+    "Ecl",
+    "Cânt",
+    "Is",
+    "Ier",
+    "Plâng",
+    "Ezec",
+    "Dan",
+    "Osea",
+    "Ioel",
+    "Amos",
+    "Obad",
+    "Iona",
+    "Mica",
+    "Naum",
+    "Hab",
+    "Țef",
+    "Hag",
+    "Zah",
+    "Mal",
+    "Mat",
+    "Mc",
+    "Lc",
+    "In",
+    "Fapte",
+    "Rom",
+    "1 Cor",
+    "2 Cor",
+    "Gal",
+    "Ef",
+    "Fil",
+    "Col",
+    "1 Tes",
+    "2 Tes",
+    "1 Tim",
+    "2 Tim",
+    "Tit",
+    "Flm",
+    "Evr",
+    "Iac",
+    "1 Pet",
+    "2 Pet",
+    "1 In",
+    "2 In",
+    "3 In",
+    "Iuda",
+    "Ap (Des)"
+  ];
+
+  static const List<String> gigiDeBookNames = [
+    "1.Mose",
+    "2.Mose",
+    "3.Mose",
+    "4.Mose",
+    "5.Mose",
+    "Jos",
+    "Rich",
+    "Ruth",
+    "1Sam",
+    "2Sam",
+    "1.Kön",
+    "2.Kön",
+    "1.Chr",
+    "2.Chr",
+    "Esra",
+    "Neh",
+    "Est",
+    "Hiob",
+    "Ps",
+    "Spr",
+    "Pred",
+    "Hld",
+    "Jes",
+    "Jer",
+    "Klgl",
+    "Hes",
+    "Dan",
+    "Hos",
+    "Joel",
+    "Am",
+    "Obd",
+    "Jona",
+    "Mich",
+    "Nah",
+    "Hab",
+    "Zeph",
+    "Hag",
+    "Sach",
+    "Mal",
+    "Mt",
+    "Mk",
+    "Lk",
+    "Joh",
+    "Apg",
+    "Röm",
+    "1.Kor",
+    "2.Kor",
+    "Gal",
+    "Eph",
+    "Phil",
+    "Kol",
+    "1.Thess",
+    "2.Thess",
+    "1.Tim",
+    "2.Tim",
+    "Tit",
+    "Phlm",
+    "Heb",
+    "Jak",
+    "1.Petr",
+    "2.Petr",
+    "1.Joh",
+    "2.Joh",
+    "3.Joh",
+    "Jud",
+    "Offb"
+  ];
+
+  final Map<String, String> deToGigiRo =
+      Map.fromIterables(deBookNames, gigiRoBookNames);
+  final Map<String, String> deToGigiDe =
+      Map.fromIterables(deBookNames, gigiDeBookNames);
+  final Map<String, String> gigiRoToGigiDe =
+      Map.fromIterables(gigiRoBookNames, gigiDeBookNames);
+  final Map<String, String> gigiDeToDe =
+      Map.fromIterables(gigiDeBookNames, deBookNames);
+
+  String convertDeToGigiRo(String deBookName) =>
+      deToGigiRo[deBookName] ?? deBookName;
+  String convertDeToGigiDe(String deBookName) =>
+      deToGigiDe[deBookName] ?? deBookName;
+  String convertGigiRoToGigiDe(String gigiRoBookName) =>
+      gigiRoToGigiDe[gigiRoBookName] ?? gigiRoBookName;
+  String convertGigiDeToDe(String gigiDeBookName) =>
+      gigiDeToDe[gigiDeBookName] ?? gigiDeBookName;
+}
+
+// void main() {
+//   var converter = BookNameConverter();
+
+//   print(converter.convertDeToGigiRo("1Mo")); // Should print "Gen"
+//   print(converter.convertDeToGigiDe("1Mo")); // Should print "1.Mose"
+//   print(converter.convertGigiRoToGigiDe("Gen")); // Should print "1.Mose"
+// }
