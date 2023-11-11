@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'package:csv/csv_settings_autodetection.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path/path.dart' as path;
@@ -1027,7 +1026,6 @@ class DocumentService {
       //   sb.write(' '); // Space between segments in the same paragraph
       // }
     }
-    ;
 
     sb.write('</p></body></html>');
 
@@ -1044,6 +1042,7 @@ class DocumentService {
 
     // Show the file save dialog
     final saveFileResultPath = await FilePicker.platform.saveFile(
+      // lockParentWindow: true,
       // initialDirectory: filePath,
       fileName: '$fileName-$language.html',
       dialogTitle: 'Save the HTML file',
