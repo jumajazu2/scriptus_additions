@@ -106,168 +106,184 @@ class FoundScriptures extends ConsumerWidget {
       width: 400,
       // height: 200,
       // color: Colors.blueGrey,
-      child: apiCallStatus == ApiCallStatus.loading
-          ? const Center(
-              child: LinearProgressIndicator(
-                color: Colors.white,
-              ),
-            )
-          : verses.isEmpty
-              ? const Text('')
-              : ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: verses.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // if (translation.isNotEmpty)
-                        //   Text(translation,
-                        //       style: const TextStyle(
-                        //         fontSize: 12,
-                        //         color: Colors.white,
-                        //       )),
-                        apiCallStatus == ApiCallStatus.loading
-                            ? const Center(
-                                child: LinearProgressIndicator(
-                                  color: Colors.white,
-                                ),
-                              )
-                            : Container(
-                                color: Colors.blueGrey[600],
-                                margin: const EdgeInsets.all(0),
-                                padding: const EdgeInsets.all(10),
-                                child: Text(
-                                  "${verses[index].bookAbb} ${verses[index].bibleChapter}:${verses[index].verse}: ${verses[index].content}",
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                        Row(
-                          // buttonPadding: const EdgeInsets.all(0),
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          // alignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              highlightColor: Colors.red,
-                              color: Colors.blue,
-                              tooltip: "Insert Reference at saved position",
-                              splashRadius: 20,
-                              iconSize: 18,
-                              onPressed: () {
-                                insertReferenceToSavedPosition(
-                                    ref,
-                                    verses[index],
-                                    ref.watch(
-                                        editedTextCursorPositionProvider));
-                                // ref.read(foundVersesProvider.notifier).remove(index);
-                              },
-                              icon: const Icon(Icons.merge),
-                            ),
-                            IconButton(
-                              highlightColor: Colors.red,
-                              color: Colors.blue,
-                              tooltip:
-                                  "Replace selected segment with this verse",
-                              splashRadius: 20,
-                              iconSize: 18,
-                              onPressed: () {
-                                replaceSegmentTextWithVerse(ref, verses[index]);
-                                // ref.read(foundVersesProvider.notifier).remove(index);
-                              },
-                              icon: const Icon(Icons.find_replace),
-                            ),
-                            TextButton(
-                              // highlightColor: Colors.red,
-                              // tooltip: "Replace selected segment with this verse",
-                              // splashRadius: 20,
-                              // iconSize: 18,
-                              onPressed: () {
-                                addReferenceToEndOfText(
-                                  ref,
-                                  verses[index],
-                                );
-                                // ref.read(foundVersesProvider.notifier).remove(index);
-                              },
-                              child: const Text("[xx]"),
-                              // icon: const Icon(Icons.find_replace),
-                            ),
-                            TextButton(
-                              // highlightColor: Colors.red,
-                              // tooltip: "Replace selected segment with this verse",
-                              // splashRadius: 20,
-                              // iconSize: 18,
-                              onPressed: () {
-                                addVerseNumberToStart(
-                                  ref,
-                                  verses[index],
-                                );
-                                // ref.read(foundVersesProvider.notifier).remove(index);
-                              },
-                              child: const Text("(x)"),
-                              // icon: const Icon(Icons.find_replace),
-                            ),
-                            // TextButton(
-                            //   // highlightColor: Colors.red,
-                            //   // tooltip: "Replace selected segment with this verse",
-                            //   // splashRadius: 20,
-                            //   // iconSize: 18,
-                            //   onPressed: () {
-                            //     replaceNextSegmentTextWithNextVerse(
-                            //       ref,
-                            //       verses[index],
-                            //     );
-                            //     // ref.read(foundVersesProvider.notifier).remove(index);
-                            //   },
-                            //   child: const Text(">>"),
-                            //   // icon: const Icon(Icons.find_replace),
-                            // ),
-                            // IconButton(
-                            //   tooltip:
-                            //       "Replace selected Text in the segment with this verse",
-                            //   splashRadius: 20,
-                            //   iconSize: 18,
-                            //   onPressed: () {
-                            //     // ref.read(foundVersesProvider.notifier).remove(index);
-                            //   },
-                            //   icon: const Icon(Icons.find_replace),
-                            // ),
-                          ],
-                        ),
-                        // Row(
-                        //   children: [
-                        //     Checkbox(
-                        //         // hoverColor: Colors.red[200],
-                        //         checkColor: Colors.white,
-                        //         fillColor: MaterialStateProperty.all(Colors.red),
-                        //         value: ref.watch(fullReferenceChecBoxProvider),
-                        //         onChanged: (a) => ref
-                        //             .read(fullReferenceChecBoxProvider.notifier)
-                        //             .state = a!),
-                        //     const Text("Copy Full Reference"),
-                        //   ],
-                        // ),
-                      ],
-                    );
-                  },
-                  // children: [
-                  //   const Text('Related Scriptures'),
-                  //   for (var a in verses)
-                  //     Container(
-                  //       color: Colors.blueGrey[600],
-                  //       margin: const EdgeInsets.only(bottom: 4),
-                  //       padding: const EdgeInsets.all(4),
-                  //       child: Text(
-                  //         "${a.bookAbb} ${a.bibleChapter}:${a.verse}: ${a.content}",
-                  //         style: const TextStyle(
-                  //           fontSize: 16,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   // Text(returnedText),
-                  // ],
+      child: Column(
+        children: [
+          if (apiCallStatus == ApiCallStatus.loading)
+            const SizedBox(
+              height: 10,
+              child: Center(
+                child: LinearProgressIndicator(
+                  color: Colors.white,
                 ),
+              ),
+            ),
+          if (verses.isNotEmpty)
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: verses.length,
+                itemBuilder: (context, index) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // if (translation.isNotEmpty)
+                      //   Text(translation,
+                      //       style: const TextStyle(
+                      //         fontSize: 12,
+                      //         color: Colors.white,
+                      //       )),
+                      // apiCallStatus == ApiCallStatus.loading
+                      //     ? const Center(
+                      //         child: LinearProgressIndicator(
+                      //           color: Colors.white,
+                      //         ),
+                      //       )
+                      Container(
+                        color: Colors.blueGrey[600],
+                        margin: const EdgeInsets.all(0),
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          "${verses[index].bookAbb} ${verses[index].bibleChapter}:${verses[index].verse}: ${verses[index].content}",
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        // buttonPadding: const EdgeInsets.all(0),
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        // alignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            highlightColor: Colors.red,
+                            color: Colors.blue,
+                            tooltip: "Insert Reference at saved position",
+                            splashRadius: 20,
+                            iconSize: 18,
+                            onPressed: () {
+                              insertReferenceToSavedPosition(ref, verses[index],
+                                  ref.watch(editedTextCursorPositionProvider));
+                              // ref.read(foundVersesProvider.notifier).remove(index);
+                            },
+                            icon: const Icon(Icons.merge),
+                          ),
+                          IconButton(
+                            highlightColor: Colors.red,
+                            color: Colors.blue,
+                            tooltip: "Replace selected segment with this verse",
+                            splashRadius: 20,
+                            iconSize: 18,
+                            onPressed: () {
+                              replaceSegmentTextWithVerse(ref, verses[index]);
+                              // ref.read(foundVersesProvider.notifier).remove(index);
+                            },
+                            icon: const Icon(Icons.find_replace),
+                          ),
+                          IconButton(
+                            highlightColor: Colors.red,
+                            color: Colors.blue,
+                            tooltip: "Assign selected this verse to segment",
+                            splashRadius: 20,
+                            iconSize: 18,
+                            onPressed: () {
+                              assignVerseToSegment(ref, verses[index]);
+                              // ref.read(foundVersesProvider.notifier).remove(index);
+                            },
+                            icon: const Icon(Icons.assignment_add),
+                          ),
+                          TextButton(
+                            // highlightColor: Colors.red,
+                            // tooltip: "Replace selected segment with this verse",
+                            // splashRadius: 20,
+                            // iconSize: 18,
+                            onPressed: () {
+                              addReferenceToEndOfText(
+                                ref,
+                                verses[index],
+                              );
+                              // ref.read(foundVersesProvider.notifier).remove(index);
+                            },
+                            child: const Text("[xx]"),
+                            // icon: const Icon(Icons.find_replace),
+                          ),
+                          TextButton(
+                            // highlightColor: Colors.red,
+                            // tooltip: "Replace selected segment with this verse",
+                            // splashRadius: 20,
+                            // iconSize: 18,
+                            onPressed: () {
+                              addVerseNumberToStart(
+                                ref,
+                                verses[index],
+                              );
+                              // ref.read(foundVersesProvider.notifier).remove(index);
+                            },
+                            child: const Text("(x)"),
+                            // icon: const Icon(Icons.find_replace),
+                          ),
+                          // TextButton(
+                          //   // highlightColor: Colors.red,
+                          //   // tooltip: "Replace selected segment with this verse",
+                          //   // splashRadius: 20,
+                          //   // iconSize: 18,
+                          //   onPressed: () {
+                          //     replaceNextSegmentTextWithNextVerse(
+                          //       ref,
+                          //       verses[index],
+                          //     );
+                          //     // ref.read(foundVersesProvider.notifier).remove(index);
+                          //   },
+                          //   child: const Text(">>"),
+                          //   // icon: const Icon(Icons.find_replace),
+                          // ),
+                          // IconButton(
+                          //   tooltip:
+                          //       "Replace selected Text in the segment with this verse",
+                          //   splashRadius: 20,
+                          //   iconSize: 18,
+                          //   onPressed: () {
+                          //     // ref.read(foundVersesProvider.notifier).remove(index);
+                          //   },
+                          //   icon: const Icon(Icons.find_replace),
+                          // ),
+                        ],
+                      ),
+                      // Row(
+                      //   children: [
+                      //     Checkbox(
+                      //         // hoverColor: Colors.red[200],
+                      //         checkColor: Colors.white,
+                      //         fillColor: MaterialStateProperty.all(Colors.red),
+                      //         value: ref.watch(fullReferenceChecBoxProvider),
+                      //         onChanged: (a) => ref
+                      //             .read(fullReferenceChecBoxProvider.notifier)
+                      //             .state = a!),
+                      //     const Text("Copy Full Reference"),
+                      //   ],
+                      // ),
+                    ],
+                  );
+                },
+                // children: [
+                //   const Text('Related Scriptures'),
+                //   for (var a in verses)
+                //     Container(
+                //       color: Colors.blueGrey[600],
+                //       margin: const EdgeInsets.only(bottom: 4),
+                //       padding: const EdgeInsets.all(4),
+                //       child: Text(
+                //         "${a.bookAbb} ${a.bibleChapter}:${a.verse}: ${a.content}",
+                //         style: const TextStyle(
+                //           fontSize: 16,
+                //         ),
+                //       ),
+                //     ),
+                //   // Text(returnedText),
+                // ],
+              ),
+            ),
+        ],
+      ),
     );
   }
 }
