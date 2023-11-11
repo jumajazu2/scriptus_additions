@@ -347,11 +347,13 @@ class SegmentTable extends ConsumerWidget {
                           child: Container(
                             height: double.infinity,
                             decoration: BoxDecoration(
+                              // set  color: Colors.grey[900] if theme is dark, color: Colors.white if theme is light
                               color: sentenceState.startTime == s.startTime
                                   ? Colors.black12
-                                  : (sentenceState.isScripture
-                                      ? Colors.black12
-                                      : Colors.black12),
+                                  : Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? Colors.grey[800]
+                                      : Colors.white,
                               border: const Border(
                                 top: BorderSide(
                                   width: 1,
@@ -382,7 +384,10 @@ class SegmentTable extends ConsumerWidget {
                                           fontFamily: 'Courier New',
                                           color: s.places.isNotEmpty
                                               ? Colors.blue
-                                              : Colors.black,
+                                              : Theme.of(context).brightness ==
+                                                      Brightness.dark
+                                                  ? Colors.grey[300]
+                                                  : Colors.grey[800],
                                           fontStyle: s.isScripture || s.isSong
                                               ? FontStyle.italic
                                               : FontStyle.normal,
