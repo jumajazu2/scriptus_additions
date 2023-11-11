@@ -10,7 +10,7 @@ class SettingsProvider extends StateNotifier<SettingsModel> {
   SettingsProvider() : super(const SettingsModel());
 
   void updateSettings(SettingsModel settings) {
-    print(settings);
+    // print(settings);
     state = settings;
   }
 }

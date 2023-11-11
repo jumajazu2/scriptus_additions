@@ -96,7 +96,8 @@ class PlaceRepository {
 
     BibleVerse slovak =
         await mskDBProvider.getVerseInOtherLanguage(place, 'sk');
-    // print(slovak);
+    print('slovak');
+    print(slovak);
     Place slovakPlace = Place(
       language: 'sk',
       meetingId: place.meetingId,
