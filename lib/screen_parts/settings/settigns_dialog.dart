@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:scriptus/extensions/meetings_button.dart';
 import 'package:scriptus/providers/settings_provider.dart';
 
 class SettingsDialog extends StatelessWidget {
@@ -21,6 +22,7 @@ class SettingsDialog extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                const LoadMeetingsButton(),
                 Consumer(
                   builder: (context, ref, child) {
                     return Column(
