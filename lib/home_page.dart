@@ -6,12 +6,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scriptus/audio/audio_player.dart';
 import 'package:scriptus/extensions/deepl_service.dart';
 import 'package:scriptus/extensions/document_service.dart';
-import 'package:scriptus/extensions/meetings_button.dart';
+import 'package:scriptus/extensions/file_services.dart';
 import 'package:scriptus/models/meeting.dart';
 import 'package:scriptus/models/transcript_data.dart';
 import 'package:scriptus/providers/current_doc_provider.dart';
 import 'package:scriptus/providers/meeting_provider.dart';
-import 'package:scriptus/providers/search_provider.dart';
 import 'package:scriptus/providers/sentence_providers.dart';
 import 'package:scriptus/providers/settings_provider.dart';
 import 'package:scriptus/repositories/transcript_data_repo.dart';
@@ -202,6 +201,10 @@ class HomePage extends ConsumerWidget {
         // title: Text('Scriptor  ${sc.position.pixels}'),
         actions: [
           // MaterialButton(
+          //   onPressed: () => clearTemporaryDirectory(),
+          //   child: const Text('list tmp files'),
+          // ),
+          // MaterialButton(
           //   onPressed: () => _importCSV(),
           //   child: const Text('Open CSV'),
           // ),
@@ -363,6 +366,7 @@ class HomePage extends ConsumerWidget {
           Consumer(
               builder: (context, ref, child) => MaterialButton(
                     color: Colors.lightGreen,
+                    hoverColor: Colors.green,
                     onPressed: () async {
                       int id = await ref
                           .read(transcriptRepositoryProvider)
@@ -385,6 +389,7 @@ class HomePage extends ConsumerWidget {
           const SizedBox(width: 10),
           Consumer(
               builder: (context, ref, child) => MaterialButton(
+                    hoverColor: Colors.green,
                     color: Colors.lightGreen,
                     onPressed: () =>
                         selectedTranscript.exportTranscriptToJson(ref),
@@ -394,7 +399,8 @@ class HomePage extends ConsumerWidget {
           const SizedBox(width: 10),
           Consumer(
               builder: (context, ref, child) => MaterialButton(
-                    color: Colors.green,
+                    color: Colors.lightGreen,
+                    hoverColor: Colors.green,
                     onPressed: () =>
                         selectedTranscript.loadTranscriptFromJson(ref),
                     child: const Icon(Icons.folder_open_sharp),
