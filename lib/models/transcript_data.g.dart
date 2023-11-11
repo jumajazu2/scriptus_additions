@@ -6,8 +6,8 @@ part of 'transcript_data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_TranscriptData _$$_TranscriptDataFromJson(Map<String, dynamic> json) =>
-    _$_TranscriptData(
+_$TranscriptDataImpl _$$TranscriptDataImplFromJson(Map<String, dynamic> json) =>
+    _$TranscriptDataImpl(
       id: json['id'] as int?,
       text: json['text'] as String,
       originalText: json['originalText'] as String,
@@ -17,10 +17,12 @@ _$_TranscriptData _$$_TranscriptDataFromJson(Map<String, dynamic> json) =>
           .map((e) => TranscriptSegment.fromJson(e as Map<String, dynamic>))
           .toList(),
       language: json['language'] as String,
+      mp3Language: json['mp3Language'] as String,
       meetingId: json['meetingId'] as int,
     );
 
-Map<String, dynamic> _$$_TranscriptDataToJson(_$_TranscriptData instance) =>
+Map<String, dynamic> _$$TranscriptDataImplToJson(
+        _$TranscriptDataImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'text': instance.text,
@@ -29,5 +31,6 @@ Map<String, dynamic> _$$_TranscriptDataToJson(_$_TranscriptData instance) =>
       'filePath': instance.filePath,
       'segments': instance.segments,
       'language': instance.language,
+      'mp3Language': instance.mp3Language,
       'meetingId': instance.meetingId,
     };

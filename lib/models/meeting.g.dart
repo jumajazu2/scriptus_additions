@@ -6,7 +6,8 @@ part of 'meeting.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Meeting _$$_MeetingFromJson(Map<String, dynamic> json) => _$_Meeting(
+_$MeetingImpl _$$MeetingImplFromJson(Map<String, dynamic> json) =>
+    _$MeetingImpl(
       id: json['id'] as int?,
       mpImage: json['mpImage'] as String?,
       link: json['link'] as String?,
@@ -34,7 +35,7 @@ _$_Meeting _$$_MeetingFromJson(Map<String, dynamic> json) => _$_Meeting(
           .toList(),
     );
 
-Map<String, dynamic> _$$_MeetingToJson(_$_Meeting instance) =>
+Map<String, dynamic> _$$MeetingImplToJson(_$MeetingImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'mpImage': instance.mpImage,

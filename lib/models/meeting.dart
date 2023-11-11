@@ -107,14 +107,18 @@ class Meeting with _$Meeting {
     // print(dateSlug);
   }
 
-  String get mp3Link {
+  String get mp3LinkBase {
     // print(this);
     if (city != null) {
       // final String vcity = city!.replaceAll('ü', 'u');
       var dateFormat = DateFormat("yyyy-MM-dd-HHmm")
           .format(DateTime.parse(meetingStart ?? '0000-00-00 00:00:00'));
       var city2 = removeDiacritics(city ?? '');
-      var filename = '$dateFormat-$city2-deutsch.mp3';
+
+      // var lang = '';
+      // fill lang based on whether loaded json file name contains string english, german, french etc.
+
+      var filename = '$dateFormat-$city2';
       var link = 'https://www.misia.sk/public/data/sermons/$filename';
       // print(link);
       // https://www.misia.sk/public/data/sermons/1981-09-27-1400-Zurich-deutsch.mp3
@@ -126,6 +130,11 @@ class Meeting with _$Meeting {
     // DateTime today = new DateTime.now();
     // String dateSlug ="${today.year.toString()}-${today.month.toString().padLeft(2,'0')}-${today.day.toString().padLeft(2,'0')}";
     // print(dateSlug);
+  }
+
+  String get mp3Link {
+    var link = '$mp3LinkBase-deutsch.mp3';
+    return link;
   }
 
   String get miroDate {

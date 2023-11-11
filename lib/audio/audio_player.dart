@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:scriptus/models/meeting.dart';
+import 'package:scriptus/providers/current_doc_provider.dart';
 import 'package:scriptus/providers/meeting_provider.dart';
 import 'common.dart';
 import 'package:rxdart/rxdart.dart';
@@ -74,11 +75,14 @@ class AudioPlayerWidgetState extends ConsumerState<AudioPlayerWidget>
     });
     // Try to load audio from a source and catch any errors.
     try {
-      // AAC example: https://dl.espressif.com/dl/audio/ff-16b-2c-44100hz.aac
-      await _player
-          .setAudioSource(AudioSource.uri(Uri.parse(_meeting.mp3Link)));
-      // await _player.setAudioSource(AudioSource.file(
-      //     '/Users/miro/Documents/Ewald Frank/_Transcriptions/1981-08-30-1400-Zürich-deutsch.mp3 large-ANE/1981-08-30-1400-Zürich-deutsch.mp3-56kbps.mp3'));
+      if (_meeting.mp3LinkBase != '') {
+        String l = ref.watch(currentTranscriptProvider).mp3Language;
+        print("INIT:: ${_meeting.mp3LinkBase}-$l.mp3");
+        await _player.setAudioSource(
+            AudioSource.uri(Uri.parse("${_meeting.mp3LinkBase}-$l.mp3")));
+        // await _player.setAudioSource(AudioSource.file(
+        //     '/Users/miro/Documents/Ewald Frank/_Transcriptions/1981-08-30-1400-Zürich-deutsch.mp3 large-ANE/1981-08-30-1400-Zürich-deutsch.mp3-56kbps.mp3'));
+      }
     } catch (e) {
       print("AudioPlayerWidget >> _init - Error loading audio source: $e");
       // Dispose of the player if it fails to load a source.

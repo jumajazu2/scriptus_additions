@@ -52,12 +52,12 @@ class SavedVerses extends ConsumerWidget {
     // Check if the data is available
     if (meetingsAsyncValue is AsyncData<List<Meeting>>) {
       List<Meeting> ms = meetingsAsyncValue.value;
-      // print('meetingsAsyncValue: ${ms.length}');
+      print('meetingsAsyncValue: ${ms.length}');
       // print('meetingsAsyncValue: ${ms.first.id} ${td.meetingId}');
       try {
-        m = ms.firstWhere((element) => element.id == td.meetingId);
-        // print('m: ${m.id}');
-        // print(m.places!.length);
+        m = ms.firstWhere((metting) => metting.id == td.meetingId);
+        print('m: ${m.id}');
+        print('m.places!.length: ${m.places!.length}');
         if (m.places != null) {
           // List<Place> places = // ... your list of Place objects
           List<Place> uniquePlaces = const Place().removeDuplicates(m.places!);
@@ -70,10 +70,10 @@ class SavedVerses extends ConsumerWidget {
                     // p.language != 'de' &&
                     parseDuration(p.timePosition) >
                         parseDuration(sentence.startTime) -
-                            const Duration(seconds: 10) &&
+                            const Duration(seconds: 30) &&
                     parseDuration(p.timePosition) <
                         parseDuration(sentence.endTime) +
-                            const Duration(seconds: 10))
+                            const Duration(seconds: 30))
                 .toList();
           }
           places = List.from(places)
@@ -97,13 +97,17 @@ class SavedVerses extends ConsumerWidget {
       // height: 200,
       // color: Colors.blueGrey,
       child: m.places == null
-          ? const Center(
-              child: LinearProgressIndicator(
-                color: Colors.white,
+          ? const SizedBox(
+              height: 30,
+              width: 30,
+              child: Center(
+                child: LinearProgressIndicator(
+                  color: Colors.white,
+                ),
               ),
             )
           : places.isEmpty
-              ? const Text('')
+              ? const Text('No places in this meeting. Reload Meetings?')
               : ListView.builder(
                   shrinkWrap: true,
                   itemCount: places.length,

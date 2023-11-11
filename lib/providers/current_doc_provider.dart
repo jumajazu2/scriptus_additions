@@ -21,6 +21,7 @@ class TranscriptDataNotifier extends StateNotifier<TranscriptData> {
             text: '',
             segments: [],
             language: 'de',
+            mp3Language: 'deutsch',
             filePath: '',
             fileName: '',
             meetingId: 0));

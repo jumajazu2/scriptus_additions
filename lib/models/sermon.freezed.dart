@@ -243,9 +243,10 @@ class _$SermonCopyWithImpl<$Res, $Val extends Sermon>
 }
 
 /// @nodoc
-abstract class _$$_SermonCopyWith<$Res> implements $SermonCopyWith<$Res> {
-  factory _$$_SermonCopyWith(_$_Sermon value, $Res Function(_$_Sermon) then) =
-      __$$_SermonCopyWithImpl<$Res>;
+abstract class _$$SermonImplCopyWith<$Res> implements $SermonCopyWith<$Res> {
+  factory _$$SermonImplCopyWith(
+          _$SermonImpl value, $Res Function(_$SermonImpl) then) =
+      __$$SermonImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -279,10 +280,11 @@ abstract class _$$_SermonCopyWith<$Res> implements $SermonCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_SermonCopyWithImpl<$Res>
-    extends _$SermonCopyWithImpl<$Res, _$_Sermon>
-    implements _$$_SermonCopyWith<$Res> {
-  __$$_SermonCopyWithImpl(_$_Sermon _value, $Res Function(_$_Sermon) _then)
+class __$$SermonImplCopyWithImpl<$Res>
+    extends _$SermonCopyWithImpl<$Res, _$SermonImpl>
+    implements _$$SermonImplCopyWith<$Res> {
+  __$$SermonImplCopyWithImpl(
+      _$SermonImpl _value, $Res Function(_$SermonImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -316,7 +318,7 @@ class __$$_SermonCopyWithImpl<$Res>
     Object? broadcastedAt = freezed,
     Object? scripturesDone = freezed,
   }) {
-    return _then(_$_Sermon(
+    return _then(_$SermonImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -431,8 +433,8 @@ class __$$_SermonCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Sermon implements _Sermon {
-  _$_Sermon(
+class _$SermonImpl implements _Sermon {
+  _$SermonImpl(
       {this.id,
       this.bookId,
       this.bTitle,
@@ -461,8 +463,8 @@ class _$_Sermon implements _Sermon {
       this.broadcastedAt,
       this.scripturesDone});
 
-  factory _$_Sermon.fromJson(Map<String, dynamic> json) =>
-      _$$_SermonFromJson(json);
+  factory _$SermonImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SermonImplFromJson(json);
 
   @override
   final int? id;
@@ -528,7 +530,7 @@ class _$_Sermon implements _Sermon {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Sermon &&
+            other is _$SermonImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.bookId, bookId) || other.bookId == bookId) &&
             (identical(other.bTitle, bTitle) || other.bTitle == bTitle) &&
@@ -608,12 +610,12 @@ class _$_Sermon implements _Sermon {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SermonCopyWith<_$_Sermon> get copyWith =>
-      __$$_SermonCopyWithImpl<_$_Sermon>(this, _$identity);
+  _$$SermonImplCopyWith<_$SermonImpl> get copyWith =>
+      __$$SermonImplCopyWithImpl<_$SermonImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_SermonToJson(
+    return _$$SermonImplToJson(
       this,
     );
   }
@@ -647,9 +649,9 @@ abstract class _Sermon implements Sermon {
       final String? country,
       final String? countryExt,
       final String? broadcastedAt,
-      final bool? scripturesDone}) = _$_Sermon;
+      final bool? scripturesDone}) = _$SermonImpl;
 
-  factory _Sermon.fromJson(Map<String, dynamic> json) = _$_Sermon.fromJson;
+  factory _Sermon.fromJson(Map<String, dynamic> json) = _$SermonImpl.fromJson;
 
   @override
   int? get id;
@@ -707,6 +709,6 @@ abstract class _Sermon implements Sermon {
   bool? get scripturesDone;
   @override
   @JsonKey(ignore: true)
-  _$$_SermonCopyWith<_$_Sermon> get copyWith =>
+  _$$SermonImplCopyWith<_$SermonImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -127,11 +127,11 @@ class _$SettingsModelCopyWithImpl<$Res, $Val extends SettingsModel>
 }
 
 /// @nodoc
-abstract class _$$_SettingsModelCopyWith<$Res>
+abstract class _$$SettingsModelImplCopyWith<$Res>
     implements $SettingsModelCopyWith<$Res> {
-  factory _$$_SettingsModelCopyWith(
-          _$_SettingsModel value, $Res Function(_$_SettingsModel) then) =
-      __$$_SettingsModelCopyWithImpl<$Res>;
+  factory _$$SettingsModelImplCopyWith(
+          _$SettingsModelImpl value, $Res Function(_$SettingsModelImpl) then) =
+      __$$SettingsModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -148,11 +148,11 @@ abstract class _$$_SettingsModelCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_SettingsModelCopyWithImpl<$Res>
-    extends _$SettingsModelCopyWithImpl<$Res, _$_SettingsModel>
-    implements _$$_SettingsModelCopyWith<$Res> {
-  __$$_SettingsModelCopyWithImpl(
-      _$_SettingsModel _value, $Res Function(_$_SettingsModel) _then)
+class __$$SettingsModelImplCopyWithImpl<$Res>
+    extends _$SettingsModelCopyWithImpl<$Res, _$SettingsModelImpl>
+    implements _$$SettingsModelImplCopyWith<$Res> {
+  __$$SettingsModelImplCopyWithImpl(
+      _$SettingsModelImpl _value, $Res Function(_$SettingsModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -169,7 +169,7 @@ class __$$_SettingsModelCopyWithImpl<$Res>
     Object? showObject = null,
     Object? exportHtmlWithOriginalVerse = null,
   }) {
-    return _then(_$_SettingsModel(
+    return _then(_$SettingsModelImpl(
       themeMode: null == themeMode
           ? _value.themeMode
           : themeMode // ignore: cast_nullable_to_non_nullable
@@ -216,8 +216,8 @@ class __$$_SettingsModelCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_SettingsModel extends _SettingsModel {
-  const _$_SettingsModel(
+class _$SettingsModelImpl extends _SettingsModel {
+  const _$SettingsModelImpl(
       {this.themeMode = ThemeMode.system,
       this.themeBrightness = Brightness.light,
       this.showSlovak = false,
@@ -230,8 +230,8 @@ class _$_SettingsModel extends _SettingsModel {
       this.exportHtmlWithOriginalVerse = true})
       : super._();
 
-  factory _$_SettingsModel.fromJson(Map<String, dynamic> json) =>
-      _$$_SettingsModelFromJson(json);
+  factory _$SettingsModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SettingsModelImplFromJson(json);
 
   @override
   @JsonKey()
@@ -274,7 +274,7 @@ class _$_SettingsModel extends _SettingsModel {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_SettingsModel &&
+            other is _$SettingsModelImpl &&
             (identical(other.themeMode, themeMode) ||
                 other.themeMode == themeMode) &&
             (identical(other.themeBrightness, themeBrightness) ||
@@ -317,12 +317,12 @@ class _$_SettingsModel extends _SettingsModel {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_SettingsModelCopyWith<_$_SettingsModel> get copyWith =>
-      __$$_SettingsModelCopyWithImpl<_$_SettingsModel>(this, _$identity);
+  _$$SettingsModelImplCopyWith<_$SettingsModelImpl> get copyWith =>
+      __$$SettingsModelImplCopyWithImpl<_$SettingsModelImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_SettingsModelToJson(
+    return _$$SettingsModelImplToJson(
       this,
     );
   }
@@ -339,11 +339,11 @@ abstract class _SettingsModel extends SettingsModel {
       final bool showAssignedAll,
       final bool showSavedFromApi,
       final bool showObject,
-      final bool exportHtmlWithOriginalVerse}) = _$_SettingsModel;
+      final bool exportHtmlWithOriginalVerse}) = _$SettingsModelImpl;
   const _SettingsModel._() : super._();
 
   factory _SettingsModel.fromJson(Map<String, dynamic> json) =
-      _$_SettingsModel.fromJson;
+      _$SettingsModelImpl.fromJson;
 
   @override
   ThemeMode get themeMode;
@@ -367,6 +367,6 @@ abstract class _SettingsModel extends SettingsModel {
   bool get exportHtmlWithOriginalVerse;
   @override
   @JsonKey(ignore: true)
-  _$$_SettingsModelCopyWith<_$_SettingsModel> get copyWith =>
+  _$$SettingsModelImplCopyWith<_$SettingsModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

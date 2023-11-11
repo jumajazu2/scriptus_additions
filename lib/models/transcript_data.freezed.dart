@@ -27,6 +27,7 @@ mixin _$TranscriptData {
   String get filePath => throw _privateConstructorUsedError;
   List<TranscriptSegment> get segments => throw _privateConstructorUsedError;
   String get language => throw _privateConstructorUsedError;
+  String get mp3Language => throw _privateConstructorUsedError;
   int get meetingId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -49,6 +50,7 @@ abstract class $TranscriptDataCopyWith<$Res> {
       String filePath,
       List<TranscriptSegment> segments,
       String language,
+      String mp3Language,
       int meetingId});
 }
 
@@ -72,6 +74,7 @@ class _$TranscriptDataCopyWithImpl<$Res, $Val extends TranscriptData>
     Object? filePath = null,
     Object? segments = null,
     Object? language = null,
+    Object? mp3Language = null,
     Object? meetingId = null,
   }) {
     return _then(_value.copyWith(
@@ -103,6 +106,10 @@ class _$TranscriptDataCopyWithImpl<$Res, $Val extends TranscriptData>
           ? _value.language
           : language // ignore: cast_nullable_to_non_nullable
               as String,
+      mp3Language: null == mp3Language
+          ? _value.mp3Language
+          : mp3Language // ignore: cast_nullable_to_non_nullable
+              as String,
       meetingId: null == meetingId
           ? _value.meetingId
           : meetingId // ignore: cast_nullable_to_non_nullable
@@ -112,11 +119,11 @@ class _$TranscriptDataCopyWithImpl<$Res, $Val extends TranscriptData>
 }
 
 /// @nodoc
-abstract class _$$_TranscriptDataCopyWith<$Res>
+abstract class _$$TranscriptDataImplCopyWith<$Res>
     implements $TranscriptDataCopyWith<$Res> {
-  factory _$$_TranscriptDataCopyWith(
-          _$_TranscriptData value, $Res Function(_$_TranscriptData) then) =
-      __$$_TranscriptDataCopyWithImpl<$Res>;
+  factory _$$TranscriptDataImplCopyWith(_$TranscriptDataImpl value,
+          $Res Function(_$TranscriptDataImpl) then) =
+      __$$TranscriptDataImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -127,15 +134,16 @@ abstract class _$$_TranscriptDataCopyWith<$Res>
       String filePath,
       List<TranscriptSegment> segments,
       String language,
+      String mp3Language,
       int meetingId});
 }
 
 /// @nodoc
-class __$$_TranscriptDataCopyWithImpl<$Res>
-    extends _$TranscriptDataCopyWithImpl<$Res, _$_TranscriptData>
-    implements _$$_TranscriptDataCopyWith<$Res> {
-  __$$_TranscriptDataCopyWithImpl(
-      _$_TranscriptData _value, $Res Function(_$_TranscriptData) _then)
+class __$$TranscriptDataImplCopyWithImpl<$Res>
+    extends _$TranscriptDataCopyWithImpl<$Res, _$TranscriptDataImpl>
+    implements _$$TranscriptDataImplCopyWith<$Res> {
+  __$$TranscriptDataImplCopyWithImpl(
+      _$TranscriptDataImpl _value, $Res Function(_$TranscriptDataImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -148,9 +156,10 @@ class __$$_TranscriptDataCopyWithImpl<$Res>
     Object? filePath = null,
     Object? segments = null,
     Object? language = null,
+    Object? mp3Language = null,
     Object? meetingId = null,
   }) {
-    return _then(_$_TranscriptData(
+    return _then(_$TranscriptDataImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -179,6 +188,10 @@ class __$$_TranscriptDataCopyWithImpl<$Res>
           ? _value.language
           : language // ignore: cast_nullable_to_non_nullable
               as String,
+      mp3Language: null == mp3Language
+          ? _value.mp3Language
+          : mp3Language // ignore: cast_nullable_to_non_nullable
+              as String,
       meetingId: null == meetingId
           ? _value.meetingId
           : meetingId // ignore: cast_nullable_to_non_nullable
@@ -189,8 +202,8 @@ class __$$_TranscriptDataCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_TranscriptData extends _TranscriptData {
-  _$_TranscriptData(
+class _$TranscriptDataImpl extends _TranscriptData {
+  _$TranscriptDataImpl(
       {this.id,
       required this.text,
       required this.originalText,
@@ -198,12 +211,13 @@ class _$_TranscriptData extends _TranscriptData {
       required this.filePath,
       required final List<TranscriptSegment> segments,
       required this.language,
+      required this.mp3Language,
       required this.meetingId})
       : _segments = segments,
         super._();
 
-  factory _$_TranscriptData.fromJson(Map<String, dynamic> json) =>
-      _$$_TranscriptDataFromJson(json);
+  factory _$TranscriptDataImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TranscriptDataImplFromJson(json);
 
   @override
   final int? id;
@@ -226,18 +240,20 @@ class _$_TranscriptData extends _TranscriptData {
   @override
   final String language;
   @override
+  final String mp3Language;
+  @override
   final int meetingId;
 
   @override
   String toString() {
-    return 'TranscriptData(id: $id, text: $text, originalText: $originalText, fileName: $fileName, filePath: $filePath, segments: $segments, language: $language, meetingId: $meetingId)';
+    return 'TranscriptData(id: $id, text: $text, originalText: $originalText, fileName: $fileName, filePath: $filePath, segments: $segments, language: $language, mp3Language: $mp3Language, meetingId: $meetingId)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_TranscriptData &&
+            other is _$TranscriptDataImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.text, text) || other.text == text) &&
             (identical(other.originalText, originalText) ||
@@ -249,6 +265,8 @@ class _$_TranscriptData extends _TranscriptData {
             const DeepCollectionEquality().equals(other._segments, _segments) &&
             (identical(other.language, language) ||
                 other.language == language) &&
+            (identical(other.mp3Language, mp3Language) ||
+                other.mp3Language == mp3Language) &&
             (identical(other.meetingId, meetingId) ||
                 other.meetingId == meetingId));
   }
@@ -264,17 +282,19 @@ class _$_TranscriptData extends _TranscriptData {
       filePath,
       const DeepCollectionEquality().hash(_segments),
       language,
+      mp3Language,
       meetingId);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_TranscriptDataCopyWith<_$_TranscriptData> get copyWith =>
-      __$$_TranscriptDataCopyWithImpl<_$_TranscriptData>(this, _$identity);
+  _$$TranscriptDataImplCopyWith<_$TranscriptDataImpl> get copyWith =>
+      __$$TranscriptDataImplCopyWithImpl<_$TranscriptDataImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_TranscriptDataToJson(
+    return _$$TranscriptDataImplToJson(
       this,
     );
   }
@@ -289,11 +309,12 @@ abstract class _TranscriptData extends TranscriptData {
       required final String filePath,
       required final List<TranscriptSegment> segments,
       required final String language,
-      required final int meetingId}) = _$_TranscriptData;
+      required final String mp3Language,
+      required final int meetingId}) = _$TranscriptDataImpl;
   _TranscriptData._() : super._();
 
   factory _TranscriptData.fromJson(Map<String, dynamic> json) =
-      _$_TranscriptData.fromJson;
+      _$TranscriptDataImpl.fromJson;
 
   @override
   int? get id;
@@ -310,9 +331,11 @@ abstract class _TranscriptData extends TranscriptData {
   @override
   String get language;
   @override
+  String get mp3Language;
+  @override
   int get meetingId;
   @override
   @JsonKey(ignore: true)
-  _$$_TranscriptDataCopyWith<_$_TranscriptData> get copyWith =>
+  _$$TranscriptDataImplCopyWith<_$TranscriptDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

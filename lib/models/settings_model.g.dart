@@ -6,8 +6,8 @@ part of 'settings_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_SettingsModel _$$_SettingsModelFromJson(Map<String, dynamic> json) =>
-    _$_SettingsModel(
+_$SettingsModelImpl _$$SettingsModelImplFromJson(Map<String, dynamic> json) =>
+    _$SettingsModelImpl(
       themeMode: $enumDecodeNullable(_$ThemeModeEnumMap, json['themeMode']) ??
           ThemeMode.system,
       themeBrightness:
@@ -24,7 +24,7 @@ _$_SettingsModel _$$_SettingsModelFromJson(Map<String, dynamic> json) =>
           json['exportHtmlWithOriginalVerse'] as bool? ?? true,
     );
 
-Map<String, dynamic> _$$_SettingsModelToJson(_$_SettingsModel instance) =>
+Map<String, dynamic> _$$SettingsModelImplToJson(_$SettingsModelImpl instance) =>
     <String, dynamic>{
       'themeMode': _$ThemeModeEnumMap[instance.themeMode]!,
       'themeBrightness': _$BrightnessEnumMap[instance.themeBrightness]!,

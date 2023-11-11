@@ -197,11 +197,11 @@ class _$TranscriptSegmentCopyWithImpl<$Res, $Val extends TranscriptSegment>
 }
 
 /// @nodoc
-abstract class _$$_TranscriptSegmentCopyWith<$Res>
+abstract class _$$TranscriptSegmentImplCopyWith<$Res>
     implements $TranscriptSegmentCopyWith<$Res> {
-  factory _$$_TranscriptSegmentCopyWith(_$_TranscriptSegment value,
-          $Res Function(_$_TranscriptSegment) then) =
-      __$$_TranscriptSegmentCopyWithImpl<$Res>;
+  factory _$$TranscriptSegmentImplCopyWith(_$TranscriptSegmentImpl value,
+          $Res Function(_$TranscriptSegmentImpl) then) =
+      __$$TranscriptSegmentImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -229,11 +229,11 @@ abstract class _$$_TranscriptSegmentCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_TranscriptSegmentCopyWithImpl<$Res>
-    extends _$TranscriptSegmentCopyWithImpl<$Res, _$_TranscriptSegment>
-    implements _$$_TranscriptSegmentCopyWith<$Res> {
-  __$$_TranscriptSegmentCopyWithImpl(
-      _$_TranscriptSegment _value, $Res Function(_$_TranscriptSegment) _then)
+class __$$TranscriptSegmentImplCopyWithImpl<$Res>
+    extends _$TranscriptSegmentCopyWithImpl<$Res, _$TranscriptSegmentImpl>
+    implements _$$TranscriptSegmentImplCopyWith<$Res> {
+  __$$TranscriptSegmentImplCopyWithImpl(_$TranscriptSegmentImpl _value,
+      $Res Function(_$TranscriptSegmentImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -258,7 +258,7 @@ class __$$_TranscriptSegmentCopyWithImpl<$Res>
     Object? isBrRuss = null,
     Object? isSong = null,
   }) {
-    return _then(_$_TranscriptSegment(
+    return _then(_$TranscriptSegmentImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -337,8 +337,8 @@ class __$$_TranscriptSegmentCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_TranscriptSegment extends _TranscriptSegment {
-  _$_TranscriptSegment(
+class _$TranscriptSegmentImpl extends _TranscriptSegment {
+  _$TranscriptSegmentImpl(
       {this.id,
       this.transcriptDataId,
       required this.start,
@@ -361,8 +361,8 @@ class _$_TranscriptSegment extends _TranscriptSegment {
         _foundScriptures = foundScriptures,
         super._();
 
-  factory _$_TranscriptSegment.fromJson(Map<String, dynamic> json) =>
-      _$$_TranscriptSegmentFromJson(json);
+  factory _$TranscriptSegmentImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TranscriptSegmentImplFromJson(json);
 
   @override
   final int? id;
@@ -433,7 +433,7 @@ class _$_TranscriptSegment extends _TranscriptSegment {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_TranscriptSegment &&
+            other is _$TranscriptSegmentImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.transcriptDataId, transcriptDataId) ||
                 other.transcriptDataId == transcriptDataId) &&
@@ -489,13 +489,13 @@ class _$_TranscriptSegment extends _TranscriptSegment {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_TranscriptSegmentCopyWith<_$_TranscriptSegment> get copyWith =>
-      __$$_TranscriptSegmentCopyWithImpl<_$_TranscriptSegment>(
+  _$$TranscriptSegmentImplCopyWith<_$TranscriptSegmentImpl> get copyWith =>
+      __$$TranscriptSegmentImplCopyWithImpl<_$TranscriptSegmentImpl>(
           this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_TranscriptSegmentToJson(
+    return _$$TranscriptSegmentImplToJson(
       this,
     );
   }
@@ -520,11 +520,11 @@ abstract class _TranscriptSegment extends TranscriptSegment {
       final bool isScripture,
       final bool isWBQuote,
       final bool isBrRuss,
-      final bool isSong}) = _$_TranscriptSegment;
+      final bool isSong}) = _$TranscriptSegmentImpl;
   _TranscriptSegment._() : super._();
 
   factory _TranscriptSegment.fromJson(Map<String, dynamic> json) =
-      _$_TranscriptSegment.fromJson;
+      _$TranscriptSegmentImpl.fromJson;
 
   @override
   int? get id;
@@ -564,6 +564,6 @@ abstract class _TranscriptSegment extends TranscriptSegment {
   bool get isSong;
   @override
   @JsonKey(ignore: true)
-  _$$_TranscriptSegmentCopyWith<_$_TranscriptSegment> get copyWith =>
+  _$$TranscriptSegmentImplCopyWith<_$TranscriptSegmentImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

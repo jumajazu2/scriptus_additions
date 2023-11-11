@@ -206,10 +206,10 @@ class _$MeetingCopyWithImpl<$Res, $Val extends Meeting>
 }
 
 /// @nodoc
-abstract class _$$_MeetingCopyWith<$Res> implements $MeetingCopyWith<$Res> {
-  factory _$$_MeetingCopyWith(
-          _$_Meeting value, $Res Function(_$_Meeting) then) =
-      __$$_MeetingCopyWithImpl<$Res>;
+abstract class _$$MeetingImplCopyWith<$Res> implements $MeetingCopyWith<$Res> {
+  factory _$$MeetingImplCopyWith(
+          _$MeetingImpl value, $Res Function(_$MeetingImpl) then) =
+      __$$MeetingImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -237,10 +237,11 @@ abstract class _$$_MeetingCopyWith<$Res> implements $MeetingCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_MeetingCopyWithImpl<$Res>
-    extends _$MeetingCopyWithImpl<$Res, _$_Meeting>
-    implements _$$_MeetingCopyWith<$Res> {
-  __$$_MeetingCopyWithImpl(_$_Meeting _value, $Res Function(_$_Meeting) _then)
+class __$$MeetingImplCopyWithImpl<$Res>
+    extends _$MeetingCopyWithImpl<$Res, _$MeetingImpl>
+    implements _$$MeetingImplCopyWith<$Res> {
+  __$$MeetingImplCopyWithImpl(
+      _$MeetingImpl _value, $Res Function(_$MeetingImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -268,7 +269,7 @@ class __$$_MeetingCopyWithImpl<$Res>
     Object? topic = freezed,
     Object? places = freezed,
   }) {
-    return _then(_$_Meeting(
+    return _then(_$MeetingImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -359,8 +360,8 @@ class __$$_MeetingCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Meeting extends _Meeting {
-  _$_Meeting(
+class _$MeetingImpl extends _Meeting {
+  _$MeetingImpl(
       {this.id,
       this.mpImage,
       this.link,
@@ -385,8 +386,8 @@ class _$_Meeting extends _Meeting {
       : _places = places,
         super._();
 
-  factory _$_Meeting.fromJson(Map<String, dynamic> json) =>
-      _$$_MeetingFromJson(json);
+  factory _$MeetingImpl.fromJson(Map<String, dynamic> json) =>
+      _$$MeetingImplFromJson(json);
 
 // class Meeting  extends _$Meeting {
 // @override
@@ -454,7 +455,7 @@ class _$_Meeting extends _Meeting {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_Meeting &&
+            other is _$MeetingImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.mpImage, mpImage) || other.mpImage == mpImage) &&
             (identical(other.link, link) || other.link == link) &&
@@ -516,12 +517,12 @@ class _$_Meeting extends _Meeting {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_MeetingCopyWith<_$_Meeting> get copyWith =>
-      __$$_MeetingCopyWithImpl<_$_Meeting>(this, _$identity);
+  _$$MeetingImplCopyWith<_$MeetingImpl> get copyWith =>
+      __$$MeetingImplCopyWithImpl<_$MeetingImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_MeetingToJson(
+    return _$$MeetingImplToJson(
       this,
     );
   }
@@ -549,10 +550,10 @@ abstract class _Meeting extends Meeting {
       final bool? scripturesDone,
       final Duration? lastEditTime,
       final String? topic,
-      final List<Place>? places}) = _$_Meeting;
+      final List<Place>? places}) = _$MeetingImpl;
   _Meeting._() : super._();
 
-  factory _Meeting.fromJson(Map<String, dynamic> json) = _$_Meeting.fromJson;
+  factory _Meeting.fromJson(Map<String, dynamic> json) = _$MeetingImpl.fromJson;
 
   @override // class Meeting  extends _$Meeting {
 // @override
@@ -601,6 +602,6 @@ abstract class _Meeting extends Meeting {
   List<Place>? get places;
   @override
   @JsonKey(ignore: true)
-  _$$_MeetingCopyWith<_$_Meeting> get copyWith =>
+  _$$MeetingImplCopyWith<_$MeetingImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

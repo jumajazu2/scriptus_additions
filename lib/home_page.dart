@@ -135,7 +135,10 @@ class HomePage extends ConsumerWidget {
                           print(s.mp3Link);
                           ref.read(audioPlayerProvider).stop();
                           // ref.read(audioPlayerProvider).dispose();
-                          ref.read(audioPlayerProvider).setUrl(s.mp3Link);
+                          String mp3Link =
+                              "${ref.watch(selectedMeetingProvider).mp3LinkBase}-${ref.watch(currentTranscriptProvider).mp3Language}.mp3";
+                          print(mp3Link);
+                          ref.read(audioPlayerProvider).setUrl(mp3Link);
                           // ref.read(audioPlayerProvider).load();
                           // ref
                           //     .read(audioPlayerControllerProvider)
@@ -560,6 +563,8 @@ class HomePage extends ConsumerWidget {
                 const SizedBox(
                   height: 10,
                 ),
+                // Text(selectedTranscript.meetingId.toString()),
+                // Text(settings.showSavedFromApi.toString()),
                 if (selectedTranscript.meetingId > 0 &&
                     settings.showSavedFromApi)
                   const Expanded(

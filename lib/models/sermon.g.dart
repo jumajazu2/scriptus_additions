@@ -6,7 +6,7 @@ part of 'sermon.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_Sermon _$$_SermonFromJson(Map<String, dynamic> json) => _$_Sermon(
+_$SermonImpl _$$SermonImplFromJson(Map<String, dynamic> json) => _$SermonImpl(
       id: json['id'] as int?,
       bookId: json['bookId'] as int?,
       bTitle: json['bTitle'] as String?,
@@ -36,7 +36,8 @@ _$_Sermon _$$_SermonFromJson(Map<String, dynamic> json) => _$_Sermon(
       scripturesDone: json['scripturesDone'] as bool?,
     );
 
-Map<String, dynamic> _$$_SermonToJson(_$_Sermon instance) => <String, dynamic>{
+Map<String, dynamic> _$$SermonImplToJson(_$SermonImpl instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'bookId': instance.bookId,
       'bTitle': instance.bTitle,

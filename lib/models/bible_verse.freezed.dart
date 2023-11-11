@@ -99,11 +99,11 @@ class _$BibleVerseCopyWithImpl<$Res, $Val extends BibleVerse>
 }
 
 /// @nodoc
-abstract class _$$_BibleVerseCopyWith<$Res>
+abstract class _$$BibleVerseImplCopyWith<$Res>
     implements $BibleVerseCopyWith<$Res> {
-  factory _$$_BibleVerseCopyWith(
-          _$_BibleVerse value, $Res Function(_$_BibleVerse) then) =
-      __$$_BibleVerseCopyWithImpl<$Res>;
+  factory _$$BibleVerseImplCopyWith(
+          _$BibleVerseImpl value, $Res Function(_$BibleVerseImpl) then) =
+      __$$BibleVerseImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -116,11 +116,11 @@ abstract class _$$_BibleVerseCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_BibleVerseCopyWithImpl<$Res>
-    extends _$BibleVerseCopyWithImpl<$Res, _$_BibleVerse>
-    implements _$$_BibleVerseCopyWith<$Res> {
-  __$$_BibleVerseCopyWithImpl(
-      _$_BibleVerse _value, $Res Function(_$_BibleVerse) _then)
+class __$$BibleVerseImplCopyWithImpl<$Res>
+    extends _$BibleVerseCopyWithImpl<$Res, _$BibleVerseImpl>
+    implements _$$BibleVerseImplCopyWith<$Res> {
+  __$$BibleVerseImplCopyWithImpl(
+      _$BibleVerseImpl _value, $Res Function(_$BibleVerseImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -133,7 +133,7 @@ class __$$_BibleVerseCopyWithImpl<$Res>
     Object? content = null,
     Object? bookAbb = freezed,
   }) {
-    return _then(_$_BibleVerse(
+    return _then(_$BibleVerseImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -164,8 +164,8 @@ class __$$_BibleVerseCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_BibleVerse extends _BibleVerse {
-  _$_BibleVerse(
+class _$BibleVerseImpl extends _BibleVerse {
+  _$BibleVerseImpl(
       {this.id,
       required this.bookId,
       required this.bibleChapter,
@@ -174,8 +174,8 @@ class _$_BibleVerse extends _BibleVerse {
       required this.bookAbb})
       : super._();
 
-  factory _$_BibleVerse.fromJson(Map<String, dynamic> json) =>
-      _$$_BibleVerseFromJson(json);
+  factory _$BibleVerseImpl.fromJson(Map<String, dynamic> json) =>
+      _$$BibleVerseImplFromJson(json);
 
 // class BibleVerse {
   @override
@@ -201,7 +201,7 @@ class _$_BibleVerse extends _BibleVerse {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_BibleVerse &&
+            other is _$BibleVerseImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.bookId, bookId) || other.bookId == bookId) &&
             (identical(other.bibleChapter, bibleChapter) ||
@@ -219,12 +219,12 @@ class _$_BibleVerse extends _BibleVerse {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_BibleVerseCopyWith<_$_BibleVerse> get copyWith =>
-      __$$_BibleVerseCopyWithImpl<_$_BibleVerse>(this, _$identity);
+  _$$BibleVerseImplCopyWith<_$BibleVerseImpl> get copyWith =>
+      __$$BibleVerseImplCopyWithImpl<_$BibleVerseImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_BibleVerseToJson(
+    return _$$BibleVerseImplToJson(
       this,
     );
   }
@@ -237,11 +237,11 @@ abstract class _BibleVerse extends BibleVerse {
       required final int? bibleChapter,
       required final int? verse,
       required final String content,
-      required final String? bookAbb}) = _$_BibleVerse;
+      required final String? bookAbb}) = _$BibleVerseImpl;
   _BibleVerse._() : super._();
 
   factory _BibleVerse.fromJson(Map<String, dynamic> json) =
-      _$_BibleVerse.fromJson;
+      _$BibleVerseImpl.fromJson;
 
   @override // class BibleVerse {
   int? get id;
@@ -257,6 +257,6 @@ abstract class _BibleVerse extends BibleVerse {
   String? get bookAbb;
   @override
   @JsonKey(ignore: true)
-  _$$_BibleVerseCopyWith<_$_BibleVerse> get copyWith =>
+  _$$BibleVerseImplCopyWith<_$BibleVerseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

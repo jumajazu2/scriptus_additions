@@ -6,13 +6,13 @@ part of 'meeting_place.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_MeetingPlace _$$_MeetingPlaceFromJson(Map<String, dynamic> json) =>
-    _$_MeetingPlace(
+_$MeetingPlaceImpl _$$MeetingPlaceImplFromJson(Map<String, dynamic> json) =>
+    _$MeetingPlaceImpl(
       id: json['id'] as int?,
       mCity: json['city'] as String?,
     );
 
-Map<String, dynamic> _$$_MeetingPlaceToJson(_$_MeetingPlace instance) =>
+Map<String, dynamic> _$$MeetingPlaceImplToJson(_$MeetingPlaceImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'city': instance.mCity,

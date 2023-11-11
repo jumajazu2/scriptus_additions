@@ -6,8 +6,8 @@ part of 'bible_verse.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_BibleVerse _$$_BibleVerseFromJson(Map<String, dynamic> json) =>
-    _$_BibleVerse(
+_$BibleVerseImpl _$$BibleVerseImplFromJson(Map<String, dynamic> json) =>
+    _$BibleVerseImpl(
       id: json['id'] as int?,
       bookId: json['bookId'] as int?,
       bibleChapter: json['bibleChapter'] as int?,
@@ -16,7 +16,7 @@ _$_BibleVerse _$$_BibleVerseFromJson(Map<String, dynamic> json) =>
       bookAbb: json['bookAbb'] as String?,
     );
 
-Map<String, dynamic> _$$_BibleVerseToJson(_$_BibleVerse instance) =>
+Map<String, dynamic> _$$BibleVerseImplToJson(_$BibleVerseImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'bookId': instance.bookId,

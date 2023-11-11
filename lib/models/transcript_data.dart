@@ -41,6 +41,7 @@ class TranscriptData //extends DataModel<TranscriptData>
     required final String filePath,
     required final List<TranscriptSegment> segments,
     required final String language,
+    required final String mp3Language,
     required final int meetingId,
     // required HasMany<TranscriptSegment> transcriptSegments,
   }) = _TranscriptData;
@@ -160,10 +161,12 @@ class TranscriptData //extends DataModel<TranscriptData>
     // } catch (e) {
     //   throw RangeError('Meeting ID not found');
     // }
+    String lang = ref.watch(currentTranscriptProvider).mp3Language;
 
     ref.read(selectedMeetingProvider.notifier).setMeeting(m);
-    ref.read(audioPlayerControllerProvider).setAudioSource(
-        AudioSource.uri(Uri.parse(ref.watch(selectedMeetingProvider).mp3Link)));
+    ref.read(audioPlayerControllerProvider).setAudioSource(AudioSource.uri(
+        Uri.parse(
+            "${ref.watch(selectedMeetingProvider).mp3LinkBase}-$lang}.mp3")));
   }
 
   TranscriptData mergeWithPrevious(int index) {

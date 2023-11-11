@@ -6,8 +6,9 @@ part of 'transcript_segment.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_TranscriptSegment _$$_TranscriptSegmentFromJson(Map<String, dynamic> json) =>
-    _$_TranscriptSegment(
+_$TranscriptSegmentImpl _$$TranscriptSegmentImplFromJson(
+        Map<String, dynamic> json) =>
+    _$TranscriptSegmentImpl(
       id: json['id'] as int?,
       transcriptDataId: json['transcriptDataId'] as int?,
       start: json['start'] as int,
@@ -37,8 +38,8 @@ _$_TranscriptSegment _$$_TranscriptSegmentFromJson(Map<String, dynamic> json) =>
       isSong: json['isSong'] as bool? ?? false,
     );
 
-Map<String, dynamic> _$$_TranscriptSegmentToJson(
-        _$_TranscriptSegment instance) =>
+Map<String, dynamic> _$$TranscriptSegmentImplToJson(
+        _$TranscriptSegmentImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'transcriptDataId': instance.transcriptDataId,

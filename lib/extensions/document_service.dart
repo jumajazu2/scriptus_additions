@@ -225,18 +225,36 @@ class DocumentService {
       // List<Meeting> meetings = ref.watch(meetingsProvider).whenData((value) => value.asMap()).
       // Meeting m = findMeetingWithDate(ref, '2021-05-02') as Meeting;
 
-      TranscriptData td = TranscriptData(
-          originalText: input,
-          text: input,
-          segments: segments,
-          language: 'de',
-          filePath: filePath,
-          fileName: fileName,
-          meetingId: 0);
+      // set language to language shortcut based on fileName, english, french, german
+      // set language to 'de' if no language is found
+      String language = 'de';
+      String mp3Language = 'deutsch';
+      if (fileName.toLowerCase().contains('french')) {
+        language = 'fr';
+        mp3Language = 'french';
+      }
+      if (fileName.toLowerCase().contains('english')) {
+        language = 'en';
+        mp3Language = 'english';
+      }
+
+      TranscriptData td = ref.watch(currentTranscriptProvider.notifier).state;
+      td = td.copyWith(
+        originalText: input,
+        text: input,
+        segments: segments,
+        language: language,
+        mp3Language: mp3Language,
+        filePath: filePath,
+        fileName: fileName,
+      );
+
       ref.read(currentTranscriptProvider.notifier).state = td;
-      if (ref.watch(selectedMeetingProvider).mp3Link != '') {
+
+      if (ref.watch(selectedMeetingProvider).mp3LinkBase != '') {
         ref.read(audioPlayerControllerProvider).setAudioSource(AudioSource.uri(
-            Uri.parse(ref.watch(selectedMeetingProvider).mp3Link)));
+            Uri.parse(
+                "${ref.watch(selectedMeetingProvider).mp3LinkBase}-$mp3Language.mp3")));
       }
     } else {
       print('canceled');
