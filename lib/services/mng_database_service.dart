@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
+import 'package:scriptus/const/constants.dart';
 import 'package:sqflite/sqflite.dart';
 // import 'dart:typed_data';
 import 'package:flutter/services.dart';
@@ -79,6 +80,258 @@ class BibleDBProvider {
     return _database!;
   }
 
+  void updateDatabase() async {
+    // final database = await openDatabase('path_to_your_database');
+    Database? thedb; // open the database
+    var databasesPath = await getDatabasesPath();
+    var path = join(databasesPath, _databaseLocalName);
+    thedb = await openDatabase(path, readOnly: false);
+
+    // add column book_number to verses table
+    await thedb.execute('ALTER TABLE verses ADD COLUMN book_number INTEGER');
+    // add string columng de_book_name to verses table
+    await thedb.execute('ALTER TABLE verses ADD COLUMN de_book_name TEXT');
+
+    // var gigi = gigiDeBookNames;
+
+    List<int> bookNumbers = [
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      90,
+      100,
+      110,
+      120,
+      130,
+      140,
+      150,
+      160,
+      190,
+      220,
+      230,
+      240,
+      250,
+      260,
+      290,
+      300,
+      310,
+      330,
+      340,
+      350,
+      360,
+      370,
+      380,
+      390,
+      400,
+      410,
+      420,
+      430,
+      440,
+      450,
+      460,
+      470,
+      480,
+      490,
+      500,
+      510,
+      520,
+      530,
+      540,
+      550,
+      560,
+      570,
+      580,
+      590,
+      600,
+      610,
+      620,
+      630,
+      640,
+      650,
+      660,
+      670,
+      680,
+      690,
+      700,
+      710,
+      720,
+      730
+    ];
+
+    List<String> oldValues = [
+      "Gen",
+      "Ex",
+      "Lev",
+      "Num",
+      "Deut",
+      "Ios",
+      "Jud",
+      "Rut",
+      "1 Sam",
+      "2 Sam",
+      "1 Împ",
+      "2  Împ",
+      "1 Cron",
+      "2 Cron",
+      "Ezra",
+      "Neem",
+      "Est",
+      "Iov",
+      "Ps",
+      "Prov",
+      "Ecl",
+      "Cânt",
+      "Is",
+      "Ier",
+      "Plâng",
+      "Ezec",
+      "Dan",
+      "Osea",
+      "Ioel",
+      "Amos",
+      "Obad",
+      "Iona",
+      "Mica",
+      "Naum",
+      "Hab",
+      "Țef",
+      "Hag",
+      "Zah",
+      "Mal",
+      "Mat",
+      "Mc",
+      "Lc",
+      "In",
+      "Fapte",
+      "Rom",
+      "1 Cor",
+      "2 Cor",
+      "Gal",
+      "Ef",
+      "Fil",
+      "Col",
+      "1 Tes",
+      "2 Tes",
+      "1 Tim",
+      "2 Tim",
+      "Tit",
+      "Flm",
+      "Evr",
+      "Iac",
+      "1 Pet",
+      "2 Pet",
+      "1 In",
+      "2 In",
+      "3 In",
+      "Iuda",
+      "Ap (Des)"
+    ];
+    // List<String> newValues = ["1.Mose","2.Mose","3.Mose","4.Mose","5.Mose","Jos","Rich","Ruth","1Sam","2Sam","1.Kön","2.Kön","1.Chr","2.Chr","Esra","Neh","Est","Hiob","Ps","Spr","Pred","Hld","Jes","Jer","Klgl","Hes","Dan","Hos","Joel","Am","Obd","Jona","Mich","Nah","Hab","Zeph","Hag","Sach","Mal","Mt","Mk","Lk","Joh","Apg","Röm","1.Kor","2.Kor","Gal","Eph","Phil","Kol","1.Thess","2.Thess","1.Tim","2.Tim","Tit","Phlm","Heb","Jak","1.Petr","2.Petr","1.Joh","2.Joh","3.Joh","Jud","Offb"];
+    List<String> newValues = [
+      "1Mo",
+      "2Mo",
+      "3Mo",
+      "4Mo",
+      "5Mo",
+      "Jos",
+      "Ri",
+      "Rt",
+      "1Sam",
+      "2Sam",
+      "1Kö",
+      "2Kö",
+      "1Chr",
+      "2Chr",
+      "Esr",
+      "Neh",
+      "Est",
+      "Hi",
+      "Ps",
+      "Spr",
+      "Pred",
+      "Hl",
+      "Jes",
+      "Jer",
+      "Kla",
+      "Hes",
+      "Dan",
+      "Hos",
+      "Joe",
+      "Am",
+      "Ob",
+      "Jon",
+      "Mi",
+      "Nah",
+      "Hab",
+      "Zeph",
+      "Hag",
+      "Sach",
+      "Mal",
+      "Mt",
+      "Mk",
+      "Lk",
+      "Joh",
+      "Apg",
+      "Röm",
+      "1Kor ",
+      "2Kor ",
+      "Gal ",
+      "Eph ",
+      "Phil ",
+      "Kol ",
+      "1Th",
+      "2Th",
+      "1Tim ",
+      "2Tim ",
+      "Tit ",
+      "Phlm ",
+      "Hebr ",
+      "Jak ",
+      "1Pt",
+      "2Pt",
+      "1Jo",
+      "2Jo",
+      "3Jo",
+      "Jud",
+      "Offb"
+    ];
+    var converter = BookNameConverter();
+
+    // print(converter.convertDeToGigiRo("1Mo")); // Should print "Gen"
+    // print(converter.convertDeToGigiDe("1Mo")); // Should print "1.Mose"
+    // print(converter.convertGigiRoToGigiDe("Gen")); // Should print "1.Mose"
+
+    for (int i = 0; i < oldValues.length; i++) {
+      String oldValue = oldValues[i];
+      String newValue = newValues[i];
+      String gigi = converter.convertDeToGigiDe(newValue);
+      // print(bookNumbers[i]);
+      // print(gigi);
+
+      await thedb.update(
+        'books',
+        {'short_name': newValue},
+        where: 'short_name = ?',
+        whereArgs: [oldValue],
+      );
+
+      // update verses table with book numbers from bookNumbers
+      await thedb.update(
+        'verses',
+        {'book_number': bookNumbers[i], 'de_book_name': newValues[i]},
+        where: 'book = ?',
+        whereArgs: [gigi],
+      );
+    }
+
+    // await thedb.close();
+  }
+
   _checkDB() async {
     // print('checkDB');
     WidgetsFlutterBinding.ensureInitialized();
@@ -149,6 +402,7 @@ class BibleDBProvider {
       } catch (e) {
         // print(e);
       }
+      updateDatabase();
     } else {
       print("Using existing database");
     }
@@ -424,7 +678,7 @@ class BibleDBProvider {
   }
 
   Future<List<BibleVerse>> getBibleVersesFromIds(List<int> l) async {
-    print("DB - getBibleVersesFromIds $l");
+    print("MNG DB - getBibleVersesFromIds $l");
 
     var ls = l.join(',');
     // print(ls);
@@ -443,32 +697,56 @@ class BibleDBProvider {
   }
 
   String removeTags(String input) {
-    // Remove all text enclosed in <n></n> tags
+    print('removeTags');
     print(input);
-    String result = input.replaceAll(RegExp(r'<n>.*?</n>'), ' ');
-    print(result);
+
+    String result = input;
+
+    // Remove all text enclosed in <n></n> tags
+    result = result.replaceAll(RegExp(r'<n>.*?</n>'), ' ');
+
     // Remove all remaining tags
     result = result.replaceAll(RegExp(r'<.*?>'), ' ');
-    result = result.replaceAll('  ', ' ');
-    result = result.replaceAll('  ', ' ');
+
+    // Remove all instances of the # symbol
+    result = result.replaceAll('#', '');
+
+    // Replace all instances of double spaces with a single space
+    // The '+' in the regular expression means 'one or more', so this will also handle cases where there are more than two spaces in a row
+    result = result.replaceAll(RegExp(' +'), ' ');
+
+    // Remove spaces before periods and commas
     result = result.replaceAll(' .', '.');
     result = result.replaceAll(' ,', ',');
-    // print(result);
+
+    // Remove spaces at the beginning and end of the string
+    result = result.trim();
+    print(result);
 
     return result;
   }
 
   /// loads bible verse from bible reference stored in Tuple3 argument
-  Future<BibleVerse?> getBibleVerseFromReference(Tuple3 reference) async {
-    print("DB - getBibleVerseFromReference $reference");
+  Future<BibleVerse?> getDEBibleVerseFromAPIReference(Tuple3 reference) async {
+    print("MNG DB - getBibleVerseFromReference $reference");
     final db = await database;
     var b = reference.item1.toString().trim();
     var c = reference.item2;
     var v = reference.item3;
     // print(b);
+    // var converter = BookNameConverter();
+    // String bookDe = converter.convertDeToGigiDe(b);
+    // old query for myBible app db
+    // String query =
+    //     'SELECT v.*, TRIM(b.short_name) short_name from verses v LEFT JOIN books b ON b.book_number = v.book_number where v.verse = $v and v.chapter=$c and (TRIM(b.short_name) = "$b" OR TRIM(b.long_name) = "$b") LIMIT 1';
 
-    String query =
-        'SELECT v.*, TRIM(b.short_name) short_name from verses v LEFT JOIN books b ON b.book_number = v.book_number where v.verse = $v and v.chapter=$c and (TRIM(b.short_name) = "$b" OR TRIM(b.long_name) = "$b") LIMIT 1';
+    // get verse text from scriptus.db
+    String query = '''SELECT v.*, TRIM(b.short_name) short_name 
+           FROM verses v 
+           LEFT JOIN books b ON b.short_name = v.de_book_name 
+           WHERE v.verse = $v and v.chapter=$c and (TRIM(b.short_name) = "$b" OR TRIM(b.long_name) = "$b") 
+           LIMIT 1''';
+
     print(query);
     var res = await db.rawQuery(query);
     // columns: ['ID', 'verse', 'content']);

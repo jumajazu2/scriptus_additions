@@ -209,21 +209,31 @@ class MskDBProvider {
     final int l = language == 'sk' ? 2 : 1;
     final Database db = await database;
 
+    // find book id in german bible
     final String queryPositionLuther =
         "SELECT position FROM msk_bible_books WHERE (TRIM(abb)) = '${p.bookName}' AND bible_id = 3 LIMIT 1";
     print(queryPositionLuther);
     var res1 = await db.rawQuery(queryPositionLuther);
-    print("queryPositionLuther: $res1");
+    print("versei db queryPositionLuther: $res1");
 
+    // find the same book in in all other bibles
     final String queryBookFromLutherPosition =
         "SELECT ID,bible_id,abb FROM msk_bible_books WHERE position = (${res1[0]['position']})";
     var res2 = await db.rawQuery(queryBookFromLutherPosition);
-    print("queryBookFromLutherPosition: $res2");
+    print("versei db queryBookFromLutherPosition: $res2");
+
     String abb = '';
+
+    // find abb from res2 based on bible_id
+    abb = res2
+        .where((e) => e['bible_id'] == l)
+        .map((e) => e['abb'].toString())
+        .first;
+
     String positions = res2
         .map((e) {
           if (language == 'en') {
-            abb = e['abb'] != null ? e['abb'].toString() : '';
+            // abb = e['abb'] != null ? e['abb'].toString() : '';
             return (int.parse(e['ID'].toString()) + 1).toString();
           } else {
             return e['ID'];
@@ -234,6 +244,7 @@ class MskDBProvider {
         .toList()
         .join(', ');
 
+    // find verse in selected bible
     final String q = '''SELECT * FROM msk_bible_verses 
       WHERE book_id IN ($positions) 
         AND verse = ${p.verseStartNumber} 
@@ -281,7 +292,7 @@ class MskDBProvider {
       // return list.first;
       return bv;
     } catch (e) {
-      print("DB error: $e");
+      print("versei DB error: $e");
       // return null;
       rethrow;
     }
@@ -562,7 +573,7 @@ class MskDBProvider {
   }
 
   Future<BibleVerse> getBibleVerseFromReference(Tuple3 reference) async {
-    print("DB - getBibleVerseFromReference $reference");
+    print("VERSEI MSK DB - getBibleVerseFromReference $reference");
     final db = await database;
     var b = reference.item1.toString().trim();
     var c = reference.item2;
