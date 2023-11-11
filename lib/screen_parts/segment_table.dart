@@ -5,6 +5,7 @@ import 'package:scriptus/audio/audio_player.dart';
 import 'package:scriptus/extensions/deepl_service.dart';
 import 'package:scriptus/extensions/openAiApi.dart';
 import 'package:scriptus/extensions/utilities.dart';
+import 'package:scriptus/models/bible_verse.dart';
 import 'package:scriptus/models/transcript_segment.dart';
 import 'package:scriptus/providers/current_doc_provider.dart';
 import 'package:scriptus/providers/found_verses_provider.dart';
@@ -330,6 +331,7 @@ class SegmentTable extends ConsumerWidget {
                           ref
                               .read(editedTextCursorPositionProvider.notifier)
                               .state = 0;
+
                           //  + const Duration(seconds: 50));
                           // TranscriptSegment(
                           //   start: s.start,
@@ -348,8 +350,8 @@ class SegmentTable extends ConsumerWidget {
                               color: sentenceState.startTime == s.startTime
                                   ? Colors.black12
                                   : (sentenceState.isScripture
-                                      ? Colors.white
-                                      : Colors.white),
+                                      ? Colors.black12
+                                      : Colors.black12),
                               border: const Border(
                                 top: BorderSide(
                                   width: 1,
@@ -433,7 +435,7 @@ class SegmentTable extends ConsumerWidget {
               ),
               if (s.foundScriptures.isNotEmpty || s.places.isNotEmpty)
                 Container(
-                  color: Colors.black26,
+                  color: Colors.blueGrey.shade700,
                   alignment: Alignment.center,
                   width: 40,
                   height: double.infinity,
@@ -441,8 +443,41 @@ class SegmentTable extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text("FS ${s.foundScriptures.length}"),
-                      Text("PS ${s.places.length}"),
+                      // TextButton(
+                      //   style: ButtonStyle( backgroundColor: MaterialStateProperty.all<Color>(Colors.black),),
+                      //   child: Text("P ${s.places.length}"),
+                      //   onPressed: () => ref.read(foundPlacesProvider.notifier).state = s.places),
+                      TextButton(
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all(EdgeInsets.zero),
+                            shape: MaterialStateProperty.all(
+                                ContinuousRectangleBorder(
+                                    borderRadius: BorderRadius.circular(0))),
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.black),
+                          ),
+                          child: Text("FS ${s.foundScriptures.length}"),
+                          onPressed: () => ref
+                              .read(foundVersesProvider.notifier)
+                              .state = s.foundScriptures),
+                      if (s.places.isNotEmpty)
+                        TextButton(
+                            style: ButtonStyle(
+                              padding:
+                                  MaterialStateProperty.all(EdgeInsets.zero),
+                              shape: MaterialStateProperty.all(
+                                  ContinuousRectangleBorder(
+                                      borderRadius: BorderRadius.circular(0))),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.black),
+                            ),
+                            child: Text("P ${s.places.length}"),
+                            onPressed: () =>
+                                ref.read(foundVersesProvider.notifier).state = s
+                                    .places
+                                    .map((e) => BibleVerse.fromPlace(e))
+                                    .toList()),
+                      // Text("PS ${s.places.length}"),
                       if (s.assignedScripture != null)
                         Text(
                             '${s.assignedScripture!.bookAbb}\n${s.assignedScripture!.bibleChapter}:${s.assignedScripture!.verse}'),
@@ -459,6 +494,7 @@ class SegmentTable extends ConsumerWidget {
 
 class SegmentTableButton extends StatelessWidget {
   const SegmentTableButton({
+    super.key,
     // this.key,
     required this.ref,
     required this.index,
