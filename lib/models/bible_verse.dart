@@ -34,7 +34,7 @@ class BibleVerse with _$BibleVerse {
   // Create a BibleVerse from Place object
   factory BibleVerse.fromPlace(Place place) {
     return BibleVerse(
-      verse: place.verseStartId,
+      verse: place.verseStartNumber,
       bookId: place.bookId,
       bookAbb: place.bookName,
       bibleChapter: place.chapterNumber,
