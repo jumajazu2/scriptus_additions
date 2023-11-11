@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:scriptus/audio/audio_player.dart';
 import 'package:scriptus/extensions/deepl_service.dart';
 import 'package:scriptus/extensions/text_cleaner.dart';
@@ -53,9 +55,46 @@ class TranscriptData //extends DataModel<TranscriptData>
     // String dirName = path.basename(path.dirname(filePath));
 
     // final file = File('${transcriptData.filePath}-tmp.json');
-    final file = File(
-        '/Volumes/HD/Users/miro/Downloads/${transcriptData.fileName}-tmp.json');
-    await file.writeAsString(transcriptDataJson);
+
+    try {
+      // Get the user's home directory path.
+      final directory = await getApplicationSupportDirectory();
+      // final homeDirectoryPath = join(
+      //     directory.path, '..', '..', '..', '..', '..', '..', '..', '..', '..');
+      final parts = directory.path.split('/');
+
+      String homeDirectoryPath = '';
+
+      // Check if there are enough parts to extract
+      if (parts.length >= 2) {
+        // Join the first three parts with a slash
+        homeDirectoryPath = '/' + parts.sublist(1, 3).join('/');
+        print(homeDirectoryPath); // Outputs: /Users/miro/Library
+      } else {
+        print('Not enough parts to extract');
+      }
+      // Construct the path to the Downloads directory.
+      final downloadsDirectoryPath = join(homeDirectoryPath, 'Downloads');
+      final downloadsDirectory = Directory(downloadsDirectoryPath);
+      print(downloadsDirectory);
+
+      // Check if the Downloads directory exists, if not, throw an error.
+      if (!await downloadsDirectory.exists()) {
+        throw Exception('Downloads directory does not exist');
+      }
+
+      // Create a File object with the correct path and write the content to it.
+      // final file = File(join(downloadsDirectory.path, fileName));
+      // await file.writeAsString(content);
+      print(transcriptData.fileName);
+      final file = File(
+          join(downloadsDirectory.path, '${transcriptData.fileName}-tmp.json'));
+      await file.writeAsString(transcriptDataJson);
+      print('File saved to ${file.path}');
+    } catch (e) {
+      print('Error saving file: $e');
+    }
+
     // return transcriptDataJson;
   }
 
@@ -317,8 +356,8 @@ class TranscriptData //extends DataModel<TranscriptData>
     final segment = segments[index];
     final newSegment = segment.copyWith(assignedScripture: bv);
 
-    print('assignBibleVerse');
-    print(newSegment.assignedScripture!.bookAbb);
+    // print('assignBibleVerse');
+    // print(newSegment.assignedScripture!.bookAbb);
 
     // Create a new list with the toggled segment
     final newSegments = List<TranscriptSegment>.from(segments);
@@ -395,7 +434,7 @@ class TranscriptData //extends DataModel<TranscriptData>
         (verse.verse ?? 0) + 1);
 
     BibleVerse? nextVerse =
-        await BibleDBProvider().getBibleVerseFromReference(nextVerseRef);
+        await BibleDBProvider().getDEBibleVerseFromAPIReference(nextVerseRef);
 
     // if next verse exists, proceed
     if (nextVerse != null) {
@@ -468,7 +507,7 @@ class TranscriptData //extends DataModel<TranscriptData>
         (verse.verse ?? 0) + 1);
 
     BibleVerse? nextVerse =
-        await BibleDBProvider().getBibleVerseFromReference(nextVerseRef);
+        await BibleDBProvider().getDEBibleVerseFromAPIReference(nextVerseRef);
 
     // if next verse exists, proceed
     if (nextVerse != null) {
@@ -834,7 +873,13 @@ class TranscriptData //extends DataModel<TranscriptData>
     // Create two new segments from the original segment
     final segment = segments[index];
     String newFirstText = segment.text.substring(0, splitIndex).trim();
-    newFirstText = '${newFirstText.substring(0, newFirstText.length - 1)}.';
+
+    // if last character is , then remove it
+    if (newFirstText[newFirstText.length - 1] == ',') {
+      newFirstText = newFirstText.substring(0, newFirstText.length - 1);
+    }
+    newFirstText = '$newFirstText.';
+    // substring(0, newFirstText.length - 1)
 
     double cursorPositionR =
         cursorPositionRatio(splitIndex, segment.text.length);
