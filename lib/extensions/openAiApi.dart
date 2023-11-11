@@ -97,20 +97,20 @@ class OpenAIService {
                     "Joh",
                     "Apg",
                     "Röm",
-                    "1Kor ",
-                    "2Kor ",
-                    "Gal ",
-                    "Eph ",
-                    "Phil ",
-                    "Kol ",
+                    "1Kor",
+                    "2Kor",
+                    "Gal",
+                    "Eph",
+                    "Phil",
+                    "Kol",
                     "1Th",
                     "2Th",
-                    "1Tim ",
-                    "2Tim ",
-                    "Tit ",
-                    "Phlm ",
-                    "Hebr ",
-                    "Jak ",
+                    "1Tim",
+                    "2Tim",
+                    "Tit",
+                    "Phlm",
+                    "Hebr",
+                    "Jak",
                     "1Pt",
                     "2Pt",
                     "1Jo",
@@ -149,9 +149,10 @@ class OpenAIService {
     //             The text of the Bible verse must not be included in the response, only short bible reference strictly in this format: "Book ChapterNumber:VerseNumber" – without quotes.
     //             Include absolutely no other text in the response string, only comma-separated values of Bible references! Bible chapter and verse must be separated with colon character.
     //             Book name must be followed by a space character.
-    //             Book name must use strictly only following short names: "1Mo","2Mo","3Mo","4Mo","5Mo","Jos","Ri","Rt","1Sam","2Sam","1Kö","2Kö","1Chr","2Chr","Esr","Neh","Est","Hi","Ps","Spr","Pred","Hl","Jes","Jer","Kla","Hes","Dan","Hos","Joe","Am","Ob","Jon","Mi","Nah","Hab","Zeph","Hag","Sach","Mal","Mt","Mk","Lk","Joh","Apg","Röm","1Kor ","2Kor ","Gal ","Eph ","Phil ","Kol ","1Th","2Th","1Tim ","2Tim ","Tit ","Phlm ","Hebr ","Jak ","1Pt","2Pt","1Jo","2Jo","3Jo","Jud","Offb"
+    //             Book name must use strictly only following short names: "1Mo","2Mo","3Mo","4Mo","5Mo","Jos","Ri","Rt","1Sam","2Sam","1Kö","2Kö","1Chr","2Chr","Esr","Neh","Est","Hi","Ps","Spr","Pred","Hl","Jes","Jer","Kla","Hes","Dan","Hos","Joe","Am","Ob","Jon","Mi","Nah","Hab","Zeph","Hag","Sach","Mal","Mt","Mk","Lk","Joh","Apg","Röm","1Kor","2Kor","Gal","Eph","Phil","Kol","1Th","2Th","1Tim","2Tim","Tit","Phlm","Hebr","Jak","1Pt","2Pt","1Jo","2Jo","3Jo","Jud","Offb"
     // The text: $text'''
 
+    // "1.Mose","2.Mose","3.Mose","4.Mose","5.Mose","Jos","Rich","Ruth","1Sam","2Sam","1.Kön","2.Kön","1.Chr","2.Chr","Esra","Neh","Est","Hiob","Ps","Spr","Pred","Hld","Jes","Jer","Klgl","Hes","Dan","Hos","Joel","Am","Obd","Jona","Mich","Nah","Hab","Zeph","Hag","Sach","Mal","Mt","Mk","Lk","Joh","Apg","Röm","1.Kor","2.Kor","Gal","Eph","Phil","Kol","1.Thess","2.Thess","1.Tim","2.Tim","Tit","Phlm","Heb","Jak","1.Petr","2.Petr","1.Joh","2.Joh","3.Joh","Jud","Offb"
     final prompt = [
       {
         "role": "system",
@@ -162,7 +163,8 @@ class OpenAIService {
         "role": "user",
         "content":
             '''Find 5 passages in german Bible closest matching to following text.
-            Book name must use strictly only following short names: "1Mo","2Mo","3Mo","4Mo","5Mo","Jos","Ri","Rt","1Sam","2Sam","1Kö","2Kö","1Chr","2Chr","Esr","Neh","Est","Hi","Ps","Spr","Pred","Hl","Jes","Jer","Kla","Hes","Dan","Hos","Joe","Am","Ob","Jon","Mi","Nah","Hab","Zeph","Hag","Sach","Mal","Mt","Mk","Lk","Joh","Apg","Röm","1Kor","2Kor","Gal","Eph","Phil","Kol","1Th","2Th","1Tim","2Tim","Tit","Phlm","Hebr","Jak","1Pt","2Pt","1Jo","2Jo","3Jo","Jud","Offb"
+            Book name must use strictly only following short names: 
+            "1Mo","2Mo","3Mo","4Mo","5Mo","Jos","Ri","Rt","1Sam","2Sam","1Kö","2Kö","1Chr","2Chr","Esr","Neh","Est","Hi","Ps","Spr","Pred","Hl","Jes","Jer","Kla","Hes","Dan","Hos","Joe","Am","Ob","Jon","Mi","Nah","Hab","Zeph","Hag","Sach","Mal","Mt","Mk","Lk","Joh","Apg","Röm","1Kor","2Kor","Gal","Eph","Phil","Kol","1Th","2Th","1Tim","2Tim","Tit","Phlm","Hebr","Jak","1Pt","2Pt","1Jo","2Jo","3Jo","Jud","Offb"
     The text: $text'''
       }
     ];
@@ -173,7 +175,7 @@ class OpenAIService {
     };
 
     final data = {
-      'model': 'gpt-3.5-turbo-0613',
+      'model': 'gpt-4-1106-preview',
       'messages': prompt,
       'max_tokens': 300,
       'temperature': 0.0,
@@ -218,7 +220,7 @@ class OpenAIService {
       // ak je start verse a end verse rovnake, pridam ho
       if (isOneVerse) {
         final Tuple3<String, int, int> t = Tuple3(b, c, sv);
-        var v = await BibleDBProvider().getBibleVerseFromReference(t);
+        var v = await BibleDBProvider().getDEBibleVerseFromAPIReference(t);
         if (v != null) {
           verses.add(v);
         }
@@ -239,7 +241,8 @@ class OpenAIService {
         print('MORE VERSES');
         print(l);
         for (var i = 0; i < l.length; i++) {
-          var v2 = await BibleDBProvider().getBibleVerseFromReference(l[i]);
+          var v2 =
+              await BibleDBProvider().getDEBibleVerseFromAPIReference(l[i]);
           if (v2 != null) {
             verses.add(v2);
           }
