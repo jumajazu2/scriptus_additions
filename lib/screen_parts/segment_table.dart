@@ -117,9 +117,11 @@ class SegmentTable extends ConsumerWidget {
           height: editedSegmentIndex == originalIndex ? 300 : 152,
           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
           // margin: EdgeInsets.only(bottom: (s.hasParagraphBreak ? 20 : 1)),
-          decoration: const BoxDecoration(
-            // color: Colors.grey[900],
-            border: Border(
+          decoration: BoxDecoration(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.grey[800]
+                : Colors.white,
+            border: const Border(
               bottom: BorderSide(
                 color: Colors.black54,
                 width: 1.0,
