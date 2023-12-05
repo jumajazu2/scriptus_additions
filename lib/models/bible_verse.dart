@@ -31,7 +31,10 @@ class BibleVerse with _$BibleVerse {
 
   String get reference => '$bookAbb $bibleChapter:$verse';
 
-  // Create a BibleVerse from Place object
+  /// Creates a BibleVerse from a Place object.
+  ///
+  /// The [place] parameter is the Place object from which the BibleVerse is created.
+  /// Returns a new BibleVerse object.
   factory BibleVerse.fromPlace(Place place) {
     return BibleVerse(
       verse: place.verseStartNumber,
