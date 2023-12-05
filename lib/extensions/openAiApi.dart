@@ -130,7 +130,7 @@ class OpenAIService {
                 },
                 "end_verse_number": {
                   "type": "string",
-                  "description": "Starting Verse Number"
+                  "description": "Ending Verse Number"
                 },
               },
             },
