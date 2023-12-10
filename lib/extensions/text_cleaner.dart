@@ -72,6 +72,7 @@ class TextCleaner {
       "berobbt": "beraubt",
       "Vereisung": "Verheißung",
       "Verheissung": "Verheißung",
+      "Beheißungen": "Verheißung",
       "das gleiche": "das Gleiche",
       "Jeremias": "Jeremia",
       "Endzeitbotschaft": "Endzeit-Botschaft",
@@ -86,6 +87,7 @@ class TextCleaner {
       "Brusa Park": "Bruder Borg",
       "getarren": "getarnt",
       "Isäbel": "Isebel",
+      "Garten gezimmerne": "Garten Gethsemane",
       "Seeligist": "seelig ist",
       "Bitte schön": "Bitteschön",
       "Brüße": "Buße",
@@ -119,6 +121,7 @@ class TextCleaner {
       "Brennhilm": "Branham",
       "Bruder Prenam": "Bruder Branham",
       "Bruder Prinem": "Bruder Branham",
+      "Bruder Brinem": "Bruder Branham",
       " ausgnaden": " aus Gnaden",
       " an Bietung ": " Anbetung ",
       " an Betung ": " Anbetung ",
@@ -359,6 +362,7 @@ class TextCleaner {
       "Gomorras": "Gomorrhas",
       "Vorbedienung": "Vorbedingung",
       "Bruder Nebel": "Bruder Neville",
+      "Bruder Prelim": "Bruder Branham",
       "Bruder Prems": "Bruder Branhams",
       "Bruder Premhim": "Bruder Branham",
       "Udo     Branham": "Bruder Branham",
@@ -371,6 +375,7 @@ class TextCleaner {
       "Bibelstille": "Bibelstelle",
       "Reiß sei": "Preis sei",
       "geseibt": " gesalbt ",
+      "Geseipte": "Gesalbte",
       "hinbegehen": "hinweggehen",
       "Sadduzeer": "Sadduzäer",
       "Nazarener": "Nazaräer",
@@ -415,11 +420,11 @@ class TextCleaner {
 
     text = text.replaceAll(
         RegExp(
-            r"(Prenhems|Pränims|Brünnhems|Brennhams|Pränens|Prehens|Brennums|Brannhams|Brennims|Brenhams|Brinhems|Prennims|Prenims|Brennems|Brennams|Brynhems)"),
+            r"(Pridims|Prenhems|Pränims|Brünnhems|Brennhams|Pränens|Prehens|Brennums|Brannhams|Brennims|Brenhams|Brinhems|Prennims|Prenims|Brennems|Brennams|Brynhems)"),
         "Branhams");
     text = text.replaceAll(
         RegExp(
-            r"(Brynhim|Brünnhem|Prenhem|Pränim|Branhamd|Brenhen|Brehnem|Prennheim|Prenem|Prinim|Prennim|Prenheim|Brunheim|Prennum|Brennum|Brenhem|Brennen|Brenheim|Brinham|Brannham|Brennem|Brennhelm|Brinim|Brinhelm|Brinheim|Brennheim|Brunham|Brinhim|Brennhem|Brangham|Brenham|Brennan|Brnham|Brannan|Brannam|Brahm|Brennim|Bredem|Brinnen|Brenni)"),
+            r"(Brynhim|Prennep|Brünnhem|Prenhem|Pränim|Branhamd|Brenhen|Brehnem|Prennheim|Prenem|Prinim|Prennim|Prenheim|Brunheim|Prennum|Brennum|Brenhem|Brennen|Brenheim|Brinham|Brannham|Brennem|Brennhelm|Brinim|Brinhelm|Brinheim|Brennheim|Brunham|Brinhim|Brennhem|Brangham|Brenham|Brennan|Brnham|Brannan|Brannam|Brahm|Brennim|Bredem|Brinnen|Brenni)"),
         "Branham");
 
     return text;
