@@ -177,7 +177,7 @@ class OpenAIService {
     final data = {
       'model': 'gpt-4-1106-preview',
       'messages': prompt,
-      'max_tokens': 300,
+      'max_tokens': 400,
       'temperature': 0.0,
       'functions': functions,
       'top_p': 0.5,
