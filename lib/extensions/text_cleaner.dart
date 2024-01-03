@@ -14,6 +14,7 @@ class TextCleaner {
       "Parosin": "Parousie",
       " wählten Uhr": " Weltenuhr",
       "heilige Schrift": "Heilige Schrift",
+      "zurückgelehrter": "Schriftgelehrter",
       "wohler Prenhems": "Bruder Branhams",
       "Bude Brennhem": "Bruder Branham",
       "himmlische Erde": "himmlische Örter",
@@ -79,6 +80,7 @@ class TextCleaner {
       "Endzeitbotschaft": "Endzeit-Botschaft",
       "Jeremiah": "Jeremia",
       "Malachi": "Maleachi",
+      "Mariachi": "Maleachi",
       "Maliachi": "Maleachi",
       "mit betroffen": "mitbetroffen",
       "ein für alle Mal": "ein für allemal",
@@ -123,6 +125,8 @@ class TextCleaner {
       "Bruder Prenam": "Bruder Branham",
       "Bruder Prinem": "Bruder Branham",
       "Bruder Brinem": "Bruder Branham",
+      "Bruder Bringen": "Bruder Branham",
+      "Bruderprinim": "Bruder Branham",
       " ausgnaden": " aus Gnaden",
       " an Bietung ": " Anbetung ",
       " an Betung ": " Anbetung ",
@@ -135,6 +139,7 @@ class TextCleaner {
       "Lied der Dichter": "Liederdichter",
       "Verlängerung": "Vollendung",
       " und und getan": " und kundgetan",
+      "Kunst getan": "kundgetan",
       "geöffentbart": "geoffentbart",
       "Bartholomeus": "Bartimäus",
       "Wuderbringim ": "Bruder Branham ",
@@ -193,6 +198,7 @@ class TextCleaner {
       "Destamen": "Testament",
       "Zaharias": "Sacharja",
       "Zakaria": "Sacharja",
+      "Sagaria": "Sacharja",
       "Minghi": "Menge",
       "Kolgata": "Golgatha",
       "Geistestapfel": "Geistestaufe",
@@ -283,6 +289,8 @@ class TextCleaner {
       " omyl ": " blud ",
       " urobil ": " vykonal ",
       " robí ": " koná ",
+      "Sibylon": "Sebulon",
+      "Isachar": "Issaschar",
       "prekliaty": "zlorečený",
       "Prekliaty": "Zlorečený",
       "kliatbu": "zlorečenstvo",
@@ -299,6 +307,7 @@ class TextCleaner {
       "Genesis": "1M",
       "Genezis": "1M",
       "Leviticus": "3M",
+      "Lefitten": "Leviten",
       "Stimmt's": "Stimmt es",
       "stimmt's": "stimmt es",
       "Durften's": "Durften es",
@@ -402,6 +411,8 @@ class TextCleaner {
       "Zunamitin": "Sunamitin",
       "Tzunamitin": "Sunamitin",
       "Tsunamitin": "Sunamitin",
+      "Heilsland": "Heilsplan",
+      "Bruder Premium": "Bruder Branham",
       "Hierchos": "Jerichos",
       "Zacchaeus": "Zachäus",
       "verfendet": "verpfändet",
@@ -426,7 +437,7 @@ class TextCleaner {
         "Branhams");
     text = text.replaceAll(
         RegExp(
-            r"(Brynhim|Prennep|Brünnhem|Prenhem|Pränim|Branhamd|Brenhen|Brehnem|Prennheim|Prenem|Prinim|Prennim|Prenheim|Brunheim|Prennum|Brennum|Brenhem|Brennen|Brenheim|Brinham|Brannham|Brennem|Brennhelm|Brinim|Brinhelm|Brinheim|Brennheim|Brunham|Brinhim|Brennhem|Brangham|Brenham|Brennan|Brnham|Brannan|Brannam|Brahm|Brennim|Bredem|Brinnen|Brenni)"),
+            r"(Brennhim|Brynhim|Prennep|Brünnhem|Prenhem|Pränim|Branhamd|Brenhen|Brehnem|Prennheim|Prenem|Prinim|Prennim|Prenheim|Brunheim|Prennum|Brennum|Brenhem|Brennen|Brenheim|Brinham|Brannham|Brennem|Brennhelm|Brinim|Brinhelm|Brinheim|Brennheim|Brunham|Brinhim|Brennhem|Brangham|Brenham|Brennan|Brnham|Brannan|Brannam|Brahm|Brennim|Bredem|Brinnen|Brenni)"),
         "Branham");
 
     return text;
