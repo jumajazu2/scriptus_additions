@@ -854,8 +854,10 @@ class TranscriptData //extends DataModel<TranscriptData>
       text: newFirstText,
       endTime: net,
     );
+    String secondText = segment.text.substring(splitIndex).trim();
+    secondText = secondText[0].toUpperCase() + secondText.substring(1);
     final secondSegment = segment.copyWith(
-      text: segment.text.substring(splitIndex).trim(),
+      text: secondText,
       startTime: nst,
     );
 
