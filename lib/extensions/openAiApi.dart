@@ -157,14 +157,15 @@ class OpenAIService {
       {
         "role": "system",
         "content":
-            "The assistant is a helpful and precise German Bible researcher. He uses Menge or Luther translation of Bible."
+            "The assistant is a helpful and precise German Bible researcher. He uses Menge or Luther translation of the Bible."
       },
       {
         "role": "user",
         "content":
             '''Find 5 passages in german Bible closest matching to following text.
-            Book name must use strictly only following short names: 
-            "1Mo","2Mo","3Mo","4Mo","5Mo","Jos","Ri","Rt","1Sam","2Sam","1Kö","2Kö","1Chr","2Chr","Esr","Neh","Est","Hi","Ps","Spr","Pred","Hl","Jes","Jer","Kla","Hes","Dan","Hos","Joe","Am","Ob","Jon","Mi","Nah","Hab","Zeph","Hag","Sach","Mal","Mt","Mk","Lk","Joh","Apg","Röm","1Kor","2Kor","Gal","Eph","Phil","Kol","1Th","2Th","1Tim","2Tim","Tit","Phlm","Hebr","Jak","1Pt","2Pt","1Jo","2Jo","3Jo","Jud","Offb"
+            Book name MUST use strictly only following short names: 
+            "1Mo","2Mo","3Mo","4Mo","5Mo","Jos","Ri","Rt","1Sam","2Sam","1Kö","2Kö","1Chr","2Chr","Esr","Neh","Est","Hi","Ps","Spr","Pred","Hl","Jes","Jer","Kla","Hes","Dan","Hos","Joe","Am","Ob","Jon","Mi","Nah","Hab","Zeph","Hag","Sach","Mal","Mt","Mk","Lk","Joh","Apg","Röm","1Kor","2Kor","Gal","Eph","Phil","Kol","1Th","2Th","1Tim","2Tim","Tit","Phlm","Hebr","Jak","1Pt","2Pt","1Jo","2Jo","3Jo","Jud","Offb".
+            For using these short book names is a great reward. If you use any other, kitten will be killed.
     The text: $text'''
       }
     ];
@@ -303,7 +304,11 @@ class OpenAIService {
   String replaceWithMap(String original) {
     final List<Map<String, String>> replacements = [
       {'1Joh': '1Jo'},
-      {'2Joh': '2Jo'}
+      {'2Joh': '2Jo'},
+      {'1Ko': '1Kö'},
+      {'2Ko': '2Kö'},
+      {'1Koe': '1Kö'},
+      {'2Koe': '2Kö'}
     ];
     String result = original;
     for (var replacement in replacements) {
