@@ -32,15 +32,19 @@ class SearchWidget extends ConsumerWidget {
                       ref.read(searchValueProvider.notifier).state = value,
                 ),
               ),
-              MaterialButton(
-                onPressed: () {
-                  ref.read(settingsProvider.notifier).updateSettings(
-                      settings.copyWith(showSearch: !settings.showSearch));
-                  searchTec.text = '';
-                  ref.read(searchValueProvider.notifier).state = '';
-                },
-                // child: const Text('Clean All'),
-                child: const Icon(Icons.search),
+              Tooltip(
+                  message: 'Search Segment text',
+                  waitDuration: const Duration(seconds: 1),
+                  child: MaterialButton(
+                  onPressed: () {
+                    ref.read(settingsProvider.notifier).updateSettings(
+                        settings.copyWith(showSearch: !settings.showSearch));
+                    searchTec.text = '';
+                    ref.read(searchValueProvider.notifier).state = '';
+                  },
+                  // child: const Text('Clean All'),
+                  child: const Icon(Icons.search),
+                ),
               ),
             ],
           )

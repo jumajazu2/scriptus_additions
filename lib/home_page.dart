@@ -238,36 +238,48 @@ class HomePage extends ConsumerWidget {
           // const SizedBox(
           //   width: 10,
           // ),
-          MaterialButton(
-            onPressed: () => selectedTranscriptNotifier.cleanAllSegments(ref),
-            // child: const Text('Clean All'),
-            child: const Icon(Icons.cleaning_services),
-          ),
-          MaterialButton(
-            onPressed: () =>
-                selectedTranscriptNotifier.translateAllSegments(ref),
-            child: Row(
-              children: [
-                deepLCallStatusProvider == DeepLCallStatus.loading
-                    ? Container(
-                        margin: const EdgeInsets.only(right: 15),
-                        height: 10,
-                        width: 10,
-                        child: const CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
-                      )
-                    : Container(),
-                // const Text('Translate All SK'),
-                const Icon(Icons.language),
-              ],
+          Tooltip(
+              message: 'Clean text',
+              waitDuration: const Duration(seconds: 1),
+              child: MaterialButton(
+              onPressed: () => selectedTranscriptNotifier.cleanAllSegments(ref),
+              // child: const Text('Clean All'),
+              child: const Icon(Icons.cleaning_services),
             ),
           ),
-          MaterialButton(
-            onPressed: () => DocumentService().importJson3(ref),
-            // child: const Text('Open JSON …'),
-            child: const Icon(Icons.folder_open_sharp),
+          Tooltip(
+              message: 'Translate All Segments to SK',
+              waitDuration: const Duration(seconds: 1),
+              child: MaterialButton(
+              onPressed: () =>
+                  selectedTranscriptNotifier.translateAllSegments(ref),
+              child: Row(
+                children: [
+                  deepLCallStatusProvider == DeepLCallStatus.loading
+                      ? Container(
+                          margin: const EdgeInsets.only(right: 15),
+                          height: 10,
+                          width: 10,
+                          child: const CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Container(),
+                  // const Text('Translate All SK'),
+                  const Icon(Icons.language),
+                ],
+              ),
+            ),
+          ),
+          Tooltip(
+              message: 'Open JSON',
+              waitDuration: const Duration(seconds: 1),
+              child: MaterialButton(
+              onPressed: () => DocumentService().importJson3(ref),
+              // child: const Text('Open JSON …'),
+              child: const Icon(Icons.folder_open_sharp),
+            ),
           ),
           // const SizedBox(
           //   width: 10,
@@ -286,66 +298,82 @@ class HomePage extends ConsumerWidget {
           //       ref, selectedTranscript.segments),
           //   child: const Text('Export MD'),
           // ),
-          MaterialButton(
-            onPressed: () {
-              DocumentService().exportToHtml(
+          Tooltip(
+              message: 'Save DE To HTML',
+              waitDuration: const Duration(seconds: 1),
+              child: MaterialButton(
+              onPressed: () {
+                DocumentService().exportToHtml(
+                    selectedTranscript.fileName,
+                    selectedTranscript.filePath,
+                    selectedTranscript.segments,
+                    'de',
+                    ref);
+              },
+              // child: const Text('HTML DE …'),
+              child: CountryFlag.fromCountryCode(
+                'DE',
+                height: 20,
+                width: 62,
+                borderRadius: 8,
+              ),
+            ),
+          ),
+          Tooltip(
+            message: 'Save EN To HTML',
+            waitDuration: const Duration(seconds: 1),
+            child: MaterialButton(
+              onPressed: () {
+                DocumentService().exportToHtml(
+                    selectedTranscript.fileName,
+                    selectedTranscript.filePath,
+                    selectedTranscript.segments,
+                    'en',
+                    ref);
+              },
+              child: CountryFlag.fromCountryCode(
+                'GB',
+                height: 20,
+                width: 62,
+                borderRadius: 8,
+              ),
+              // child: const Text('HTML SK …'),
+            ),
+          ),
+          Tooltip(
+            message: 'Save SK To HTML',
+            waitDuration: const Duration(seconds: 1),
+            child: MaterialButton(
+              onPressed: () {
+                DocumentService().exportToHtml(
+                    selectedTranscript.fileName,
+                    selectedTranscript.filePath,
+                    selectedTranscript.segments,
+                    'sk',
+                    ref);
+              },
+              child: CountryFlag.fromCountryCode(
+                'SK',
+                height: 20,
+                width: 62,
+                borderRadius: 8,
+              ),
+              // child: const Text('HTML SK …'),
+            ),
+          ),
+          Tooltip(
+              message: 'Save To JS HTML',
+              waitDuration: const Duration(seconds: 1),
+            child: MaterialButton(
+              onPressed: () {
+                DocumentService().exportToHtmlJs(
                   selectedTranscript.fileName,
                   selectedTranscript.filePath,
                   selectedTranscript.segments,
-                  'de',
-                  ref);
-            },
-            // child: const Text('HTML DE …'),
-            child: CountryFlag.fromCountryCode(
-              'DE',
-              height: 20,
-              width: 62,
-              borderRadius: 8,
+                );
+              },
+              child: const Text('JS …'),
             ),
-          ),
-          MaterialButton(
-            onPressed: () {
-              DocumentService().exportToHtml(
-                  selectedTranscript.fileName,
-                  selectedTranscript.filePath,
-                  selectedTranscript.segments,
-                  'en',
-                  ref);
-            },
-            child: CountryFlag.fromCountryCode(
-              'GB',
-              height: 20,
-              width: 62,
-              borderRadius: 8,
-            ),
-            // child: const Text('HTML SK …'),
-          ),
-          MaterialButton(
-            onPressed: () {
-              DocumentService().exportToHtml(
-                  selectedTranscript.fileName,
-                  selectedTranscript.filePath,
-                  selectedTranscript.segments,
-                  'sk',
-                  ref);
-            },
-            child: CountryFlag.fromCountryCode(
-              'SK',
-              height: 20,
-              width: 62,
-              borderRadius: 8,
-            ),
-            // child: const Text('HTML SK …'),
-          ),
-          MaterialButton(
-            onPressed: () {
-              DocumentService().exportToHtmlJs(
-                selectedTranscript.fileName,
-                selectedTranscript.filePath,
-                selectedTranscript.segments,
-              );
-            },
-            child: const Text('JS …'),
           ),
           const SizedBox(
             width: 10,
@@ -367,17 +395,21 @@ class HomePage extends ConsumerWidget {
           //   child: const Text('Save JSON'),
           // ),
           Consumer(
-              builder: (context, ref, child) => MaterialButton(
-                    color: Colors.lightGreen,
-                    hoverColor: Colors.green,
-                    onPressed: () async {
-                      int id = await ref
-                          .read(transcriptRepositoryProvider)
-                          .saveTranscriptData(selectedTranscript);
-                      selectedTranscriptNotifier.saveId(id);
-                    },
-                    child: const Text('API'),
-                  )),
+              builder: (context, ref, child) => Tooltip(
+                message: 'Save finnished sermon to API',
+                waitDuration: const Duration(seconds: 1),
+                child: MaterialButton(
+                      color: Colors.lightGreen,
+                      hoverColor: Colors.green,
+                      onPressed: () async {
+                        int id = await ref
+                            .read(transcriptRepositoryProvider)
+                            .saveTranscriptData(selectedTranscript);
+                        selectedTranscriptNotifier.saveId(id);
+                      },
+                      child: const Text('API'),
+                    ),
+              )),
           // Consumer(
           //     builder: (context, ref, child) => MaterialButton(
           //           color: Colors.lightGreen,
@@ -391,24 +423,32 @@ class HomePage extends ConsumerWidget {
           //         )),
           const SizedBox(width: 10),
           Consumer(
-              builder: (context, ref, child) => MaterialButton(
-                    hoverColor: Colors.green,
-                    color: Colors.lightGreen,
-                    onPressed: () =>
-                        selectedTranscript.exportTranscriptToJson(ref),
-                    child: const Icon(Icons.save),
-                    // Text('Save'),
-                  )),
+              builder: (context, ref, child) => Tooltip(
+                message: 'Save sermon to JSON for later use',
+                waitDuration: const Duration(seconds: 1),
+                child: MaterialButton(
+                      hoverColor: Colors.green,
+                      color: Colors.lightGreen,
+                      onPressed: () =>
+                          selectedTranscript.exportTranscriptToJson(ref),
+                      child: const Icon(Icons.save),
+                      // Text('Save'),
+                    ),
+              )),
           const SizedBox(width: 10),
           Consumer(
-              builder: (context, ref, child) => MaterialButton(
-                    color: Colors.lightGreen,
-                    hoverColor: Colors.green,
-                    onPressed: () =>
-                        selectedTranscript.loadTranscriptFromJson(ref),
-                    child: const Icon(Icons.folder_open_sharp),
-                    // child: const Text('Open'),
-                  )),
+              builder: (context, ref, child) => Tooltip(
+                message: 'Open JSON file',
+                waitDuration: const Duration(seconds: 1),
+                child: MaterialButton(
+                      color: Colors.lightGreen,
+                      hoverColor: Colors.green,
+                      onPressed: () =>
+                          selectedTranscript.loadTranscriptFromJson(ref),
+                      child: const Icon(Icons.folder_open_sharp),
+                      // child: const Text('Open'),
+                    ),
+              )),
 
           // const LoadMeetingsButton(),
           const SizedBox(width: 10),
