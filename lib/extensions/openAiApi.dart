@@ -40,7 +40,7 @@ class OpenAIService {
       {
         "name": "get_bible_verses",
         "description":
-            "Retrieve Bible verses text from the Bible based on book, chapter, start_verse_number, end_verse_number parameters",
+            "Retrieve Bible verses text from the Bible based on book, chapter, start_verse_number, end_verse_number parameters in UTF-8 format",
         "parameters": {
           "type": "object",
           "properties": {
@@ -96,7 +96,7 @@ class OpenAIService {
                     "Lk",
                     "Joh",
                     "Apg",
-                    "Röm",
+                    "Rm",
                     "1Kor",
                     "2Kor",
                     "Gal",
@@ -163,8 +163,8 @@ class OpenAIService {
         "role": "user",
         "content":
             '''Find 5 passages in german Bible closest matching to following text.
-            Book name MUST use strictly only following short names: 
-            "1Mo","2Mo","3Mo","4Mo","5Mo","Jos","Ri","Rt","1Sam","2Sam","1Kö","2Kö","1Chr","2Chr","Esr","Neh","Est","Hi","Ps","Spr","Pred","Hl","Jes","Jer","Kla","Hes","Dan","Hos","Joe","Am","Ob","Jon","Mi","Nah","Hab","Zeph","Hag","Sach","Mal","Mt","Mk","Lk","Joh","Apg","Röm","1Kor","2Kor","Gal","Eph","Phil","Kol","1Th","2Th","1Tim","2Tim","Tit","Phlm","Hebr","Jak","1Pt","2Pt","1Jo","2Jo","3Jo","Jud","Offb".
+            Book name MUST use strictly only following short names in UTF-8 format: 
+            "1Mo","2Mo","3Mo","4Mo","5Mo","Jos","Ri","Rt","1Sam","2Sam","1Kö","2Kö","1Chr","2Chr","Esr","Neh","Est","Hi","Ps","Spr","Pred","Hl","Jes","Jer","Kla","Hes","Dan","Hos","Joe","Am","Ob","Jon","Mi","Nah","Hab","Zeph","Hag","Sach","Mal","Mt","Mk","Lk","Joh","Apg","Rm","1Kor","2Kor","Gal","Eph","Phil","Kol","1Th","2Th","1Tim","2Tim","Tit","Phlm","Hebr","Jak","1Pt","2Pt","1Jo","2Jo","3Jo","Jud","Offb".
             For using these short book names is a great reward. If you use any other, kitten will be killed.
     The text: $text'''
       }
@@ -178,7 +178,7 @@ class OpenAIService {
     final data = {
       'model': 'gpt-4-1106-preview',
       'messages': prompt,
-      'max_tokens': 400,
+      'max_tokens': 800,
       'temperature': 0.0,
       'functions': functions,
       'top_p': 0.5,
@@ -303,6 +303,7 @@ class OpenAIService {
 
   String replaceWithMap(String original) {
     final List<Map<String, String>> replacements = [
+      {'Rm': 'Röm'},
       {'1Joh': '1Jo'},
       {'2Joh': '2Jo'},
       {'1Ko': '1Kö'},
@@ -313,7 +314,9 @@ class OpenAIService {
     String result = original;
     for (var replacement in replacements) {
       replacement.forEach((key, value) {
-        result = result.replaceAll(key, value);
+        // replace exact match between result and key with value
+        result = result.replaceAll(RegExp(r'\b' + key + r'\b'), value);
+        // result = result.replaceAll(key, value);
       });
     }
     return result;
