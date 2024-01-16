@@ -406,9 +406,38 @@ void addReferenceToEndOfText(WidgetRef ref, BibleVerse verse) {
 
 void mergeWithPrevious(WidgetRef ref, int index) {
   ref.read(currentTranscriptProvider.notifier).mergeWithPrevious(index);
-  TranscriptSegment ts =
-      ref.watch(currentTranscriptProvider).segments[index - 1];
-  ref.read(sentenceProvider.notifier).state = ts;
+
+  // ref
+  //     .read(currentTranscriptProvider.notifier)
+  //     .updateText(editedSegmentIndex, tec.text);
+  // TranscriptSegment ts =
+  //     ref.watch(currentTranscriptProvider).segments[editedSegmentIndex];
+  // ref.read(sentenceProvider.notifier).state = ts;
+
+  // get editedSegmentIndex from provider 
+  int? editedSegmentIndex = ref.watch(editedSegmentIndexProvider);
+
+  // if index of merged segment is the same as edited one, replace edited text with it
+  if (editedSegmentIndex == (index - 1)) {
+    TranscriptSegment ts =
+        ref.watch(currentTranscriptProvider).segments[index - 1];
+    ref.read(sentenceProvider.notifier).state = ts;
+
+    // ref.read(sentenceProvider.notifier).state = ts;
+    // replace segment in edited segment provider
+    // ref.read(sentenceProvider.notifier).updateText(ts.text);    
+  }
+  print('editedSegmentIndex: $editedSegmentIndex');
+  print('index: $index');
+  if (editedSegmentIndex == index) {
+    // ref.read(sentenceProvider.notifier).state = ts;
+  // ref.read(currentTranscriptProvider.notifier).mergeWithPrevious(index);
+    TranscriptSegment newCurrentSegment = ref.watch(currentTranscriptProvider).segments[editedSegmentIndex! ];
+    print('currentSegment: $newCurrentSegment');
+    ref.read(sentenceProvider.notifier).updateText(newCurrentSegment.text);
+    
+  }
+
 }
 
 void mergeWithPreviousWithComma(WidgetRef ref, int index) {
