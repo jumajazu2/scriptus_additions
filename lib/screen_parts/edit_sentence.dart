@@ -486,24 +486,43 @@ class EditSentence extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sentenceState = ref.watch(sentenceProvider);
-    final tec = useTextEditingController(text: sentenceState.text.trim());
+    // final tec = useTextEditingController(text: sentenceState.text.trim());
     final tecStart = useTextEditingController(text: sentenceState.startTime);
     final tecEnd = useTextEditingController(text: sentenceState.endTime);
     final editedSegmentIndex = ref.watch(editedSegmentIndexProvider);
     final player = ref.read(audioPlayerControllerProvider.notifier);
+    print('sentenceState.text: ${sentenceState.text}');
+    
+    // Create the TextEditingController without setting the initial text.
+    final tec = useTextEditingController();
 
+    // Update the TextEditingController's text when the provider's state changes.
+    // This side effect runs every time the widget rebuilds.
+    if (tec.text != sentenceState.text.trim()) {
+      tec.text = sentenceState.text.trim();
+      // Set the cursor at the end of the text field.
+      // tec.selection = TextSelection.fromPosition(
+      //   TextPosition(offset: tec.text.length),
+      // );
+    }
+    
     void _handleSelectionChanged() {
-      print(ref.watch(editedTextCursorPositionProvider));
-      print(tec.selection.baseOffset);
+      
       // if (ref.watch(editedTextCursorPositionProvider) !=
       //         tec.selection.baseOffset &&
       //     tec.selection.baseOffset != tec.text.length &&
       //     ref.watch(editedTextCursorPositionProvider) != tec.text.length) {
       // final cursorPosition = tec.selection.baseOffset;
+      // ref
+      //     .read(editedTextCursorPositionProvider.notifier)
+      //     .updateTextPosition(tec.selection.baseOffset);
+      // // }
+        WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
           .read(editedTextCursorPositionProvider.notifier)
           .updateTextPosition(tec.selection.baseOffset);
-      // }
+      });
+
     }
 
     useEffect(() {
@@ -601,11 +620,11 @@ class EditSentence extends HookConsumerWidget {
           cursorColor: Colors.red[900],
           autofocus: true,
           cursorWidth: 5,
-          onTap: () {
-            ref
-                .read(editedTextCursorPositionProvider.notifier)
-                .updateTextPosition(tec.selection.baseOffset);
-          },
+          // onTap: () {
+          //   ref
+          //       .read(editedTextCursorPositionProvider.notifier)
+          //       .updateTextPosition(tec.selection.baseOffset);
+          // },
 
           // onChanged: (value) =>
           //     ref.read(sentenceProvider.notifier).state = sentenceState.state
