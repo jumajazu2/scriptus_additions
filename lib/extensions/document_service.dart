@@ -47,7 +47,16 @@ class DocumentService {
       PlatformFile file = result.files.first;
 
       var f = File(file.path as String);
-      input = await f.readAsString();
+
+      try {
+        final bytes = await File(file.path as String).readAsBytes();
+        input = utf8.decode(bytes, allowMalformed: true);
+        // print(content);
+      } catch (e) {
+        print('An error occurred while reading the file: $e');
+      }
+
+      // input = await f.readAsString();
       filePath = file.path as String;
 
       fileName = file.name;
