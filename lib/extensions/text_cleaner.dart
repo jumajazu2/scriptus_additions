@@ -8,6 +8,7 @@ class TextCleaner {
       "aus Gnaten": "aus Gnaden",
       "in bezug": "in Bezug",
       "Kumeni": "Chomeini",
+      "Petros": "Petrus",
       "Talser": "Tulsa",
       "Gigali": "Kigali",
       "Insel Padmos": "Insel Patmos",
@@ -16,7 +17,9 @@ class TextCleaner {
       "heilige Schrift": "Heilige Schrift",
       "zurückgelehrter": "Schriftgelehrter",
       "wohler Prenhems": "Bruder Branhams",
+      "Bruderbrennhems": "Bruder Branhams",
       "Bude Brennhem": "Bruder Branham",
+      "Bruder Brünnen": "Bruder Branham",
       "himmlische Erde": "himmlische Örter",
       "verborgenen Manner": "verborgenen Manna",
       "Gott sammte": "Gott sandte",
@@ -38,6 +41,7 @@ class TextCleaner {
       "bieten dich an": "beten dich an",
       "Sohnestellung": "Sohnesstellung",
       "Herr Silber": "Herr Selber",
+      "Bergetzion": "Berge Sion",
       "hersprach": "Herr sprach",
       "preis und ehre": "Preis und Ehre",
       "Verlegnung": "Vollendung",
@@ -465,7 +469,7 @@ class TextCleaner {
         "Branhams");
     text = text.replaceAll(
         RegExp(
-            r"(Brehnen|Brenhim|Brennhim|Brynhim|Prennep|Brünnhem|Prenhem|Pränim|Branhamd|Brenhen|Brehnem|Prennheim|Prenem|Prinim|Prennim|Prenheim|Brunheim|Prennum|Brennum|Brenhem|Brennen|Brenheim|Brinham|Brannham|Brennem|Brennhelm|Brinim|Brinhelm|Brinheim|Brennheim|Brunham|Brinhim|Brennhem|Brangham|Brenham|Brennan|Brnham|Brannan|Brannam|Brahm|Brennim|Bredem|Brinnen|Brenni)"),
+            r"(Brehnen|Prenhjem|Brenhim|Brennhim|Brynhim|Prennep|Brünnhem|Prenhem|Pränim|Branhamd|Brenhen|Brehnem|Prennheim|Prenem|Prinim|Prennim|Prenheim|Brunheim|Prennum|Brennum|Brenhem|Brennen|Brenheim|Brinham|Brannham|Brennem|Brennhelm|Brinim|Brinhelm|Brinheim|Brennheim|Brunham|Brinhim|Brennhem|Brangham|Brenham|Brennan|Brnham|Brannan|Brannam|Brahm|Brennim|Bredem|Brinnen|Brenni)"),
         "Branham");
 
     return text;
