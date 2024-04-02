@@ -269,7 +269,11 @@ class DocumentService {
       print('canceled');
     }
   }
-
+  /// Splits the given [element] into sentences based on punctuation marks (. ! ? ").
+  /// Returns a list of maps, where each map represents a sentence and contains the following keys:
+  /// - 'text': The text of the sentence.
+  /// - 'timestamps': An object with 'from' and 'to' keys representing the start and end timestamps of the sentence.
+  /// - 'offsets': An object with 'from' and 'to' keys representing the start and end offsets of the sentence.
   List<Map<String, dynamic>> splitIntoSentences(Map<String, dynamic> element) {
     String text = element['text'];
     List<String> sentences = text.split(RegExp(r'(?<=[.!?])\s+'));
