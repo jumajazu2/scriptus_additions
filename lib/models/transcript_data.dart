@@ -842,7 +842,12 @@ class TranscriptData //extends DataModel<TranscriptData>
     }
     // Create two new segments from the original segment
     String newFirstText = segment.text.substring(0, splitIndex).trim();
-    newFirstText = '${newFirstText.substring(0, newFirstText.length - 1)}:';
+    newFirstText = newFirstText.substring(0, newFirstText.length).trim();
+    // remove last character if it's a comma
+    if (newFirstText[newFirstText.length - 1] == ',') {
+      newFirstText = newFirstText.substring(0, newFirstText.length - 1);
+    }
+    newFirstText = '$newFirstText:';
 
     double cursorPositionR =
         cursorPositionRatio(splitIndex, segment.text.length);
