@@ -176,7 +176,7 @@ class OpenAIService {
     };
 
     final data = {
-      'model': 'gpt-4-1106-preview',
+      'model': 'gpt-4o',
       'messages': prompt,
       'max_tokens': 800,
       'temperature': 0.0,
