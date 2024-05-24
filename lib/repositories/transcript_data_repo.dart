@@ -26,6 +26,9 @@ class TranscriptRepository {
         var segmentMap = (segment as TranscriptSegment).toJson();
         segmentMap.remove("transcriptDataId");
         segmentMap.remove("id");
+        segmentMap.remove("assignedScripture");
+        segmentMap.remove("places");
+        segmentMap.remove("foundScriptures");
         return segmentMap;
       }).toList();
       datasjson.remove("segments"); // remove the old segments field
