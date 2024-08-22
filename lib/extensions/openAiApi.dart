@@ -40,7 +40,7 @@ class OpenAIService {
       {
         "name": "get_bible_verses",
         "description":
-            "Retrieve Bible verses text from the Bible based on book, chapter, start_verse_number, end_verse_number parameters in UTF-8 format",
+            "Function will retrieve Bible verse text from the Bible based returned book_short_name, chapter_number, start_verse_number and end_verse_number parameters in UTF-8 encoding",
         "parameters": {
           "type": "object",
           "properties": {
@@ -165,7 +165,6 @@ class OpenAIService {
             '''Find 5 passages in german Bible closest matching to following text.
             Book name MUST use strictly only following short names in UTF-8 format: 
             "1Mo","2Mo","3Mo","4Mo","5Mo","Jos","Ri","Rt","1Sam","2Sam","1Kö","2Kö","1Chr","2Chr","Esr","Neh","Est","Hi","Ps","Spr","Pred","Hl","Jes","Jer","Kla","Hes","Dan","Hos","Joe","Am","Ob","Jon","Mi","Nah","Hab","Zeph","Hag","Sach","Mal","Mt","Mk","Lk","Joh","Apg","Rm","1Kor","2Kor","Gal","Eph","Phil","Kol","1Th","2Th","1Tim","2Tim","Tit","Phlm","Hebr","Jak","1Pt","2Pt","1Jo","2Jo","3Jo","Jud","Offb".
-            For using these short book names is a great reward. If you use any other, kitten will be killed.
     The text: $text'''
       }
     ];
@@ -176,10 +175,10 @@ class OpenAIService {
     };
 
     final data = {
-      'model': 'gpt-4o',
+      'model': 'gpt-4o-mini',
       'messages': prompt,
       'max_tokens': 800,
-      'temperature': 0.0,
+      'temperature': 0.1,
       'functions': functions,
       'top_p': 0.5,
       'frequency_penalty': 0,
@@ -194,6 +193,10 @@ class OpenAIService {
     // print('response.data');
     // print(response.data);
     // print(response.data.usage);
+
+    if (response.data['choices'][0]['message']['content'] == Null ){
+      print('response is null');
+    }
     final responseData =
         response.data['choices'][0]['message']['function_call']['arguments'];
 
@@ -206,10 +209,10 @@ class OpenAIService {
     List<BibleVerse> verses = [];
 
     for (var i = 0; i < decodedVerses.length; i++) {
-      String b = decodedVerses[i]['book'];
+      String b = decodedVerses[i]['book_short_name'];
       b = replaceWithMap(b);
 
-      final int c = int.parse(decodedVerses[i]['chapter'].toString());
+      final int c = int.parse(decodedVerses[i]['chapter_number'].toString());
       final int sv =
           int.parse(decodedVerses[i]['start_verse_number'].toString());
       final int ev = (decodedVerses[i]['end_verse_number']) != null
