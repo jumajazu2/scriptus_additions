@@ -5,6 +5,8 @@ import 'package:just_audio/just_audio.dart';
 import 'package:path/path.dart' as path;
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:scriptus/audio/audio_player.dart';
 // import 'package:path_provider/path_provider.dart';
 import 'package:scriptus/extensions/utilities.dart';
@@ -409,6 +411,7 @@ class DocumentService {
     segments = [];
     paragraphBreaks = [];
     input = '';
+    // const segmentCharacterLimit = 500;
 
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
@@ -425,7 +428,7 @@ class DocumentService {
       // print(_json['segments'][0]['start']);
       // print(_json['segments'][0]['end']);
       // print(_json['segments'][0]['text']);
-// {"start":2300, "end": 3100, "text": [[3, " Blessed"],[4, " be"],[5, " the"],[3, " name"],[7, " of"],[4, " our"],[6, " Lord"],[4, " Jesus"],[4, " Christ"],[4, "."]]},
+      // {"start":2300, "end": 3100, "text": [[3, " Blessed"],[4, " be"],[5, " the"],[3, " name"],[7, " of"],[4, " our"],[6, " Lord"],[4, " Jesus"],[4, " Christ"],[4, "."]]},
 
       // for (var a in _json['segments']) {
       var text = '';
@@ -550,11 +553,11 @@ class DocumentService {
 
   /// CSV exported from Whisper does not have " escaped
   /// therefore it must be first replaced with other character
-  void _importCSV() async {
+  void importCSV() async {
     var d = const FirstOccurrenceSettingsDetector(
       eols: ['\r\n', '\n'],
       // textDelimiters: ['"'],
-      textEndDelimiters: ['≥'],
+      // textEndDelimiters: ['≥'],
     );
 
     FilePickerResult? result = await FilePicker.platform.pickFiles();
@@ -578,9 +581,10 @@ class DocumentService {
       // print(input);
       final res =
           const CsvToListConverter().convert(input, csvSettingsDetector: d);
-      print(res);
+      print(res.length);
       res.removeAt(0);
-      print(res);
+      print(res[0]);
+      print(res[1]);
 
       // setState(() {
       _csv = res;
@@ -1004,19 +1008,20 @@ class DocumentService {
       }
 
       if (language == 'de') {
-        print("language: $language");
+        // print("language: $language");
+        // replace "" with " in text"
         sb.write(segment.text);
       } else {
-        print(segment.assignedScripture);
+        // print(segment.assignedScripture);
         if (segment.isScripture && segment.assignedScripture != null) {
           // sb.write("isscripture");
           // add error handling if no verse found
           try {
-            print("segment.assignedScripture1: ${segment.assignedScripture}");
+            // print("segment.assignedScripture1: ${segment.assignedScripture}");
             BibleVerse otherLanguage =
                 await mskDBProvider.getVerseInOtherLanguage(
                     Place.fromBibleVerse(segment.assignedScripture!), language);
-            print("segment.assignedScripture2: $otherLanguage");
+            // print("segment.assignedScripture2: $otherLanguage");
             if (ref.watch(settingsProvider).exportHtmlWithOriginalVerse) {
               sb.write("${segment.text}<br>");
             } else {
@@ -1025,11 +1030,11 @@ class DocumentService {
 
             sb.write("(${otherLanguage.verse}) ${otherLanguage.content}");
           } catch (e) {
-            print("Error: $e");
+            // print("Error: $e");
             sb.write("Error in Other Language Bible Verse: $e");
           }
         } else {
-          print("not scripture && assignedScripture not null");
+          // print("not scripture && assignedScripture not null");
           if (segment.textSk != '') {
             sb.write(segment.textSk);
           } else {
@@ -1060,10 +1065,46 @@ class DocumentService {
 
     sb.write('</p></body></html>');
 
-    final htmlText = sb.toString();
+    final String htmlText = sb.toString().replaceAll('""', '"');
+    // final htmlText = sb.toString();
 
     return htmlText;
   }
+
+  Future<String> getDownloadsDir() async {
+      try {
+        // Get the user's home directory path.
+        final directory = await getApplicationSupportDirectory();
+        // final homeDirectoryPath = join(
+        //     directory.path, '..', '..', '..', '..', '..', '..', '..', '..', '..');
+        final parts = directory.path.split('/');
+
+        String homeDirectoryPath = '';
+
+        // Check if there are enough parts to extract
+        if (parts.length >= 2) {
+          // Join the first three parts with a slash
+          homeDirectoryPath = '/' + parts.sublist(1, 3).join('/');
+          print(homeDirectoryPath); // Outputs: /Users/miro/Library
+        } else {
+          print('Not enough parts to extract');
+        }
+        // Construct the path to the Downloads directory.
+        final downloadsDirectoryPath = join(homeDirectoryPath, 'Downloads');
+        final downloadsDirectory = Directory(downloadsDirectoryPath);
+        print(downloadsDirectory);
+
+        // Check if the Downloads directory exists, if not, throw an error.
+        if (!await downloadsDirectory.exists()) {
+          throw Exception('Downloads directory does not exist');
+        }
+        return downloadsDirectoryPath;
+      } catch (e) {
+        print('Error: $e');
+        return '';
+      }
+  }
+
 
   Future<void> exportToHtml(fileName, filePath,
       List<TranscriptSegment> segments, language, ref) async {
@@ -1072,17 +1113,19 @@ class DocumentService {
     final htmlText = await generateHtml(segments, language, ref);
 
     // Show the file save dialog
-    final saveFileResultPath = await FilePicker.platform.saveFile(
-      // lockParentWindow: true,
-      // initialDirectory: filePath,
-      fileName: '$fileName-$language.html',
-      dialogTitle: 'Save the HTML file',
-      // type: FileType.custom,
-      // allowedExtensions: ['html'],
-    );
+    // final saveFileResultPath = await FilePicker.platform.saveFile(
+    //   // lockParentWindow: true,
+    //   // initialDirectory: filePath,
+    //   fileName: '$fileName-$language.html',
+    //   dialogTitle: 'Save the HTML file',
+    //   // type: FileType.custom,
+    //   // allowedExtensions: ['html'],
+    // );
+
+    String saveFileResultPath = await getDownloadsDir();
 
     if (saveFileResultPath != null) {
-      final file = File(saveFileResultPath);
+      final file = File('$saveFileResultPath/$fileName-$language.html');
       await file.writeAsString(htmlText);
     }
   }
