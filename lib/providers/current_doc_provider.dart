@@ -24,6 +24,7 @@ class TranscriptDataNotifier extends StateNotifier<TranscriptData> {
             mp3Language: 'deutsch',
             filePath: '',
             fileName: '',
+            offsetSeconds: 0,
             meetingId: 0));
 
   void addFoundVersesToSegment(int index, List<BibleVerse> verses) {
@@ -36,6 +37,10 @@ class TranscriptDataNotifier extends StateNotifier<TranscriptData> {
 
   void mergeWithPreviousWithComma(int index) {
     state = state.mergeWithPreviousWithComma(index);
+  }
+
+  void setOffsetSeconds(int offsetSeconds) {
+    state = state.setOffsetSeconds(offsetSeconds);
   }
 
   void setAllWBQ() {

@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:scriptus/audio/audio_player.dart';
 import 'package:scriptus/extensions/deepl_service.dart';
+import 'package:scriptus/extensions/document_service.dart';
 import 'package:scriptus/extensions/openAiApi.dart';
 import 'package:scriptus/extensions/utilities.dart';
 import 'package:scriptus/models/bible_verse.dart';
@@ -523,6 +524,7 @@ class SegmentTableButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TranscriptData selectedTranscript = ref.watch(currentTranscriptProvider);
     return SizedBox(
         // color: Colors.red,
         width: 35,
@@ -540,6 +542,20 @@ class SegmentTableButton extends StatelessWidget {
             icon: icon,
             onPressed: () {
               onPressed();
+              selectedTranscript.exportTranscriptToJson(ref);
+              DocumentService().exportToHtml(
+                    selectedTranscript.fileName,
+                    selectedTranscript.filePath,
+                    selectedTranscript.segments,
+                    'de',
+                    ref);
+              DocumentService().exportToHtml(
+                    selectedTranscript.fileName,
+                    selectedTranscript.filePath,
+                    selectedTranscript.segments,
+                    'sk',
+                    ref);
+
             },
           ),
         ));

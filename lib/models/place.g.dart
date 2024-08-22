@@ -7,35 +7,36 @@ part of 'place.dart';
 // **************************************************************************
 
 _$PlaceImpl _$$PlaceImplFromJson(Map<String, dynamic> json) => _$PlaceImpl(
-      id: json['id'] as int?,
-      meetingId: json['meetingId'] as int?,
-      sermonId: json['sermonId'] as int?,
-      segmentId: json['segmentId'] as int?,
-      transcriptDataId: json['transcriptDataId'] as int?,
+      id: (json['id'] as num?)?.toInt(),
+      meetingId: (json['meetingId'] as num?)?.toInt(),
+      sermonId: (json['sermonId'] as num?)?.toInt(),
+      segmentId: (json['segmentId'] as num?)?.toInt(),
+      transcriptDataId: (json['transcriptDataId'] as num?)?.toInt(),
       language: json['language'] as String? ?? 'de',
       timePosition: json['timePosition'] as String? ?? 'Unknown',
-      chapterNumber: json['chapterNumber'] as int? ?? -1,
-      bookId: json['bookId'] as int? ?? -1,
+      chapterNumber: (json['chapterNumber'] as num?)?.toInt() ?? -1,
+      bookId: (json['bookId'] as num?)?.toInt() ?? -1,
       bookName: json['bookName'] as String? ?? 'Unknown',
-      verseStartId: json['verseStartId'] as int?,
+      verseStartId: (json['verseStartId'] as num?)?.toInt(),
       verseText: json['verseText'] as String? ?? 'Unknown',
       verseTextModified: json['verseTextModified'] as String?,
       verses: json['verses'] as String?,
-      verseStartNumber: json['verseStartNumber'] as int? ?? -1,
-      verseEndNumber: json['verseEndNumber'] as int? ?? -1,
-      verseEndId: json['verseEndId'] as int?,
+      verseStartNumber: (json['verseStartNumber'] as num?)?.toInt() ?? -1,
+      verseEndNumber: (json['verseEndNumber'] as num?)?.toInt() ?? -1,
+      verseEndId: (json['verseEndId'] as num?)?.toInt(),
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
-      referencePosition: json['referencePosition'] as int?,
+      referencePosition: (json['referencePosition'] as num?)?.toInt(),
       isReference: json['isReference'] as bool? ?? false,
       isFullSegment: json['isFullSegment'] as bool? ?? false,
       note: json['note'] as bool? ?? false,
       keepWithPrevious: json['keepWithPrevious'] as bool? ?? false,
-      verseIds:
-          (json['verseIds'] as List<dynamic>?)?.map((e) => e as int).toList() ??
-              const [],
-      createdBy: json['createdBy'] as int? ?? 1,
+      verseIds: (json['verseIds'] as List<dynamic>?)
+              ?.map((e) => (e as num).toInt())
+              .toList() ??
+          const [],
+      createdBy: (json['createdBy'] as num?)?.toInt() ?? 1,
     );
 
 Map<String, dynamic> _$$PlaceImplToJson(_$PlaceImpl instance) =>

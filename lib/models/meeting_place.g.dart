@@ -8,7 +8,7 @@ part of 'meeting_place.dart';
 
 _$MeetingPlaceImpl _$$MeetingPlaceImplFromJson(Map<String, dynamic> json) =>
     _$MeetingPlaceImpl(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       mCity: json['city'] as String?,
     );
 

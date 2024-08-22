@@ -9,10 +9,10 @@ part of 'transcript_segment.dart';
 _$TranscriptSegmentImpl _$$TranscriptSegmentImplFromJson(
         Map<String, dynamic> json) =>
     _$TranscriptSegmentImpl(
-      id: json['id'] as int?,
-      transcriptDataId: json['transcriptDataId'] as int?,
-      start: json['start'] as int,
-      end: json['end'] as int,
+      id: (json['id'] as num?)?.toInt(),
+      transcriptDataId: (json['transcriptDataId'] as num?)?.toInt(),
+      start: (json['start'] as num).toInt(),
+      end: (json['end'] as num).toInt(),
       startTime: json['startTime'] as String,
       places: (json['places'] as List<dynamic>?)
               ?.map((e) => Place.fromJson(e as Map<String, dynamic>))

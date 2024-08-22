@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scriptus/extensions/meetings_button.dart';
+import 'package:scriptus/providers/current_doc_provider.dart';
 import 'package:scriptus/providers/settings_provider.dart';
 
 class SettingsDialog extends StatelessWidget {
@@ -160,6 +161,43 @@ class SettingsDialog extends StatelessWidget {
                                                 .exportHtmlWithOriginalVerse))),
                           ],
                         ),
+                      //   Row(
+                      //     mainAxisSize: MainAxisSize.min,
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       const Text('Offset MP3 playback (s)'),
+                      //       const Spacer(),
+                      //       ExcludeSemantics(
+                      //         child: Slider(
+                      //           min: 0.0,
+                      //           // activeColor: Colors.amberAccent,
+                      //           // secondaryActiveColor: Colors.amberAccent,
+                      //           max: 360.toDouble(),
+                      //           divisions: 36,
+                      //           value: 0,
+                      //           onChanged: (value) => ref
+                      //               .read(currentTranscriptProvider.notifier).setOffsetSeconds(int.parse(value.toString()),
+                      // ),
+                      // ),
+                      // ),
+                      //       // TextField(
+                      //       //   minLines: 6,
+                      //       //   maxLines: 6,
+                      //       //   decoration: const InputDecoration(contentPadding: EdgeInsets.all(8)),
+                      //       //   strutStyle: const StrutStyle(
+                      //       //     // fontSize: 18,
+                      //       //     height: 1.4,
+                      //       //   ),
+                      //       //   textAlign: TextAlign.left,
+                      //       //   cursorColor: Colors.red[900],
+                      //       //   autofocus: true,
+                      //       //   cursorWidth: 5,
+                      //       //   controller: TextEditingController(
+                      //       //       text: ref.watch(currentTranscriptProvider).offsetSeconds.toString()),
+                      //       //     onChanged: (value) => ref
+                      //       //         .read(currentTranscriptProvider.notifier).setOffsetSeconds(int.parse(value)),),
+                      //     ],
+                      //   ),
                       ],
                     );
                   },

@@ -81,7 +81,7 @@ class BibleDBProvider {
   }
 
   void updateDatabase() async {
-    // final database = await openDatabase('path_to_your_database');
+    
     Database? thedb; // open the database
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, _databaseLocalName);

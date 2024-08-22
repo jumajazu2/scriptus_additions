@@ -12,7 +12,7 @@ part of 'transcript_data.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 TranscriptData _$TranscriptDataFromJson(Map<String, dynamic> json) {
   return _TranscriptData.fromJson(json);
@@ -29,6 +29,7 @@ mixin _$TranscriptData {
   String get language => throw _privateConstructorUsedError;
   String get mp3Language => throw _privateConstructorUsedError;
   int get meetingId => throw _privateConstructorUsedError;
+  int get offsetSeconds => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -51,7 +52,8 @@ abstract class $TranscriptDataCopyWith<$Res> {
       List<TranscriptSegment> segments,
       String language,
       String mp3Language,
-      int meetingId});
+      int meetingId,
+      int offsetSeconds});
 }
 
 /// @nodoc
@@ -76,6 +78,7 @@ class _$TranscriptDataCopyWithImpl<$Res, $Val extends TranscriptData>
     Object? language = null,
     Object? mp3Language = null,
     Object? meetingId = null,
+    Object? offsetSeconds = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -114,6 +117,10 @@ class _$TranscriptDataCopyWithImpl<$Res, $Val extends TranscriptData>
           ? _value.meetingId
           : meetingId // ignore: cast_nullable_to_non_nullable
               as int,
+      offsetSeconds: null == offsetSeconds
+          ? _value.offsetSeconds
+          : offsetSeconds // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -135,7 +142,8 @@ abstract class _$$TranscriptDataImplCopyWith<$Res>
       List<TranscriptSegment> segments,
       String language,
       String mp3Language,
-      int meetingId});
+      int meetingId,
+      int offsetSeconds});
 }
 
 /// @nodoc
@@ -158,6 +166,7 @@ class __$$TranscriptDataImplCopyWithImpl<$Res>
     Object? language = null,
     Object? mp3Language = null,
     Object? meetingId = null,
+    Object? offsetSeconds = null,
   }) {
     return _then(_$TranscriptDataImpl(
       id: freezed == id
@@ -196,6 +205,10 @@ class __$$TranscriptDataImplCopyWithImpl<$Res>
           ? _value.meetingId
           : meetingId // ignore: cast_nullable_to_non_nullable
               as int,
+      offsetSeconds: null == offsetSeconds
+          ? _value.offsetSeconds
+          : offsetSeconds // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -212,7 +225,8 @@ class _$TranscriptDataImpl extends _TranscriptData {
       required final List<TranscriptSegment> segments,
       required this.language,
       required this.mp3Language,
-      required this.meetingId})
+      required this.meetingId,
+      this.offsetSeconds = 0})
       : _segments = segments,
         super._();
 
@@ -243,14 +257,17 @@ class _$TranscriptDataImpl extends _TranscriptData {
   final String mp3Language;
   @override
   final int meetingId;
+  @override
+  @JsonKey()
+  final int offsetSeconds;
 
   @override
   String toString() {
-    return 'TranscriptData(id: $id, text: $text, originalText: $originalText, fileName: $fileName, filePath: $filePath, segments: $segments, language: $language, mp3Language: $mp3Language, meetingId: $meetingId)';
+    return 'TranscriptData(id: $id, text: $text, originalText: $originalText, fileName: $fileName, filePath: $filePath, segments: $segments, language: $language, mp3Language: $mp3Language, meetingId: $meetingId, offsetSeconds: $offsetSeconds)';
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$TranscriptDataImpl &&
@@ -268,7 +285,9 @@ class _$TranscriptDataImpl extends _TranscriptData {
             (identical(other.mp3Language, mp3Language) ||
                 other.mp3Language == mp3Language) &&
             (identical(other.meetingId, meetingId) ||
-                other.meetingId == meetingId));
+                other.meetingId == meetingId) &&
+            (identical(other.offsetSeconds, offsetSeconds) ||
+                other.offsetSeconds == offsetSeconds));
   }
 
   @JsonKey(ignore: true)
@@ -283,7 +302,8 @@ class _$TranscriptDataImpl extends _TranscriptData {
       const DeepCollectionEquality().hash(_segments),
       language,
       mp3Language,
-      meetingId);
+      meetingId,
+      offsetSeconds);
 
   @JsonKey(ignore: true)
   @override
@@ -310,7 +330,8 @@ abstract class _TranscriptData extends TranscriptData {
       required final List<TranscriptSegment> segments,
       required final String language,
       required final String mp3Language,
-      required final int meetingId}) = _$TranscriptDataImpl;
+      required final int meetingId,
+      final int offsetSeconds}) = _$TranscriptDataImpl;
   _TranscriptData._() : super._();
 
   factory _TranscriptData.fromJson(Map<String, dynamic> json) =
@@ -334,6 +355,8 @@ abstract class _TranscriptData extends TranscriptData {
   String get mp3Language;
   @override
   int get meetingId;
+  @override
+  int get offsetSeconds;
   @override
   @JsonKey(ignore: true)
   _$$TranscriptDataImplCopyWith<_$TranscriptDataImpl> get copyWith =>

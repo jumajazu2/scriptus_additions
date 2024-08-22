@@ -8,10 +8,10 @@ part of 'bible_verse.dart';
 
 _$BibleVerseImpl _$$BibleVerseImplFromJson(Map<String, dynamic> json) =>
     _$BibleVerseImpl(
-      id: json['id'] as int?,
-      bookId: json['bookId'] as int?,
-      bibleChapter: json['bibleChapter'] as int?,
-      verse: json['verse'] as int?,
+      id: (json['id'] as num?)?.toInt(),
+      bookId: (json['bookId'] as num?)?.toInt(),
+      bibleChapter: (json['bibleChapter'] as num?)?.toInt(),
+      verse: (json['verse'] as num?)?.toInt(),
       content: json['content'] as String,
       bookAbb: json['bookAbb'] as String?,
     );

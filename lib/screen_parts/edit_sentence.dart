@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scriptus/audio/audio_player.dart';
+import 'package:scriptus/extensions/document_service.dart';
 import 'package:scriptus/extensions/openAiApi.dart';
 import 'package:scriptus/extensions/utilities.dart';
 import 'package:scriptus/models/transcript_segment.dart';
@@ -492,6 +493,7 @@ class EditSentence extends HookConsumerWidget {
     final editedSegmentIndex = ref.watch(editedSegmentIndexProvider);
     final player = ref.read(audioPlayerControllerProvider.notifier);
     print('sentenceState.text: ${sentenceState.text}');
+    final selectedTranscript = ref.watch(currentTranscriptProvider);
     
     // Create the TextEditingController without setting the initial text.
     final tec = useTextEditingController();
@@ -617,6 +619,33 @@ class EditSentence extends HookConsumerWidget {
             height: 1.4,
           ),
           textAlign: TextAlign.left,
+          // onEditingComplete: () {
+          //     ref
+          //         .read(currentTranscriptProvider.notifier)
+          //         .updateText(editedSegmentIndex!, tec.text);
+          //     ref.read(sentenceProvider.notifier).updateText(tec.text);
+          //     selectedTranscript.exportTranscriptToJson(ref);
+          // } ,
+          onChanged: (s)  { 
+              ref
+                  .read(currentTranscriptProvider.notifier)
+                  .updateText(editedSegmentIndex!, s);
+              ref.read(sentenceProvider.notifier).updateText(s);
+              selectedTranscript.exportTranscriptToJson(ref);
+              DocumentService().exportToHtml(
+                    selectedTranscript.fileName,
+                    selectedTranscript.filePath,
+                    selectedTranscript.segments,
+                    'de',
+                    ref);
+              DocumentService().exportToHtml(
+                    selectedTranscript.fileName,
+                    selectedTranscript.filePath,
+                    selectedTranscript.segments,
+                    'sk',
+                    ref);
+
+          },
           cursorColor: Colors.red[900],
           autofocus: true,
           cursorWidth: 5,
@@ -948,11 +977,11 @@ class EditSegmentButtons extends StatelessWidget {
                 ? TextButton(
                     style: TextButton.styleFrom(
                       foregroundColor:
-                          ref.watch(editedTextCursorPositionProvider) > 0
+                          ref.watch(editedTextCursorPositionProvider) >= 0
                               ? Colors.white
                               : Colors.black87,
                     ),
-                    onPressed: ref.watch(editedTextCursorPositionProvider) > 0
+                    onPressed: ref.watch(editedTextCursorPositionProvider) >= 0
                         ? () => onPressed()
                         : null,
                     child: Text(
@@ -965,7 +994,7 @@ class EditSegmentButtons extends StatelessWidget {
                       backgroundColor:
                           MaterialStateProperty.all<Color>(Colors.black38),
                     ),
-                    onPressed: ref.watch(editedTextCursorPositionProvider) > 0
+                    onPressed: ref.watch(editedTextCursorPositionProvider) >= 0
                         ? () => onPressed()
                         : null,
                     child: icon,

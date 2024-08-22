@@ -272,6 +272,24 @@ class HomePage extends ConsumerWidget {
               ),
             ),
           ),
+          // Tooltip(
+          //     message: 'Open JSON',
+          //     waitDuration: const Duration(seconds: 1),
+          //     child: MaterialButton(
+          //     onPressed: () => DocumentService().importJson(),
+          //     // child: const Text('Open JSON …'),
+          //     child: const Icon(Icons.folder_open_sharp),
+          //   ),
+          // ),
+          // Tooltip(
+          //     message: 'Open JSON 0',
+          //     waitDuration: const Duration(seconds: 1),
+          //     child: MaterialButton(
+          //     onPressed: () => DocumentService().importJson(),
+          //     // child: const Text('Open JSON …'),
+          //     child: const Icon(Icons.folder_open_sharp),
+          //   ),
+          // ),
           Tooltip(
               message: 'Open JSON',
               waitDuration: const Duration(seconds: 1),
@@ -314,8 +332,8 @@ class HomePage extends ConsumerWidget {
               child: CountryFlag.fromCountryCode(
                 'DE',
                 height: 20,
-                width: 62,
-                borderRadius: 8,
+                width: 32,
+                shape: Rectangle(),
               ),
             ),
           ),
@@ -334,8 +352,8 @@ class HomePage extends ConsumerWidget {
               child: CountryFlag.fromCountryCode(
                 'GB',
                 height: 20,
-                width: 62,
-                borderRadius: 8,
+                width: 32,
+                shape: Rectangle(),
               ),
               // child: const Text('HTML SK …'),
             ),
@@ -355,8 +373,8 @@ class HomePage extends ConsumerWidget {
               child: CountryFlag.fromCountryCode(
                 'SK',
                 height: 20,
-                width: 62,
-                borderRadius: 8,
+                width: 32,
+                shape: Rectangle(),
               ),
               // child: const Text('HTML SK …'),
             ),
@@ -428,6 +446,7 @@ class HomePage extends ConsumerWidget {
                 waitDuration: const Duration(seconds: 1),
                 child: MaterialButton(
                       hoverColor: Colors.green,
+                      focusColor: Colors.lightGreen,
                       color: Colors.lightGreen,
                       onPressed: () =>
                           selectedTranscript.exportTranscriptToJson(ref),

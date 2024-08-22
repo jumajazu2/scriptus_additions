@@ -8,7 +8,7 @@ part of 'transcript_data.dart';
 
 _$TranscriptDataImpl _$$TranscriptDataImplFromJson(Map<String, dynamic> json) =>
     _$TranscriptDataImpl(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       text: json['text'] as String,
       originalText: json['originalText'] as String,
       fileName: json['fileName'] as String,
@@ -18,7 +18,8 @@ _$TranscriptDataImpl _$$TranscriptDataImplFromJson(Map<String, dynamic> json) =>
           .toList(),
       language: json['language'] as String,
       mp3Language: json['mp3Language'] as String,
-      meetingId: json['meetingId'] as int,
+      meetingId: (json['meetingId'] as num).toInt(),
+      offsetSeconds: (json['offsetSeconds'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$$TranscriptDataImplToJson(
@@ -33,4 +34,5 @@ Map<String, dynamic> _$$TranscriptDataImplToJson(
       'language': instance.language,
       'mp3Language': instance.mp3Language,
       'meetingId': instance.meetingId,
+      'offsetSeconds': instance.offsetSeconds,
     };

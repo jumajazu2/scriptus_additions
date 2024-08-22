@@ -43,6 +43,7 @@ class TranscriptData //extends DataModel<TranscriptData>
     required final String language,
     required final String mp3Language,
     required final int meetingId,
+    @Default(0) final int offsetSeconds,
     // required HasMany<TranscriptSegment> transcriptSegments,
   }) = _TranscriptData;
 
@@ -352,6 +353,10 @@ class TranscriptData //extends DataModel<TranscriptData>
     return copyWith(meetingId: meetingId);
   }
 
+  TranscriptData setOffsetSeconds(int o) {
+    return copyWith(offsetSeconds: o);
+  }
+
   TranscriptData assignBibleVerse(int index, BibleVerse bv) {
     if (index < 0 || index >= segments.length) {
       throw RangeError('Index out of range');
@@ -641,8 +646,8 @@ class TranscriptData //extends DataModel<TranscriptData>
     // loop through all segments
     for (TranscriptSegment segment in newSegments) {
       // translate segment
-      String cleanedDe = TextCleaner().cleanText(segment.text);
-      String cleanedSk = TextCleaner().cleanText(segment.textSk);
+      String cleanedDe = TextCleaner().cleanText(segment.text, language: ref.watch(currentTranscriptProvider).language);
+      String cleanedSk = TextCleaner().cleanText(segment.textSk, language: 'sk');
 
       // create new segment with translated text
       final newSegment = segment.copyWith(text: cleanedDe, textSk: cleanedSk);

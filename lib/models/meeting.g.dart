@@ -8,10 +8,10 @@ part of 'meeting.dart';
 
 _$MeetingImpl _$$MeetingImplFromJson(Map<String, dynamic> json) =>
     _$MeetingImpl(
-      id: json['id'] as int?,
+      id: (json['id'] as num?)?.toInt(),
       mpImage: json['mpImage'] as String?,
       link: json['link'] as String?,
-      mpId: json['mpId'] as int?,
+      mpId: (json['mpId'] as num?)?.toInt(),
       meetingStart: json['meetingStart'] as String?,
       broadcastedAt: json['broadcastedAt'] as String?,
       brFrank: json['brFrank'] as bool?,
@@ -24,11 +24,11 @@ _$MeetingImpl _$$MeetingImplFromJson(Map<String, dynamic> json) =>
       zip: json['zip'] as String?,
       countryExt: json['countryExt'] as String?,
       street: json['street'] as String?,
-      countryId: json['countryId'] as int?,
+      countryId: (json['countryId'] as num?)?.toInt(),
       scripturesDone: json['scripturesDone'] as bool?,
       lastEditTime: json['lastEditTime'] == null
           ? null
-          : Duration(microseconds: json['lastEditTime'] as int),
+          : Duration(microseconds: (json['lastEditTime'] as num).toInt()),
       topic: json['topic'] as String?,
       places: (json['places'] as List<dynamic>?)
           ?.map((e) => Place.fromJson(e as Map<String, dynamic>))
