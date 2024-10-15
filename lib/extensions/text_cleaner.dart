@@ -141,6 +141,7 @@ class TextCleaner {
       "Stück Werk": "Stückwerk",
       "biete dich an": "bete dich an",
       "Wuderos": "Bruder Russ",
+      "Wodoros": "Bruder Russ",
       "okkumenisch": "ökumenisch",
       "Siebentonner": "Sieben Donner",
       "Bruder Brenn ": "Bruder Branham ",
@@ -159,6 +160,7 @@ class TextCleaner {
       "Buddha Branhams": "Bruder Branhams",
       "Buddha Branham": "Bruder Branham",
       "Bruder Brünnen": "Bruder Branham",
+      "Buddha": "Bruder",
       "himmlische Erde": "himmlische Örter",
       "verborgenen Manner": "verborgenen Manna",
       "Gott sammte": "Gott sandte",
@@ -310,6 +312,7 @@ class TextCleaner {
       "essa, denn": "es sei denn",
       " Wouter": " Bruder",
       "Sinsschreiben": "Sendschreiben",
+      "Sinn Schreiben": "Sendschreiben",
       "Sinnschreiben": "Sendschreiben",
       "[BLANK_AUDIO]": " ",
       "Bruder Brenne ": "Bruder Branham ",
@@ -363,6 +366,7 @@ class TextCleaner {
       "Geistestapfel": "Geistestaufe",
       "hineingemogen": "hineingenommen",
       "Antimotheus": "an Timotheus",
+      "Dämodius": "Timotheus",
       "Demotius": "Timotheus",
       "Demodius": "Timotheus",
       "Timodius": "Timotheus",
@@ -412,6 +416,7 @@ class TextCleaner {
       "Berg Nepo": "Berg Nebo",
       "Berge Nepo": "Berge Nebo",
       " Nepo ": " Nebo ",
+      "Pelzebub": "Belzebub",
       "Pharisee": "Pharisäer",
       "Gnechte": "Knechte",
       "Geloft": "Gelobt",
@@ -459,9 +464,11 @@ class TextCleaner {
       "Bude Branham": "Bruder Branham",
       "Bruder Prenim": "Bruder Branham",
       "Bruderruf": "Bruder Russ",
+      "Bruder Rostan": "Bruder Russ",
       "Rudrus": "Bruder Russ",
       "in seinem Worten": "in seinem Worte",
       "In seinem Worten": "In seinem Worte",
+      "Schriftstille": "Schriftstelle",
       "Bibelschelle": "Bibelstelle",
       "Bibelschille": "Bibelstelle",
       "Bibelstille": "Bibelstelle",
@@ -475,6 +482,7 @@ class TextCleaner {
       "so und so": "Soundso",
       "So und So": "Soundso",
       "Anklage Rede": "Anklagerede",
+      "Budapremis": "Bruder Branhams",
       "Puderprinims": "Bruder Branhams",
       "Predigung der Pränens": "Predigt Bruder Branhams",
       "hindurch führen": "hindurchführen",
@@ -515,6 +523,7 @@ class TextCleaner {
       "hoher Priester": "Hohepriester",
       " muß ": " muss ",
       " ersten Moses": " 1. Moses",
+      "Parallelstille": "Parallelstelle",
       " zweiten Korinther": " 2. Korinther",
       " erste Korinther": " 1. Korinther",
       " ersten Kapitel": " 1. Kapitel",
@@ -542,7 +551,7 @@ class TextCleaner {
         "Branhams");
     text = text.replaceAll(
         RegExp(
-            r"(Prennem|Brigham|Pringim|Brenem|Brünnhild|Brennwort|Brehnen|Brynhem|Prenhjem|Brenhim|Brennhim|Brynhim|Prennep|Brünnhem|Prenhem|Pränim|Branhamd|Brenhen|Brehnem|Prennheim|Prenem|Prinim|Prennim|Prenheim|Brunheim|Prennum|Brennum|Brenhem|Brennen|Brenheim|Brinham|Brannham|Brennem|Brennhelm|Brinim|Brinhelm|Brinheim|Brennheim|Brunham|Brinhim|Brennhem|Brangham|Brenham|Brennan|Brnham|Brannan|Brannam|Brahm|Brennim|Bredem|Brinnen|Brenni)"),
+            r"(Prennem|Prenhim|Branheim|Brigham|Pringim|Brenem|Brünnhild|Brennwort|Brehnen|Brynhem|Prenhjem|Brenhim|Brennhim|Brynhim|Prennep|Brünnhem|Prenhem|Pränim|Branhamd|Brenhen|Brehnem|Prennheim|Prenem|Prinim|Prennim|Prenheim|Brunheim|Prennum|Brennum|Brenhem|Brennen|Brenheim|Brinham|Brannham|Brennem|Brennhelm|Brinim|Brinhelm|Brinheim|Brennheim|Brunham|Brinhim|Brennhem|Brangham|Brenham|Brennan|Brnham|Brannan|Brannam|Brahm|Brennim|Bredem|Brinnen|Brenni)"),
         "Branham");
 
     return text;
