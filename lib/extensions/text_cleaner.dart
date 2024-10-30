@@ -373,6 +373,12 @@ class TextCleaner {
       "Imodius": "Timotheus",
       "Vorricht": "Vorrecht",
       "Herrscharen": "Heerscharen",
+      "Würtenträger": "Würdenträger",
+      "Heiliger Mond": "Heiliger Mund",
+      "Mond Gottes": "Mund Gottes",
+      "preis und Ehre": "Preis und Ehre",
+      " Reis und Ehre": " Preis und Ehre",
+      " Reis sei Gott": " Preis sei Gott",
       "neunteste männliche": "neutestamentliche",
       "neutesten männliche": "neutestamentliche",
       "neuesten männliche": "neutestamentliche",
@@ -547,11 +553,11 @@ class TextCleaner {
 
     text = text.replaceAll(
         RegExp(
-          r"(Pränenz|Branhamies|Prennems|Pridims|Prehnems|Prenhems|Pränims|Brünnhems|Brennhams|Pränens|Prehens|Brennums|Brannhams|Brennims|Brenhams|Brinhems|Prennims|Prenims|Brennems|Brennams|Brynhems)"),
+          r"(Brinhems|Pränenz|Branhamies|Prennems|Pridims|Prehnems|Prenhems|Pränims|Brünnhems|Brennhams|Pränens|Prehens|Brennums|Brannhams|Brennims|Brenhams|Brinhems|Prennims|Prenims|Brennems|Brennams|Brynhems)"),
         "Branhams");
     text = text.replaceAll(
         RegExp(
-            r"(Prennem|Prenhim|Branheim|Brigham|Pringim|Brenem|Brünnhild|Brennwort|Brehnen|Brynhem|Prenhjem|Brenhim|Brennhim|Brynhim|Prennep|Brünnhem|Prenhem|Pränim|Branhamd|Brenhen|Brehnem|Prennheim|Prenem|Prinim|Prennim|Prenheim|Brunheim|Prennum|Brennum|Brenhem|Brennen|Brenheim|Brinham|Brannham|Brennem|Brennhelm|Brinim|Brinhelm|Brinheim|Brennheim|Brunham|Brinhim|Brennhem|Brangham|Brenham|Brennan|Brnham|Brannan|Brannam|Brahm|Brennim|Bredem|Brinnen|Brenni)"),
+            r"(Brinhem|Prennem|Prenhim|Branheim|Brigham|Pringim|Brenem|Brünnhild|Brennwort|Brehnen|Brynhem|Prenhjem|Brenhim|Brennhim|Brynhim|Prennep|Brünnhem|Prenhem|Pränim|Branhamd|Brenhen|Brehnem|Prennheim|Prenem|Prinim|Prennim|Prenheim|Brunheim|Prennum|Brennum|Brenhem|Brennen|Brenheim|Brinham|Brannham|Brennem|Brennhelm|Brinim|Brinhelm|Brinheim|Brennheim|Brunham|Brinhim|Brennhem|Brangham|Brenham|Brennan|Brnham|Brannan|Brannam|Brahm|Brennim|Bredem|Brinnen|Brenni)"),
         "Branham");
 
     return text;
