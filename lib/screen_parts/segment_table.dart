@@ -48,6 +48,15 @@ class SegmentTable extends ConsumerWidget {
     print('addParagraphBreak: $index');
   }
 
+  Future<void> callGeminiApi(
+      WidgetRef ref, TranscriptSegment s, int index) async {
+    // Make the API call
+    final response = await GeminiService()
+        .getGermanBibleReference(ref, s.text.trim(), index);
+
+    // Update the provider with the response
+    ref.read(foundVersesProvider.notifier).state = response;
+  }
   Future<void> callOpenAiApi(
       WidgetRef ref, TranscriptSegment s, int index) async {
     // Make the API call
@@ -279,9 +288,17 @@ class SegmentTable extends ConsumerWidget {
                         SegmentTableButton(
                           ref: ref,
                           color: Colors.green,
-                          tooltip: 'Get Scripture references',
+                          tooltip: 'Get Scripture references OpenAI',
                           icon: const Icon(Icons.find_in_page),
                           onPressed: () => callOpenAiApi(ref, s, index),
+                          index: index,
+                        ),
+                        SegmentTableButton(
+                          ref: ref,
+                          color: Colors.red,
+                          tooltip: 'Get Scripture references Gemini',
+                          icon: const Icon(Icons.find_in_page),
+                          onPressed: () => callGeminiApi(ref, s, index),
                           index: index,
                         ),
                         SegmentTableButton(
@@ -527,7 +544,7 @@ class SegmentTableButton extends StatelessWidget {
     final TranscriptData selectedTranscript = ref.watch(currentTranscriptProvider);
     return SizedBox(
         // color: Colors.red,
-        width: 35,
+        width: 33,
         child: Tooltip(
           message: tooltip,
           waitDuration: const Duration(seconds: 1),
