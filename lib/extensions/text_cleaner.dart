@@ -169,6 +169,8 @@ class TextCleaner {
       " sandet ": " sandte ",
       "aufstehen und bieten": "aufstehen und beten",
       " sandest": " sandtest",
+      "Walzpriester": "Baalspriester",
+      "Walspriester": "Baalspriester",
       "Städte zu bereiten": "Stätte zu bereiten",
       " erlieben": " erleben",
       "Laoducea": "Laodizea",
@@ -276,6 +278,25 @@ class TextCleaner {
       "Ämmeraus": "Emmaus",
       "ersten kommend": "ersten Kommen",
       "erste kommend": "erste Kommen",
+      "herrliche Heiland": "herrlicher Heiland",
+      " zu kurz kommen": " Zukurzkommen",
+      "es betrügt mich": "es betrübt mich",
+      "wie stets ": "wie steht's ",
+      "Wie stets ": "Wie steht's ",
+      "Angst und Bange": "angst und bange",
+      "Mahlzeichen": "Malzeichen",
+      "Hochzeitsmal": "Hochzeitsmahl",
+      "Abendmal": "Abendmahl",
+      "Wundenmahl": "Wundenmal",
+      "in seinen Worten": "in seinem Worte",
+      "sei seinem herrlichen Namen": "sei sein herrlicher Name",
+      "fühle Wohl": "fühle wohl",
+      "Wohl fühlen": "wohl fühlen",
+      "treuer, Hohepriester": "treuer Hohepriester",
+      "gedüngt": "gedünkt",
+      "finstern ist": "Finsternis",
+      "mit jedem Gotteskinder": "mit jedem Gotteskinde",
+      "eingedingt": "eingedenkt",
       "Eglesia": "Ecclesia",
       " gebackt ": " gepackt ",
       "Rechtsendresse": "richtige Adresse",
@@ -353,6 +374,7 @@ class TextCleaner {
       " Hiops": " Hiobs",
       " Hiop": " Hiob",
       "Weiss sagt": "weissagt",
+      "Weiß, sage": "weissage",
       "Sehnschreiben": "Sendschreiben",
       "Destamens": "Testaments",
       "Destamen": "Testament",
@@ -365,6 +387,7 @@ class TextCleaner {
       "Kolgata": "Golgatha",
       "Geistestapfel": "Geistestaufe",
       "hineingemogen": "hineingenommen",
+      "Thimodius": "Timotheus",
       "Antimotheus": "an Timotheus",
       "Dämodius": "Timotheus",
       "Demotius": "Timotheus",
@@ -417,6 +440,7 @@ class TextCleaner {
       "Sacharia": "Sacharja",
       "Hesikiel": "Hesekiel",
       "Hesäkel": "Hesekiel",
+      "Heersegel": "Hesekiel",
       "Epäse": "Epheser",
       "Logen Dank": "Lob und Dank",
       "Berg Nepo": "Berg Nebo",
@@ -500,7 +524,7 @@ class TextCleaner {
       " Joseh ": " Josua ",
       "Jannis": "Jannes",
       "zerrottetem": "zerrüttetem",
-      "zerrottet in": "zerrüttetem",
+      "Zero Bibles": "Serubabel",
       "kommt getan": "kundgetan",
       "Röstzeug": "Rüstzeug",
       "Blut Islames": "Blut des Lammes",
@@ -534,6 +558,8 @@ class TextCleaner {
       " erste Korinther": " 1. Korinther",
       " ersten Kapitel": " 1. Kapitel",
       " erste Kapitel": " 1. Kapitel",
+      "holzselig": "holdselig",
+      "Blut ergaufte": "Blut-erkaufte",
     };
 
     if (language == "en") {
@@ -553,11 +579,11 @@ class TextCleaner {
 
     text = text.replaceAll(
         RegExp(
-          r"(Brinhems|Pränenz|Branhamies|Prennems|Pridims|Prehnems|Prenhems|Pränims|Brünnhems|Brennhams|Pränens|Prehens|Brennums|Brannhams|Brennims|Brenhams|Brinhems|Prennims|Prenims|Brennems|Brennams|Brynhems)"),
+          r"(Brengens|Brinhems|Pränenz|Branhamies|Prinhems|Prennems|Pridims|Prehnems|Prenhems|Pränims|Brünnhems|Brennhams|Pränens|Prehens|Brennums|Brannhams|Brennims|Brenhams|Brinhems|Prennims|Prenims|Brennems|Brennams|Brynhems)"),
         "Branhams");
     text = text.replaceAll(
         RegExp(
-            r"(Brinhem|Prennem|Prenhim|Branheim|Brigham|Pringim|Brenem|Brünnhild|Brennwort|Brehnen|Brynhem|Prenhjem|Brenhim|Brennhim|Brynhim|Prennep|Brünnhem|Prenhem|Pränim|Branhamd|Brenhen|Brehnem|Prennheim|Prenem|Prinim|Prennim|Prenheim|Brunheim|Prennum|Brennum|Brenhem|Brennen|Brenheim|Brinham|Brannham|Brennem|Brennhelm|Brinim|Brinhelm|Brinheim|Brennheim|Brunham|Brinhim|Brennhem|Brangham|Brenham|Brennan|Brnham|Brannan|Brannam|Brahm|Brennim|Bredem|Brinnen|Brenni)"),
+            r"(Brengen|Brinhem|Prennem|Prenhim|Prinhem|Branheim|Brigham|Pringim|Brenem|Brünnhild|Brennwort|Brehnen|Brynhem|Prenhjem|Brenhim|Brennhim|Brynhim|Prennep|Brünnhem|Prenhem|Pränim|Branhamd|Brenhen|Brehnem|Prennheim|Prenem|Prinim|Prennim|Prenheim|Brunheim|Prennum|Brennum|Brenhem|Brennen|Brenheim|Brinham|Brannham|Brennem|Brennhelm|Brinim|Brinhelm|Brinheim|Brennheim|Brunham|Brinhim|Brennhem|Brangham|Brenham|Brennan|Brnham|Brannan|Brannam|Brahm|Brennim|Bredem|Brinnen|Brenni)"),
         "Branham");
 
     return text;
