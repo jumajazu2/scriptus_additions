@@ -136,12 +136,20 @@ class TextCleaner {
       "world prophet": "Word-Prophet",
       "word of truth": "Word of truth",
     };
+    Map<String, String> replacements_cz = {
+      "Braterus": "bratr Russ",
+      "Bátharus": "bratr Russ",
+      "Báthar": "bratr",
+    };
     Map<String, String> replacements_de = {
       "Dienstwohler Prenhems": "Diens Bruder Branhams",
       "Stück Werk": "Stückwerk",
+      "Ihr fehlt der Himmel": "Eher fehlt der Himmel",
       "biete dich an": "bete dich an",
       "Wuderos": "Bruder Russ",
       "Wodoros": "Bruder Russ",
+      "Uderus ": "Bruder Russ ",
+      "preis sei": "Preis sei",
       "okkumenisch": "ökumenisch",
       "Siebentonner": "Sieben Donner",
       "Bruder Brenn ": "Bruder Branham ",
@@ -274,6 +282,7 @@ class TextCleaner {
       "Epheserbriefe": "Epheser-Brief",
       "Epheserbrief": "Epheser-Brief",
       "Verlindung": "Vollendung",
+      "Misha": "Micha",
       "Erweckungsversammlung": "Erweckungs-Versammlung",
       "Ämmeraus": "Emmaus",
       "ersten kommend": "ersten Kommen",
@@ -352,9 +361,6 @@ class TextCleaner {
       "Bruthaus": "Brothaus",
       "Lefiten": "Leviten",
       "Lefit": "Levit",
-      "Braterus": "bratr Russ",
-      "Bátharus": "bratr Russ",
-      "Báthar": "bratr",
       "Verheizung": "Verheißung",
       "Erstmoses": "Erste Moses",
       "Morse": "Mose",
@@ -362,6 +368,7 @@ class TextCleaner {
       "frumme ": "fromme ",
       "Joils": "Joels",
       "Bibelfers": "Bibelvers",
+      "Bruder Ros": "Bruder Russ",
       "Bruderus": "Bruder Russ",
       "Udo Ross": "Bruder Russ",
       "Bruder Rusch": "Bruder Russ",
@@ -382,6 +389,7 @@ class TextCleaner {
       "Zakaria": "Sacharja",
       "Sagaria": "Sacharja",
       "Minghi": "Menge",
+      "beiden Stillen": "beide Stellen",
       "Olgath": "Golgatha",
       "Bölgata": "Golgatha",
       "Kolgata": "Golgatha",
@@ -396,7 +404,10 @@ class TextCleaner {
       "Imodius": "Timotheus",
       "Vorricht": "Vorrecht",
       "Herrscharen": "Heerscharen",
+      "Flugscharen": "Pflugscharen",
+      "Flug scharen": "Pflugscharen",
       "Würtenträger": "Würdenträger",
+      "heiliger Mond": "heiliger Mund",
       "Heiliger Mond": "Heiliger Mund",
       "Mond Gottes": "Mund Gottes",
       "preis und Ehre": "Preis und Ehre",
@@ -568,6 +579,8 @@ class TextCleaner {
       replacements.addAll(replacements_sk);
     } else if (language == "de") {
       replacements.addAll(replacements_de);
+    } else if (language == "cz") {
+      replacements.addAll(replacements_cz);
     } else {
       replacements.addAll(replacements_de);
       replacements.addAll(replacements_sk);
