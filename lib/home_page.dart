@@ -28,6 +28,7 @@ class HomePage extends ConsumerWidget {
   const HomePage({super.key, required this.title});
 
   final String title;
+
 //   @override
 //   HomePageState createState() => HomePageState();
 // }
@@ -239,18 +240,18 @@ class HomePage extends ConsumerWidget {
           //   width: 10,
           // ),
           Tooltip(
-              message: 'Clean text',
-              waitDuration: const Duration(seconds: 1),
-              child: MaterialButton(
+            message: 'Clean text',
+            waitDuration: const Duration(seconds: 1),
+            child: MaterialButton(
               onPressed: () => selectedTranscriptNotifier.cleanAllSegments(ref),
               // child: const Text('Clean All'),
               child: const Icon(Icons.cleaning_services),
             ),
           ),
           Tooltip(
-              message: 'Translate All Segments to SK',
-              waitDuration: const Duration(seconds: 1),
-              child: MaterialButton(
+            message: 'Translate All Segments to SK',
+            waitDuration: const Duration(seconds: 1),
+            child: MaterialButton(
               onPressed: () =>
                   selectedTranscriptNotifier.translateAllSegments(ref),
               child: Row(
@@ -291,9 +292,9 @@ class HomePage extends ConsumerWidget {
           //   ),
           // ),
           Tooltip(
-              message: 'Open JSON',
-              waitDuration: const Duration(seconds: 1),
-              child: MaterialButton(
+            message: 'Open JSON',
+            waitDuration: const Duration(seconds: 1),
+            child: MaterialButton(
               onPressed: () => DocumentService().importJson3(ref),
               // child: const Text('Open JSON …'),
               child: const Icon(Icons.folder_open_sharp),
@@ -317,9 +318,9 @@ class HomePage extends ConsumerWidget {
           //   child: const Text('Export MD'),
           // ),
           Tooltip(
-              message: 'Save DE To HTML',
-              waitDuration: const Duration(seconds: 1),
-              child: MaterialButton(
+            message: 'Save DE To HTML',
+            waitDuration: const Duration(seconds: 1),
+            child: MaterialButton(
               onPressed: () {
                 DocumentService().exportToHtml(
                     selectedTranscript.fileName,
@@ -380,8 +381,8 @@ class HomePage extends ConsumerWidget {
             ),
           ),
           Tooltip(
-              message: 'Save To JS HTML',
-              waitDuration: const Duration(seconds: 1),
+            message: 'Save To JS HTML',
+            waitDuration: const Duration(seconds: 1),
             child: MaterialButton(
               onPressed: () {
                 DocumentService().exportToHtmlJs(
@@ -414,9 +415,9 @@ class HomePage extends ConsumerWidget {
           // ),
           Consumer(
               builder: (context, ref, child) => Tooltip(
-                message: 'Save finnished sermon to API',
-                waitDuration: const Duration(seconds: 1),
-                child: MaterialButton(
+                    message: 'Save finnished sermon to API',
+                    waitDuration: const Duration(seconds: 1),
+                    child: MaterialButton(
                       color: Colors.lightGreen,
                       hoverColor: Colors.green,
                       onPressed: () async {
@@ -427,7 +428,7 @@ class HomePage extends ConsumerWidget {
                       },
                       child: const Text('API'),
                     ),
-              )),
+                  )),
           // Consumer(
           //     builder: (context, ref, child) => MaterialButton(
           //           color: Colors.lightGreen,
@@ -442,9 +443,9 @@ class HomePage extends ConsumerWidget {
           const SizedBox(width: 10),
           Consumer(
               builder: (context, ref, child) => Tooltip(
-                message: 'Save sermon to JSON for later use',
-                waitDuration: const Duration(seconds: 1),
-                child: MaterialButton(
+                    message: 'Save sermon to JSON for later use',
+                    waitDuration: const Duration(seconds: 1),
+                    child: MaterialButton(
                       hoverColor: Colors.green,
                       focusColor: Colors.lightGreen,
                       color: Colors.lightGreen,
@@ -453,13 +454,13 @@ class HomePage extends ConsumerWidget {
                       child: const Icon(Icons.save),
                       // Text('Save'),
                     ),
-              )),
+                  )),
           const SizedBox(width: 10),
           Consumer(
               builder: (context, ref, child) => Tooltip(
-                message: 'Open JSON file',
-                waitDuration: const Duration(seconds: 1),
-                child: MaterialButton(
+                    message: 'Open JSON file',
+                    waitDuration: const Duration(seconds: 1),
+                    child: MaterialButton(
                       color: Colors.lightGreen,
                       hoverColor: Colors.green,
                       onPressed: () =>
@@ -467,7 +468,7 @@ class HomePage extends ConsumerWidget {
                       child: const Icon(Icons.folder_open_sharp),
                       // child: const Text('Open'),
                     ),
-              )),
+                  )),
 
           // const LoadMeetingsButton(),
           const SizedBox(width: 10),

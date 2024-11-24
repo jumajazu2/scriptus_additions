@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; //jumajazu2 added for clipboard operations
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scriptus/audio/audio_player.dart';
@@ -484,6 +485,55 @@ class EditSentence extends HookConsumerWidget {
     }
   }
 
+//jumajazu2 added - send selection to clipboard where it is intercepted by Fuzzy Search Python code
+  void KJVsearch(WidgetRef ref, tec) {
+    final editedSegmentIndex = ref.watch(editedSegmentIndexProvider);
+
+    if (editedSegmentIndex != null) {
+      // Get the current selection
+      TextSelection selection = tec.selection;
+
+      if (selection.isValid && selection.isCollapsed == false) {
+        // Get the selected text
+        String selectedText =
+            tec.text.substring(selection.start, selection.end);
+
+        // Make the first letter uppercase
+        // if (selectedText.isNotEmpty) {
+        //   selectedText =
+        //       selectedText[0].toUpperCase() + selectedText.substring(1);
+        // }
+
+        // Add quotation marks
+        String newText =
+            '#KJVFS# $selectedText'; //adds activation code to python search app that will monitor the clipboard
+        Clipboard.setData(ClipboardData(text: newText));
+
+        // Replace the selected text with the new text
+        //tec.text =
+        //    tec.text.replaceRange(selection.start, selection.end, newText);
+
+        // Update the selection to keep it in the correct place
+        //tec.selection = TextSelection(
+        //  baseOffset: selection.start,
+        //  extentOffset: selection.start + newText.length,
+        //);
+      }
+      // if (editedSegmentIndex != null) {
+      //   final splitIndex = tec.selection.baseOffset;
+      //   ref
+      //       .read(currentTranscriptProvider.notifier)
+      //       .splitSegment(editedSegmentIndex, splitIndex);
+      // }
+      ref
+          .read(currentTranscriptProvider.notifier)
+          .updateText(editedSegmentIndex, tec.text);
+      TranscriptSegment ts =
+          ref.watch(currentTranscriptProvider).segments[editedSegmentIndex];
+      ref.read(sentenceProvider.notifier).state = ts;
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sentenceState = ref.watch(sentenceProvider);
@@ -494,7 +544,7 @@ class EditSentence extends HookConsumerWidget {
     final player = ref.read(audioPlayerControllerProvider.notifier);
     print('sentenceState.text: ${sentenceState.text}');
     final selectedTranscript = ref.watch(currentTranscriptProvider);
-    
+
     // Create the TextEditingController without setting the initial text.
     final tec = useTextEditingController();
 
@@ -507,9 +557,8 @@ class EditSentence extends HookConsumerWidget {
       //   TextPosition(offset: tec.text.length),
       // );
     }
-    
+
     void _handleSelectionChanged() {
-      
       // if (ref.watch(editedTextCursorPositionProvider) !=
       //         tec.selection.baseOffset &&
       //     tec.selection.baseOffset != tec.text.length &&
@@ -519,12 +568,11 @@ class EditSentence extends HookConsumerWidget {
       //     .read(editedTextCursorPositionProvider.notifier)
       //     .updateTextPosition(tec.selection.baseOffset);
       // // }
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref
-          .read(editedTextCursorPositionProvider.notifier)
-          .updateTextPosition(tec.selection.baseOffset);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref
+            .read(editedTextCursorPositionProvider.notifier)
+            .updateTextPosition(tec.selection.baseOffset);
       });
-
     }
 
     useEffect(() {
@@ -626,25 +674,24 @@ class EditSentence extends HookConsumerWidget {
           //     ref.read(sentenceProvider.notifier).updateText(tec.text);
           //     selectedTranscript.exportTranscriptToJson(ref);
           // } ,
-          onChanged: (s)  { 
-              ref
-                  .read(currentTranscriptProvider.notifier)
-                  .updateText(editedSegmentIndex!, s);
-              ref.read(sentenceProvider.notifier).updateText(s);
-              selectedTranscript.exportTranscriptToJson(ref);
-              DocumentService().exportToHtml(
-                    selectedTranscript.fileName,
-                    selectedTranscript.filePath,
-                    selectedTranscript.segments,
-                    'de',
-                    ref);
-              DocumentService().exportToHtml(
-                    selectedTranscript.fileName,
-                    selectedTranscript.filePath,
-                    selectedTranscript.segments,
-                    'sk',
-                    ref);
-
+          onChanged: (s) {
+            ref
+                .read(currentTranscriptProvider.notifier)
+                .updateText(editedSegmentIndex!, s);
+            ref.read(sentenceProvider.notifier).updateText(s);
+            selectedTranscript.exportTranscriptToJson(ref);
+            DocumentService().exportToHtml(
+                selectedTranscript.fileName,
+                selectedTranscript.filePath,
+                selectedTranscript.segments,
+                'de',
+                ref);
+            DocumentService().exportToHtml(
+                selectedTranscript.fileName,
+                selectedTranscript.filePath,
+                selectedTranscript.segments,
+                'sk',
+                ref);
           },
           cursorColor: Colors.red[900],
           autofocus: true,
@@ -850,6 +897,15 @@ class EditSentence extends HookConsumerWidget {
               text: '"…"',
               tooltip: 'Add Quotes Small',
               onPressed: () => addQuotesSmall(ref, tec),
+            ),
+            EditSegmentButtons(
+              // index: editedSegmentIndex ?? 0,
+              icon: const Icon(Icons.format_quote),
+              // ref: ref,
+              text: '#KJV',
+              tooltip:
+                  'Fuzzy search for selected text in KJV to return the verse in the clipboard',
+              onPressed: () => KJVsearch(ref, tec),
             ),
             // const VerticalDivider(
             //   // height: 20,

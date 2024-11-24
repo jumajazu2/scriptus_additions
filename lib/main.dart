@@ -21,6 +21,7 @@ import 'package:scriptus/home_page.dart';
 // import 'services/mng_database_service.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const ProviderScope(child: MyApp()));
 }
 
