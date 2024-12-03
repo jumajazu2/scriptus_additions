@@ -125,7 +125,7 @@ class TranscriptData //extends DataModel<TranscriptData>
     );
 
     if (result == null) {
-      throw Exception('No file selected');
+      return;
     }
 
     File file = File(result.files.single.path!);

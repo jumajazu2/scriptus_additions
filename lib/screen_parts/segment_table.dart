@@ -48,6 +48,15 @@ class SegmentTable extends ConsumerWidget {
     print('addParagraphBreak: $index');
   }
 
+  Future<void> callGeminiApi(
+      WidgetRef ref, TranscriptSegment s, int index) async {
+    // Make the API call
+    final response = await GeminiService()
+        .getGermanBibleReference(ref, s.text.trim(), index);
+
+    // Update the provider with the response
+    ref.read(foundVersesProvider.notifier).state = response;
+  }
   Future<void> callOpenAiApi(
       WidgetRef ref, TranscriptSegment s, int index) async {
     // Make the API call
@@ -267,21 +276,29 @@ class SegmentTable extends ConsumerWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        // SegmentTableButton(
+                        //   ref: ref,
+                        //   color: Colors.green,
+                        //   tooltip: 'Translate SK',
+                        //   icon: const Icon(Icons.language),
+                        //   // onPressed: () => {translateText(ref, s.text, index)},
+                        //   onPressed: () => {tdn.translateSegment(index)},
+                        //   index: index,
+                        // ),
                         SegmentTableButton(
                           ref: ref,
                           color: Colors.green,
-                          tooltip: 'Translate SK',
-                          icon: const Icon(Icons.language),
-                          // onPressed: () => {translateText(ref, s.text, index)},
-                          onPressed: () => {tdn.translateSegment(index)},
+                          tooltip: 'Get Scripture references OpenAI',
+                          icon: const Icon(Icons.find_in_page),
+                          onPressed: () => callOpenAiApi(ref, s, index),
                           index: index,
                         ),
                         SegmentTableButton(
                           ref: ref,
-                          color: Colors.green,
-                          tooltip: 'Get Scripture references',
+                          color: Colors.red,
+                          tooltip: 'Get Scripture references Gemini',
                           icon: const Icon(Icons.find_in_page),
-                          onPressed: () => callOpenAiApi(ref, s, index),
+                          onPressed: () => callGeminiApi(ref, s, index),
                           index: index,
                         ),
                         SegmentTableButton(
@@ -416,14 +433,17 @@ class SegmentTable extends ConsumerWidget {
                                               // backgroundColor: Colors.red,
                                               // overflow: TextOverflow.ellipsis,
                                               height: 1.6,
-                                              fontSize: 18,
+                                              fontSize: 22,
                                               // textBaseline: TextBaseline.values[0],
                                               // leadingDistribution:
                                               //     TextLeadingDistribution.proportional,
                                               fontFamily: 'Courier New',
                                               color: s.places.isNotEmpty
-                                                  ? Colors.blue
-                                                  : Colors.black,
+                                              ? Colors.blue
+                                              : Theme.of(context).brightness ==
+                                                      Brightness.dark
+                                                  ? Colors.grey[300]
+                                                  : Colors.grey[800],
                                               fontStyle:
                                                   s.isScripture || s.isSong
                                                       ? FontStyle.italic
@@ -527,7 +547,7 @@ class SegmentTableButton extends StatelessWidget {
     final TranscriptData selectedTranscript = ref.watch(currentTranscriptProvider);
     return SizedBox(
         // color: Colors.red,
-        width: 35,
+        width: 33,
         child: Tooltip(
           message: tooltip,
           waitDuration: const Duration(seconds: 1),

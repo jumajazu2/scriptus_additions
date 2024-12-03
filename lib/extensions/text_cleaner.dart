@@ -136,12 +136,20 @@ class TextCleaner {
       "world prophet": "Word-Prophet",
       "word of truth": "Word of truth",
     };
+    Map<String, String> replacements_cz = {
+      "Braterus": "bratr Russ",
+      "Bátharus": "bratr Russ",
+      "Báthar": "bratr",
+    };
     Map<String, String> replacements_de = {
       "Dienstwohler Prenhems": "Diens Bruder Branhams",
       "Stück Werk": "Stückwerk",
+      "Ihr fehlt der Himmel": "Eher fehlt der Himmel",
       "biete dich an": "bete dich an",
       "Wuderos": "Bruder Russ",
       "Wodoros": "Bruder Russ",
+      "Uderus ": "Bruder Russ ",
+      "preis sei": "Preis sei",
       "okkumenisch": "ökumenisch",
       "Siebentonner": "Sieben Donner",
       "Bruder Brenn ": "Bruder Branham ",
@@ -169,6 +177,8 @@ class TextCleaner {
       " sandet ": " sandte ",
       "aufstehen und bieten": "aufstehen und beten",
       " sandest": " sandtest",
+      "Walzpriester": "Baalspriester",
+      "Walspriester": "Baalspriester",
       "Städte zu bereiten": "Stätte zu bereiten",
       " erlieben": " erleben",
       "Laoducea": "Laodizea",
@@ -272,10 +282,30 @@ class TextCleaner {
       "Epheserbriefe": "Epheser-Brief",
       "Epheserbrief": "Epheser-Brief",
       "Verlindung": "Vollendung",
+      "Misha": "Micha",
       "Erweckungsversammlung": "Erweckungs-Versammlung",
       "Ämmeraus": "Emmaus",
       "ersten kommend": "ersten Kommen",
       "erste kommend": "erste Kommen",
+      "herrliche Heiland": "herrlicher Heiland",
+      " zu kurz kommen": " Zukurzkommen",
+      "es betrügt mich": "es betrübt mich",
+      "wie stets ": "wie steht's ",
+      "Wie stets ": "Wie steht's ",
+      "Angst und Bange": "angst und bange",
+      "Mahlzeichen": "Malzeichen",
+      "Hochzeitsmal": "Hochzeitsmahl",
+      "Abendmal": "Abendmahl",
+      "Wundenmahl": "Wundenmal",
+      "in seinen Worten": "in seinem Worte",
+      "sei seinem herrlichen Namen": "sei sein herrlicher Name",
+      "fühle Wohl": "fühle wohl",
+      "Wohl fühlen": "wohl fühlen",
+      "treuer, Hohepriester": "treuer Hohepriester",
+      "gedüngt": "gedünkt",
+      "finstern ist": "Finsternis",
+      "mit jedem Gotteskinder": "mit jedem Gotteskinde",
+      "eingedingt": "eingedenkt",
       "Eglesia": "Ecclesia",
       " gebackt ": " gepackt ",
       "Rechtsendresse": "richtige Adresse",
@@ -331,9 +361,6 @@ class TextCleaner {
       "Bruthaus": "Brothaus",
       "Lefiten": "Leviten",
       "Lefit": "Levit",
-      "Braterus": "bratr Russ",
-      "Bátharus": "bratr Russ",
-      "Báthar": "bratr",
       "Verheizung": "Verheißung",
       "Erstmoses": "Erste Moses",
       "Morse": "Mose",
@@ -341,6 +368,7 @@ class TextCleaner {
       "frumme ": "fromme ",
       "Joils": "Joels",
       "Bibelfers": "Bibelvers",
+      "Bruder Ros": "Bruder Russ",
       "Bruderus": "Bruder Russ",
       "Udo Ross": "Bruder Russ",
       "Bruder Rusch": "Bruder Russ",
@@ -353,6 +381,7 @@ class TextCleaner {
       " Hiops": " Hiobs",
       " Hiop": " Hiob",
       "Weiss sagt": "weissagt",
+      "Weiß, sage": "weissage",
       "Sehnschreiben": "Sendschreiben",
       "Destamens": "Testaments",
       "Destamen": "Testament",
@@ -360,11 +389,13 @@ class TextCleaner {
       "Zakaria": "Sacharja",
       "Sagaria": "Sacharja",
       "Minghi": "Menge",
+      "beiden Stillen": "beide Stellen",
       "Olgath": "Golgatha",
       "Bölgata": "Golgatha",
       "Kolgata": "Golgatha",
       "Geistestapfel": "Geistestaufe",
       "hineingemogen": "hineingenommen",
+      "Thimodius": "Timotheus",
       "Antimotheus": "an Timotheus",
       "Dämodius": "Timotheus",
       "Demotius": "Timotheus",
@@ -373,6 +404,15 @@ class TextCleaner {
       "Imodius": "Timotheus",
       "Vorricht": "Vorrecht",
       "Herrscharen": "Heerscharen",
+      "Flugscharen": "Pflugscharen",
+      "Flug scharen": "Pflugscharen",
+      "Würtenträger": "Würdenträger",
+      "heiliger Mond": "heiliger Mund",
+      "Heiliger Mond": "Heiliger Mund",
+      "Mond Gottes": "Mund Gottes",
+      "preis und Ehre": "Preis und Ehre",
+      " Reis und Ehre": " Preis und Ehre",
+      " Reis sei Gott": " Preis sei Gott",
       "neunteste männliche": "neutestamentliche",
       "neutesten männliche": "neutestamentliche",
       "neuesten männliche": "neutestamentliche",
@@ -411,6 +451,7 @@ class TextCleaner {
       "Sacharia": "Sacharja",
       "Hesikiel": "Hesekiel",
       "Hesäkel": "Hesekiel",
+      "Heersegel": "Hesekiel",
       "Epäse": "Epheser",
       "Logen Dank": "Lob und Dank",
       "Berg Nepo": "Berg Nebo",
@@ -494,7 +535,7 @@ class TextCleaner {
       " Joseh ": " Josua ",
       "Jannis": "Jannes",
       "zerrottetem": "zerrüttetem",
-      "zerrottet in": "zerrüttetem",
+      "Zero Bibles": "Serubabel",
       "kommt getan": "kundgetan",
       "Röstzeug": "Rüstzeug",
       "Blut Islames": "Blut des Lammes",
@@ -528,6 +569,8 @@ class TextCleaner {
       " erste Korinther": " 1. Korinther",
       " ersten Kapitel": " 1. Kapitel",
       " erste Kapitel": " 1. Kapitel",
+      "holzselig": "holdselig",
+      "Blut ergaufte": "Blut-erkaufte",
     };
 
     if (language == "en") {
@@ -536,6 +579,8 @@ class TextCleaner {
       replacements.addAll(replacements_sk);
     } else if (language == "de") {
       replacements.addAll(replacements_de);
+    } else if (language == "cz") {
+      replacements.addAll(replacements_cz);
     } else {
       replacements.addAll(replacements_de);
       replacements.addAll(replacements_sk);
@@ -547,11 +592,11 @@ class TextCleaner {
 
     text = text.replaceAll(
         RegExp(
-          r"(Pränenz|Branhamies|Prennems|Pridims|Prehnems|Prenhems|Pränims|Brünnhems|Brennhams|Pränens|Prehens|Brennums|Brannhams|Brennims|Brenhams|Brinhems|Prennims|Prenims|Brennems|Brennams|Brynhems)"),
+          r"(Brengens|Brinhems|Pränenz|Branhamies|Prinhems|Prennems|Pridims|Prehnems|Prenhems|Pränims|Brünnhems|Brennhams|Pränens|Prehens|Brennums|Brannhams|Brennims|Brenhams|Brinhems|Prennims|Prenims|Brennems|Brennams|Brynhems)"),
         "Branhams");
     text = text.replaceAll(
         RegExp(
-            r"(Prennem|Prenhim|Branheim|Brigham|Pringim|Brenem|Brünnhild|Brennwort|Brehnen|Brynhem|Prenhjem|Brenhim|Brennhim|Brynhim|Prennep|Brünnhem|Prenhem|Pränim|Branhamd|Brenhen|Brehnem|Prennheim|Prenem|Prinim|Prennim|Prenheim|Brunheim|Prennum|Brennum|Brenhem|Brennen|Brenheim|Brinham|Brannham|Brennem|Brennhelm|Brinim|Brinhelm|Brinheim|Brennheim|Brunham|Brinhim|Brennhem|Brangham|Brenham|Brennan|Brnham|Brannan|Brannam|Brahm|Brennim|Bredem|Brinnen|Brenni)"),
+            r"(Brengen|Brinhem|Prennem|Prenhim|Prinhem|Branheim|Brigham|Pringim|Brenem|Brünnhild|Brennwort|Brehnen|Brynhem|Prenhjem|Brenhim|Brennhim|Brynhim|Prennep|Brünnhem|Prenhem|Pränim|Branhamd|Brenhen|Brehnem|Prennheim|Prenem|Prinim|Prennim|Prenheim|Brunheim|Prennum|Brennum|Brenhem|Brennen|Brenheim|Brinham|Brannham|Brennem|Brennhelm|Brinim|Brinhelm|Brinheim|Brennheim|Brunham|Brinhim|Brennhem|Brangham|Brenham|Brennan|Brnham|Brannan|Brannam|Brahm|Brennim|Bredem|Brinnen|Brenni)"),
         "Branham");
 
     return text;

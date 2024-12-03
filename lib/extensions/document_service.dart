@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:csv/csv_settings_autodetection.dart';
+import 'package:flutter/services.dart';
+import 'package:id3tag/id3tag.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path/path.dart' as path;
 import 'package:csv/csv.dart';
@@ -11,12 +13,16 @@ import 'package:scriptus/audio/audio_player.dart';
 // import 'package:path_provider/path_provider.dart';
 import 'package:scriptus/extensions/utilities.dart';
 import 'package:scriptus/models/bible_verse.dart';
+import 'package:scriptus/models/sermon.dart';
 import 'package:scriptus/models/transcript_data.dart';
 import 'package:scriptus/models/transcript_segment.dart';
 import 'package:scriptus/providers/current_doc_provider.dart';
 import 'package:scriptus/providers/meeting_provider.dart';
 import 'package:scriptus/providers/settings_provider.dart';
 import 'package:scriptus/services/msk_db_service.dart';
+// import 'package:docx_template/docx_template.dart';
+import 'package:process_run/process_run.dart';
+import 'package:mp3_info/mp3_info.dart';
 
 import '../models/place.dart';
 
@@ -964,13 +970,126 @@ class DocumentService {
     return htmlText;
   }
 
+  Future<void> exportToWord(
+      String fileName, String filePath, List<TranscriptSegment> segments, String language, ref) async {
+    try {
+      String reference_docx = 'custom-reference-deutsch.docx';
+      fileName = fileName.replaceAll('.wav.json', '');
+      // replace deutsch with slovak or english or deutsch according to language parameter
+      if (language == 'sk') {
+        fileName = fileName.replaceAll('deutsch', 'slovak');
+        reference_docx = 'custom-reference-slovak.docx';
+      } else if (language == 'en') {
+        fileName = fileName.replaceAll('deutsch', 'english');
+        reference_docx = 'custom-reference-english.docx';
+      } 
+
+      // Get temporary directory that the app has access to
+      final tempDir = await getTemporaryDirectory();
+      final tempHtmlPath = '${tempDir.path}/$fileName.html';
+      final tempDocxPath = '${tempDir.path}/$fileName.docx';
+      
+      // Generate HTML content
+      final htmlText = await generateHtml(segments, filePath, language, ref);
+      
+      // Save HTML to temporary location
+      await File(tempHtmlPath).writeAsString(htmlText);
+      
+      // Run pandoc command using temporary paths
+      var shell = Shell(workingDirectory: tempDir.path);
+      await shell.run('/opt/homebrew/bin/pandoc -f html -t docx "$tempHtmlPath" -o "$tempDocxPath" --reference-doc=/Users/miro/$reference_docx');
+      
+      // Copy the generated DOCX to Downloads
+      final downloadsPath = await getDownloadsDir();
+      final finalPath = '$downloadsPath/$fileName.docx';
+      await File(tempDocxPath).copy(finalPath);
+      
+      // Clean up temporary files
+      await File(tempHtmlPath).delete();
+      await File(tempDocxPath).delete();
+    } catch (e) {
+      print('Error converting file: $e');
+      rethrow;
+    }
+  }
+
+  String extractSermonTitle(String filePath, String language) {
+    // MP3Info mp3 = MP3Processor.fromFile(File(filePath));
+
+    final parser = ID3TagReader.path(filePath);
+    final tag = parser.readTagSync();
+    // print(broadcastDate.toString().substring(0, 10));
+    // print(tag.comment?.comment);
+    // print(tag.frameDictionaries);
+
+    String cleanTitle = tag.comment?.comment ?? '';
+    // if cleanTitle is empty, extract title from file name
+    // if (cleanTitle == '') {
+    //   print('no title found in id3 tag');
+    //   // cleanTitle = extractFileInfo(file.path)['title'];
+    // }
+    // print(filePath);
+    // print(cleanTitle);
+
+    // String cleanTitle = title == '' ? tag.title ?? '' : title;
+    cleanTitle = cleanTitle.replaceAll('"', '');
+    // remove line breaks from title
+    cleanTitle = cleanTitle.replaceAll('\n', '');
+    if(language == 'deutsch') {
+    }
+    // print(cleanTitle);
+
+    return cleanTitle;
+
+  }
+  
   Future<String> generateHtml(
-      List<TranscriptSegment> segments, language, ref) async {
-    // final settings = ref.watch(settingsProvider);
+    List<TranscriptSegment> segments, String filePath, String language, ref) async {
+    final selectedTranscript = ref.watch(currentTranscriptProvider);
+    // print(selectedTranscript.filePath);
+    // print(selectedTranscript.fileName);
+    // strip filename
+    String dirName = selectedTranscript.fileName.split('.').first;
+    // remove trailing city and language info, starting with deutsch
+    dirName = dirName.replaceAll(RegExp(r'-deutsch|-english'), '');
+    String fileName = selectedTranscript.fileName.split('.').first;
+    // remove first 13 characters
+    fileName = fileName.substring(13);
+    final String transferredDir = '/Users/miro/Downloads/transferred/';
+    String mp3filePath = '$transferredDir$dirName/$fileName.mp3';
+    // final audioPlayer = ref.watch(audioPlayerProvider);
+    // final mp3url = audioPlayer.audioSource.uri.toString();
+    // extract filename from mp3 url
+    // final mp3path = mp3url.split('/').last;
+    // get path to mp3 file in app support directory
+    // final appSupportDir = await getApplicationSupportDirectory();
+    // final mp3filePath = '${appSupportDir.path}/$mp3path';
+    print(mp3filePath);
+
     final sb = StringBuffer();
     MskDBProvider mskDBProvider = MskDBProvider();
+    // String title = 'test';
+    String title = extractSermonTitle(mp3filePath, language);
+    String broadcastDate = dirName.substring(0, 10);
+    String preachedOn = fileName.substring(0, 10);
+    String preachedAt = fileName.substring(11, 15);
+    // format preachedAt to be 12:00
+    print(preachedAt);
+    // Convert 24 hour time to 12 hour format with AM/PM
+    int hour = int.parse(preachedAt.substring(0,2));
+    int minute = int.parse(preachedAt.substring(2));
+    // String period = hour >= 12 ? 'PM' : 'AM';
+    hour = hour > 12 ? hour - 12 : hour;
+    hour = hour == 0 ? 12 : hour;
+    preachedAt = '${hour.toString().padLeft(2,'0')}:${minute.toString().padLeft(2,'0')} ';
+    print(preachedAt);
 
     sb.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head>');
+    sb.write('<body>');
+    sb.write('<h2>Ewald Frank</h2>');
+    sb.write('<h2>$preachedOn $preachedAt</h2>');
+    sb.write('<h2>$broadcastDate</h2>');
+    sb.write('<h2>$title</h2>');
 
     // for (final segment in segments) {
     // segments.asMap().forEach((index, segment) async {
@@ -1023,7 +1142,7 @@ class DocumentService {
                     Place.fromBibleVerse(segment.assignedScripture!), language);
             // print("segment.assignedScripture2: $otherLanguage");
             if (ref.watch(settingsProvider).exportHtmlWithOriginalVerse) {
-              sb.write("${segment.text}<br>");
+              sb.write("<u>${segment.text}</u> <br>");
             } else {
               sb.write(otherLanguage.content);
             }
@@ -1057,7 +1176,10 @@ class DocumentService {
 
       // if (segment.hasParagraphBreak) {
       sb.write('</p>'); // Paragraph break in HTML
-      sb.write('<p></p>');
+      // add a small space between paragraphs for german language
+      if (language == 'de') {
+        sb.write('<p><span style="height: 10px;"></span></p>');
+      }
       // } else {
       //   sb.write(' '); // Space between segments in the same paragraph
       // }
@@ -1110,7 +1232,7 @@ class DocumentService {
       List<TranscriptSegment> segments, language, ref) async {
     // final ctp = ref.watch(currentTranscriptProvider);
 
-    final htmlText = await generateHtml(segments, language, ref);
+    final htmlText = await generateHtml(segments, filePath, language, ref);
 
     // Show the file save dialog
     // final saveFileResultPath = await FilePicker.platform.saveFile(
@@ -1125,7 +1247,15 @@ class DocumentService {
     String saveFileResultPath = await getDownloadsDir();
 
     if (saveFileResultPath != null) {
-      final file = File('$saveFileResultPath/$fileName-$language.html');
+      // remove .wav.json from filename
+      fileName = fileName.replaceAll('.wav.json', '');
+      // replace deutsch with slovak or english or deutsch according to language parameter
+      if (language == 'sk') {
+        fileName = fileName.replaceAll('deutsch', 'slovak');
+      } else if (language == 'en') {
+        fileName = fileName.replaceAll('deutsch', 'english');
+      } 
+      final file = File('$saveFileResultPath/$fileName.html');
       await file.writeAsString(htmlText);
     }
   }
