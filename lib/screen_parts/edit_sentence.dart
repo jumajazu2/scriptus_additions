@@ -207,7 +207,7 @@ class EditSentence extends HookConsumerWidget {
             tec.text.substring(selection.start, selection.end);
 
         // Make the first letter uppercase
-        selectedText = makeFirstLetterUppercase(selectedText);
+        //selectedText = makeFirstLetterUppercase(selectedText); disabled as this usually needs to be change to lowercase again
 
         String enclosedSelectedText = encloseText(selectedText, ["b", "i"]);
 
