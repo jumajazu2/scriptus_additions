@@ -31,11 +31,12 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
-
+/Downloads/
+C:\Users\Juraj\scriptus2\scriptus\Downloads
 # Symbolication related
 app.*.symbols
 
-# Obfuscation related
+# Obfuscation relatedgit
 app.*.map.json
 
 # Android Studio will place build artifacts here

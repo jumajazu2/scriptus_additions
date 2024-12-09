@@ -277,6 +277,7 @@ class DocumentService {
       print('canceled');
     }
   }
+
   /// Splits the given [element] into sentences based on punctuation marks (. ! ? ").
   /// Returns a list of maps, where each map represents a sentence and contains the following keys:
   /// - 'text': The text of the sentence.
@@ -970,8 +971,8 @@ class DocumentService {
     return htmlText;
   }
 
-  Future<void> exportToWord(
-      String fileName, String filePath, List<TranscriptSegment> segments, String language, ref) async {
+  Future<void> exportToWord(String fileName, String filePath,
+      List<TranscriptSegment> segments, String language, ref) async {
     try {
       String reference_docx = 'custom-reference-deutsch.docx';
       fileName = fileName.replaceAll('.wav.json', '');
@@ -982,28 +983,29 @@ class DocumentService {
       } else if (language == 'en') {
         fileName = fileName.replaceAll('deutsch', 'english');
         reference_docx = 'custom-reference-english.docx';
-      } 
+      }
 
       // Get temporary directory that the app has access to
       final tempDir = await getTemporaryDirectory();
       final tempHtmlPath = '${tempDir.path}/$fileName.html';
       final tempDocxPath = '${tempDir.path}/$fileName.docx';
-      
+
       // Generate HTML content
       final htmlText = await generateHtml(segments, filePath, language, ref);
-      
+
       // Save HTML to temporary location
       await File(tempHtmlPath).writeAsString(htmlText);
-      
+
       // Run pandoc command using temporary paths
       var shell = Shell(workingDirectory: tempDir.path);
-      await shell.run('/opt/homebrew/bin/pandoc -f html -t docx "$tempHtmlPath" -o "$tempDocxPath" --reference-doc=/Users/miro/$reference_docx');
-      
+      await shell.run(
+          '/opt/homebrew/bin/pandoc -f html -t docx "$tempHtmlPath" -o "$tempDocxPath" --reference-doc=/Users/miro/$reference_docx');
+
       // Copy the generated DOCX to Downloads
       final downloadsPath = await getDownloadsDir();
       final finalPath = '$downloadsPath/$fileName.docx';
       await File(tempDocxPath).copy(finalPath);
-      
+
       // Clean up temporary files
       await File(tempHtmlPath).delete();
       await File(tempDocxPath).delete();
@@ -1035,16 +1037,14 @@ class DocumentService {
     cleanTitle = cleanTitle.replaceAll('"', '');
     // remove line breaks from title
     cleanTitle = cleanTitle.replaceAll('\n', '');
-    if(language == 'deutsch') {
-    }
+    if (language == 'deutsch') {}
     // print(cleanTitle);
 
     return cleanTitle;
-
   }
-  
-  Future<String> generateHtml(
-    List<TranscriptSegment> segments, String filePath, String language, ref) async {
+
+  Future<String> generateHtml(List<TranscriptSegment> segments, String filePath,
+      String language, ref) async {
     final selectedTranscript = ref.watch(currentTranscriptProvider);
     // print(selectedTranscript.filePath);
     // print(selectedTranscript.fileName);
@@ -1055,8 +1055,8 @@ class DocumentService {
     String fileName = selectedTranscript.fileName.split('.').first;
     // remove first 13 characters
     fileName = fileName.substring(13);
-    final String transferredDir = '/Users/miro/Downloads/transferred/';
-    String mp3filePath = '$transferredDir$dirName/$fileName.mp3';
+    //final String transferredDir = '';
+    //String mp3filePath = '$transferredDir$dirName\\$fileName.mp3';
     // final audioPlayer = ref.watch(audioPlayerProvider);
     // final mp3url = audioPlayer.audioSource.uri.toString();
     // extract filename from mp3 url
@@ -1064,24 +1064,26 @@ class DocumentService {
     // get path to mp3 file in app support directory
     // final appSupportDir = await getApplicationSupportDirectory();
     // final mp3filePath = '${appSupportDir.path}/$mp3path';
-    print(mp3filePath);
+    //print(mp3filePath);
 
     final sb = StringBuffer();
     MskDBProvider mskDBProvider = MskDBProvider();
     // String title = 'test';
-    String title = extractSermonTitle(mp3filePath, language);
+    String title =
+        '–'; //extractSermonTitle(mp3filePath, language); // temporarily disabled extractSermonTitle and reference to transferredDir as it does not exist on my system and prevents Export to English HTML from working, Export to English HTML works now, just the title is not constructed
     String broadcastDate = dirName.substring(0, 10);
     String preachedOn = fileName.substring(0, 10);
     String preachedAt = fileName.substring(11, 15);
     // format preachedAt to be 12:00
     print(preachedAt);
     // Convert 24 hour time to 12 hour format with AM/PM
-    int hour = int.parse(preachedAt.substring(0,2));
+    int hour = int.parse(preachedAt.substring(0, 2));
     int minute = int.parse(preachedAt.substring(2));
     // String period = hour >= 12 ? 'PM' : 'AM';
     hour = hour > 12 ? hour - 12 : hour;
     hour = hour == 0 ? 12 : hour;
-    preachedAt = '${hour.toString().padLeft(2,'0')}:${minute.toString().padLeft(2,'0')} ';
+    preachedAt =
+        '${hour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} ';
     print(preachedAt);
 
     sb.write('<!DOCTYPE html><html><head><meta charset="UTF-8"></head>');
@@ -1194,39 +1196,38 @@ class DocumentService {
   }
 
   Future<String> getDownloadsDir() async {
-      try {
-        // Get the user's home directory path.
-        final directory = await getApplicationSupportDirectory();
-        // final homeDirectoryPath = join(
-        //     directory.path, '..', '..', '..', '..', '..', '..', '..', '..', '..');
-        final parts = directory.path.split('/');
+    try {
+      // Get the user's home directory path.
+      final directory = await getApplicationSupportDirectory();
+      // final homeDirectoryPath = join(
+      //     directory.path, '..', '..', '..', '..', '..', '..', '..', '..', '..');
+      final parts = directory.path.split('/');
 
-        String homeDirectoryPath = '';
+      String homeDirectoryPath = '';
 
-        // Check if there are enough parts to extract
-        if (parts.length >= 2) {
-          // Join the first three parts with a slash
-          homeDirectoryPath = '/' + parts.sublist(1, 3).join('/');
-          print(homeDirectoryPath); // Outputs: /Users/miro/Library
-        } else {
-          print('Not enough parts to extract');
-        }
-        // Construct the path to the Downloads directory.
-        final downloadsDirectoryPath = join(homeDirectoryPath, 'Downloads');
-        final downloadsDirectory = Directory(downloadsDirectoryPath);
-        print(downloadsDirectory);
-
-        // Check if the Downloads directory exists, if not, throw an error.
-        if (!await downloadsDirectory.exists()) {
-          throw Exception('Downloads directory does not exist');
-        }
-        return downloadsDirectoryPath;
-      } catch (e) {
-        print('Error: $e');
-        return '';
+      // Check if there are enough parts to extract
+      if (parts.length >= 2) {
+        // Join the first three parts with a slash
+        homeDirectoryPath = '/' + parts.sublist(1, 3).join('/');
+        print(homeDirectoryPath); // Outputs: /Users/miro/Library
+      } else {
+        print('Not enough parts to extract');
       }
-  }
+      // Construct the path to the Downloads directory.
+      final downloadsDirectoryPath = join(homeDirectoryPath, 'Downloads');
+      final downloadsDirectory = Directory(downloadsDirectoryPath);
+      print(downloadsDirectory);
 
+      // Check if the Downloads directory exists, if not, throw an error.
+      if (!await downloadsDirectory.exists()) {
+        throw Exception('Downloads directory does not exist');
+      }
+      return downloadsDirectoryPath;
+    } catch (e) {
+      print('Error: $e');
+      return '';
+    }
+  }
 
   Future<void> exportToHtml(fileName, filePath,
       List<TranscriptSegment> segments, language, ref) async {
@@ -1254,7 +1255,7 @@ class DocumentService {
         fileName = fileName.replaceAll('deutsch', 'slovak');
       } else if (language == 'en') {
         fileName = fileName.replaceAll('deutsch', 'english');
-      } 
+      }
       final file = File('$saveFileResultPath/$fileName.html');
       await file.writeAsString(htmlText);
     }
