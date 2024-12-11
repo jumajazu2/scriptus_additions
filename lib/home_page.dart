@@ -22,7 +22,6 @@ import 'package:scriptus/screen_parts/saved_verses.dart';
 import 'package:scriptus/screen_parts/search_widget.dart';
 import 'package:scriptus/screen_parts/settings/settigns_dialog.dart';
 import 'package:scriptus/services/meeting_service.dart';
-import 'package:scriptus/screen_parts/kjv_display.dart';
 
 import 'screen_parts/object_viewer.dart';
 import 'screen_parts/segment_table.dart';
