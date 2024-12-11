@@ -8,10 +8,14 @@ import 'package:scriptus/audio/audio_player.dart';
 import 'package:scriptus/extensions/document_service.dart';
 import 'package:scriptus/extensions/openAiApi.dart';
 import 'package:scriptus/extensions/utilities.dart';
+import 'package:scriptus/home_page.dart';
 import 'package:scriptus/models/transcript_segment.dart';
 import 'package:scriptus/providers/current_doc_provider.dart';
 import 'package:scriptus/providers/found_verses_provider.dart';
 import 'package:scriptus/providers/sentence_providers.dart';
+import 'package:scriptus/providers/variable_monitor.dart';
+import 'package:scriptus/services/kjv_fuzzy_search.dart';
+
 // import 'package:scriptus/constants.dart';
 
 // create a riverpod provider to hold CMD button pressed status
@@ -485,10 +489,16 @@ class EditSentence extends HookConsumerWidget {
     }
   }
 
-//jumajazu2 added - send selection to clipboard where it is intercepted by Fuzzy Search Python code
+//jumajazu2 added - send whole segment/selection to clipboard to kjvFuzzySearch amd to Clipboard where it can be intercepted by external code
   void KJVsearch(WidgetRef ref, tec) {
     final editedSegmentIndex = ref.watch(editedSegmentIndexProvider);
 
+    numberClicks = numberClicks + 1;
+    clicks = clicks + 1;
+    print(numberClicks);
+    print(clicks);
+    ref.read(variablemonitorProvider.notifier).state++;
+    print(variablemonitorProvider.notifier);
     if (editedSegmentIndex != null) {
       // Get the current selection
       TextSelection selection = tec.selection;
@@ -505,10 +515,12 @@ class EditSentence extends HookConsumerWidget {
         // }
 
         // Add quotation marks
-        String newText =
-            '#KJVFS# $selectedText'; //adds activation code to python search app that will monitor the clipboard
-        Clipboard.setData(ClipboardData(text: newText));
-
+        String queryToClipboard =
+            '#KJVFS# $selectedText'; //adds activation code to python search app that will monitor the clipboard, this will be removed when search is done in Scriptus
+        Clipboard.setData(ClipboardData(text: queryToClipboard));
+        print("selection passed");
+        searchReturn = kjvFuzzySearch(selectedText, ref, tec);
+        print("searchReturn passed to calling function: $searchReturn");
         // Replace the selected text with the new text
         //tec.text =
         //    tec.text.replaceRange(selection.start, selection.end, newText);
@@ -518,7 +530,15 @@ class EditSentence extends HookConsumerWidget {
         //  baseOffset: selection.start,
         //  extentOffset: selection.start + newText.length,
         //);
-      }
+      } else {
+        String wholeSegment = tec.text;
+        String queryToClipboard =
+            '#KJVFS# $wholeSegment'; //adds activation code to python search app that will monitor the clipboard, this will be removed when search is done in Scriptus
+        Clipboard.setData(ClipboardData(text: queryToClipboard));
+        print("whole segment passed");
+        searchReturn = kjvFuzzySearch(wholeSegment, ref, tec);
+        print("searchReturn passed to calling function: $searchReturn");
+      } //Passes to the search function the whole segment if nothing is selected
       // if (editedSegmentIndex != null) {
       //   final splitIndex = tec.selection.baseOffset;
       //   ref
@@ -544,10 +564,10 @@ class EditSentence extends HookConsumerWidget {
     final player = ref.read(audioPlayerControllerProvider.notifier);
     print('sentenceState.text: ${sentenceState.text}');
     final selectedTranscript = ref.watch(currentTranscriptProvider);
-
+    final clicks = ref.watch(variablemonitorProvider);
     // Create the TextEditingController without setting the initial text.
     final tec = useTextEditingController();
-
+    print(clicks);
     // Update the TextEditingController's text when the provider's state changes.
     // This side effect runs every time the widget rebuilds.
     if (tec.text != sentenceState.text.trim()) {

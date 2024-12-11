@@ -3,6 +3,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_quill/flutter_quill.dart' as q;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter/services.dart';
 import 'package:scriptus/audio/audio_player.dart';
 import 'package:scriptus/extensions/deepl_service.dart';
 import 'package:scriptus/extensions/document_service.dart';
@@ -13,6 +14,7 @@ import 'package:scriptus/providers/current_doc_provider.dart';
 import 'package:scriptus/providers/meeting_provider.dart';
 import 'package:scriptus/providers/sentence_providers.dart';
 import 'package:scriptus/providers/settings_provider.dart';
+import 'package:scriptus/providers/variable_monitor.dart';
 import 'package:scriptus/repositories/transcript_data_repo.dart';
 import 'package:scriptus/screen_parts/assigned_places.dart';
 import 'package:scriptus/screen_parts/found_scriptures.dart';
@@ -20,9 +22,22 @@ import 'package:scriptus/screen_parts/saved_verses.dart';
 import 'package:scriptus/screen_parts/search_widget.dart';
 import 'package:scriptus/screen_parts/settings/settigns_dialog.dart';
 import 'package:scriptus/services/meeting_service.dart';
+import 'package:scriptus/screen_parts/kjv_display.dart';
 
 import 'screen_parts/object_viewer.dart';
 import 'screen_parts/segment_table.dart';
+import 'main.dart';
+
+//final dataclipboard = await Clipboard.getData(Clipboard.kTextPlain);
+final List<String> items = ["Item 1", "Item 2", "Item 3", "Item 4"];
+final String listText = items.map((item) => "- $item").join("\n");
+List<String> searchReturn = [];
+String kjvOutput = "No data yet";
+String kjvInput = "No data yet";
+var numberClicks = 0;
+var clicks = 0;
+String numberClickstr = numberClicks.toString();
+String clicksstr = clicks.toString();
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key, required this.title});
@@ -94,6 +109,7 @@ class HomePage extends ConsumerWidget {
     final deepLCallStatusProvider = ref.watch(deepLCallStatusPProvider);
     final settings = ref.watch(settingsProvider);
     final sentenceState = ref.watch(sentenceProvider);
+    final clicks = ref.watch(variablemonitorProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xffffffff),
@@ -616,13 +632,49 @@ class HomePage extends ConsumerWidget {
                 //   height: 10,
                 // ),
                 if (settings.showFound)
-                  const Expanded(
-                    /// Segment Places found through OpenAI API
-                    child: FoundScriptures(),
+                  SelectableText(
+
+                      /// Segment Places found through OpenAI API
+                      clicks.toString()
+                      //child: FoundScriptures(),
+                      ),
+                if (settings.showFound)
+                  SelectableText.rich(TextSpan(
+                      text: "Search results:", // Additional static text
+                      style: TextStyle(fontSize: 15, color: Colors.red))),
+                //if (settings.showFound) SelectableText(kjvInput),
+                if (settings.showFound)
+                  Container(
+                    height: 400,
+                    width: 500, // Define the height for the Container
+                    padding:
+                        EdgeInsets.all(10), // Add padding around the ListView
+                    decoration: BoxDecoration(
+                      // Background color
+                      border: Border.all(
+                          color: Colors.blue, width: 2), // Border styling
+                    ),
+                    child: ListView.builder(
+                        itemCount:
+                            searchReturn.length, // Number of items in the list
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                              title: SelectableText(
+                                  searchReturn[index]), // Display each item
+                              leading: Icon(Icons.star));
+                        }),
+                    /*style: TextStyle(
+                            fontSize: 20, // Set the desired font size here
+                            color:
+                                Colors.white, // Optional: Customize text color
+                            //fontWeight: FontWeight
+                           */ //    .bold, // Optional: Customize font weight),
                   ),
+
                 const SizedBox(
                   height: 10,
                 ),
+                Text(" "),
                 // Text(selectedTranscript.meetingId.toString()),
                 // Text(settings.showSavedFromApi.toString()),
                 if (selectedTranscript.meetingId > 0 &&

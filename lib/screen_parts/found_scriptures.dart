@@ -5,6 +5,7 @@ import 'package:scriptus/models/bible_verse.dart';
 import 'package:scriptus/providers/current_doc_provider.dart';
 import 'package:scriptus/providers/found_verses_provider.dart';
 import 'package:scriptus/providers/sentence_providers.dart';
+import 'package:scriptus/providers/variable_monitor.dart';
 // import 'package:scriptus/screen_parts/segment_table.dart';
 
 StateProvider<bool> fullReferenceChecBoxProvider =
@@ -98,8 +99,22 @@ class FoundScriptures extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<BibleVerse> verses = ref.watch(foundVersesProvider);
+
     final apiCallStatus = ref.watch(apiCallStatusProvider);
     // final translation = ref.watch(translationProvider);
+
+    //   return Scaffold(
+    //     appBar: AppBar(title: Text("Counter: $counter")),
+    //     body: Center(
+    //       child: ElevatedButton(
+    //         onPressed: () {
+    //           // Increment the counter when button is pressed
+    //           ref.read(variablemonitorProvider.notifier).state++;
+    //         },
+    //         child: const Text("Increment Counter"),
+    //       ),
+    //     ),
+    //   );
 
     return SizedBox(
       // padding: const EdgeInsets.all(8),

@@ -1,7 +1,9 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scriptus/models/bible_verse.dart';
 
-final foundVersesProvider = StateProvider<List<BibleVerse>>((ref) => []);
+//final foundVersesProvider = StateProvider<List<BibleVerse>>((ref) => []);
+
+final variablemonitorProvider = StateProvider<int>((ref) => 0);
 
 // class FoundVersesNotifier extends StateNotifier<List<BibleVerse>> {
 //   FoundVersesNotifier() : super([]);
