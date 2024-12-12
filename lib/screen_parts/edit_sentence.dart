@@ -493,10 +493,8 @@ class EditSentence extends HookConsumerWidget {
   void KJVsearch(WidgetRef ref, tec) {
     final editedSegmentIndex = ref.watch(editedSegmentIndexProvider);
 
-    numberClicks = numberClicks + 1;
     clicks = clicks + 1;
-    print(numberClicks);
-    print(clicks);
+
     ref.read(variablemonitorProvider.notifier).state++;
     print(variablemonitorProvider.notifier);
     if (editedSegmentIndex != null) {
@@ -515,12 +513,18 @@ class EditSentence extends HookConsumerWidget {
         // }
 
         // Add quotation marks
-        String queryToClipboard =
-            '#KJVFS# $selectedText'; //adds activation code to python search app that will monitor the clipboard, this will be removed when search is done in Scriptus
-        Clipboard.setData(ClipboardData(text: queryToClipboard));
+        //String queryToClipboard =
+        //    '#KJVFS# $selectedText'; //adds activation code to python search app that will monitor the clipboard, this will be removed when search is done in Scriptus
+        //Clipboard.setData(ClipboardData(text: queryToClipboard));
         print("selection passed");
         searchReturn = kjvFuzzySearch(selectedText, ref, tec);
         print("searchReturn passed to calling function: $searchReturn");
+        if (searchReturn[0] != "No results found") {
+          Clipboard.setData(ClipboardData(text: searchReturn[1]));
+          print(
+              "searchReturn passed to Clipboard - 1st result in list: $searchReturn");
+        }
+
         // Replace the selected text with the new text
         //tec.text =
         //    tec.text.replaceRange(selection.start, selection.end, newText);
@@ -532,12 +536,17 @@ class EditSentence extends HookConsumerWidget {
         //);
       } else {
         String wholeSegment = tec.text;
-        String queryToClipboard =
-            '#KJVFS# $wholeSegment'; //adds activation code to python search app that will monitor the clipboard, this will be removed when search is done in Scriptus
-        Clipboard.setData(ClipboardData(text: queryToClipboard));
+        //String queryToClipboard =
+        //    '#KJVFS# $wholeSegment'; //adds activation code to python search app that will monitor the clipboard, this will be removed when search is done in Scriptus
+        //Clipboard.setData(ClipboardData(text: queryToClipboard));
         print("whole segment passed");
         searchReturn = kjvFuzzySearch(wholeSegment, ref, tec);
         print("searchReturn passed to calling function: $searchReturn");
+        if (searchReturn[0] != "No results found") {
+          Clipboard.setData(ClipboardData(text: searchReturn[1]));
+          print(
+              "searchReturn passed to Clipboard - 1st result in list: $searchReturn");
+        }
       } //Passes to the search function the whole segment if nothing is selected
       // if (editedSegmentIndex != null) {
       //   final splitIndex = tec.selection.baseOffset;

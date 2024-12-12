@@ -15,29 +15,25 @@ List<String> kjvFuzzySearch(String kjvquery, WidgetRef ref, tec) {
   List<String> searchReturn = []; // Initialize results
   print("selection passed to kjvFuzzySearch function:");
   print(kjvquery);
-  numberClicks = numberClicks + 1;
+
   clicks = clicks + 1;
-  print(numberClicks);
   print(clicks);
   ref.read(variablemonitorProvider.notifier).state++;
-  print(variablemonitorProvider.notifier);
 
-  Map<String, dynamic> data = {}; // To store the JSON data from kjv.json
-  print('Current working directory: ${Directory.current.path}');
+  //Map<String, dynamic> data = {}; // To store the JSON data from kjv.json
+
 // Load the JSON data from a file, change to read once at startup
-  //void loadData() async {
-  String jsonString =
-      File('kjv.json') //C:\\Users\\Juraj\\scriptus2\\scriptus\\lib\\services\\
-          .readAsStringSync();
-  data = json.decode(jsonString);
-  print("in sync loadData");
-  print(data.length); //fails to return data
-  //}
+  //void loadData() async
 
-  print("after file read");
-  print(data.length);
-  kjvInput = kjvquery;
-  kjvOutput = "search function completed";
+  if (data.isEmpty) {
+    String jsonString = File(
+            'kjv.json') //C:\\Users\\Juraj\\scriptus2\\scriptus\\lib\\services\\
+        .readAsStringSync();
+    data = json.decode(jsonString);
+    print("KJV json loaded once when empty");
+  } else {
+    print("KJV json already has content, loading skipped");
+  }
 
 //performing search
 
@@ -120,7 +116,7 @@ List<String> kjvFuzzySearch(String kjvquery, WidgetRef ref, tec) {
           if (score > 0.75) {
             resultsVerses.add(baseReference);
             resultsVerses.add(baseVerse);
-            resultsVerses.add(score.toString());
+            resultsVerses.add(((score * 100).toStringAsFixed(0)) + " %");
           }
         }
       }
@@ -138,7 +134,6 @@ List<String> kjvFuzzySearch(String kjvquery, WidgetRef ref, tec) {
     return searchReturn;
   }
 }
- 
 
 /*
 
@@ -175,4 +170,4 @@ List<String> kjvFuzzySearch(String kjvquery, WidgetRef ref, tec) {
   // ref.read(sentenceProvider.notifier).state = ts;
 
 
-*/ 
+*/

@@ -28,15 +28,11 @@ import 'screen_parts/segment_table.dart';
 import 'main.dart';
 
 //final dataclipboard = await Clipboard.getData(Clipboard.kTextPlain);
-final List<String> items = ["Item 1", "Item 2", "Item 3", "Item 4"];
-final String listText = items.map((item) => "- $item").join("\n");
-List<String> searchReturn = [];
-String kjvOutput = "No data yet";
-String kjvInput = "No data yet";
-var numberClicks = 0;
-var clicks = 0;
-String numberClickstr = numberClicks.toString();
-String clicksstr = clicks.toString();
+
+List<String> searchReturn = []; //initialise object to return search results
+Map<String, dynamic> data = {}; //initialise object to load kjv json
+var clicks =
+    0; //initialize variable for variableMonitorProvider to update the result widget
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key, required this.title});
@@ -630,13 +626,7 @@ class HomePage extends ConsumerWidget {
                 // const SizedBox(
                 //   height: 10,
                 // ),
-                if (settings.showFound)
-                  SelectableText(
 
-                      /// Segment Places found through OpenAI API
-                      clicks.toString()
-                      //child: FoundScriptures(),
-                      ),
                 if (settings.showFound)
                   SelectableText.rich(TextSpan(
                       text: "Search results:", // Additional static text
