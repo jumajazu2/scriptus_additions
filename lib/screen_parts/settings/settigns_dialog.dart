@@ -89,6 +89,25 @@ class SettingsDialog extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            const Text('Show KJV Search'),
+                            const Spacer(),
+                            Checkbox(
+                                value: ref.watch(settingsProvider).showKJV,
+                                onChanged: (_) => ref
+                                    .read(settingsProvider.notifier)
+                                    .updateSettings(ref
+                                        .watch(settingsProvider)
+                                        .copyWith(
+                                            showKJV: !ref
+                                                .watch(settingsProvider)
+                                                .showKJV))),
+                          ],
+                        ),
+
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
                             const Text('Show From API'),
                             const Spacer(),
                             Checkbox(
@@ -161,43 +180,43 @@ class SettingsDialog extends StatelessWidget {
                                                 .exportHtmlWithOriginalVerse))),
                           ],
                         ),
-                      //   Row(
-                      //     mainAxisSize: MainAxisSize.min,
-                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //     children: [
-                      //       const Text('Offset MP3 playback (s)'),
-                      //       const Spacer(),
-                      //       ExcludeSemantics(
-                      //         child: Slider(
-                      //           min: 0.0,
-                      //           // activeColor: Colors.amberAccent,
-                      //           // secondaryActiveColor: Colors.amberAccent,
-                      //           max: 360.toDouble(),
-                      //           divisions: 36,
-                      //           value: 0,
-                      //           onChanged: (value) => ref
-                      //               .read(currentTranscriptProvider.notifier).setOffsetSeconds(int.parse(value.toString()),
-                      // ),
-                      // ),
-                      // ),
-                      //       // TextField(
-                      //       //   minLines: 6,
-                      //       //   maxLines: 6,
-                      //       //   decoration: const InputDecoration(contentPadding: EdgeInsets.all(8)),
-                      //       //   strutStyle: const StrutStyle(
-                      //       //     // fontSize: 18,
-                      //       //     height: 1.4,
-                      //       //   ),
-                      //       //   textAlign: TextAlign.left,
-                      //       //   cursorColor: Colors.red[900],
-                      //       //   autofocus: true,
-                      //       //   cursorWidth: 5,
-                      //       //   controller: TextEditingController(
-                      //       //       text: ref.watch(currentTranscriptProvider).offsetSeconds.toString()),
-                      //       //     onChanged: (value) => ref
-                      //       //         .read(currentTranscriptProvider.notifier).setOffsetSeconds(int.parse(value)),),
-                      //     ],
-                      //   ),
+                        //   Row(
+                        //     mainAxisSize: MainAxisSize.min,
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       const Text('Offset MP3 playback (s)'),
+                        //       const Spacer(),
+                        //       ExcludeSemantics(
+                        //         child: Slider(
+                        //           min: 0.0,
+                        //           // activeColor: Colors.amberAccent,
+                        //           // secondaryActiveColor: Colors.amberAccent,
+                        //           max: 360.toDouble(),
+                        //           divisions: 36,
+                        //           value: 0,
+                        //           onChanged: (value) => ref
+                        //               .read(currentTranscriptProvider.notifier).setOffsetSeconds(int.parse(value.toString()),
+                        // ),
+                        // ),
+                        // ),
+                        //       // TextField(
+                        //       //   minLines: 6,
+                        //       //   maxLines: 6,
+                        //       //   decoration: const InputDecoration(contentPadding: EdgeInsets.all(8)),
+                        //       //   strutStyle: const StrutStyle(
+                        //       //     // fontSize: 18,
+                        //       //     height: 1.4,
+                        //       //   ),
+                        //       //   textAlign: TextAlign.left,
+                        //       //   cursorColor: Colors.red[900],
+                        //       //   autofocus: true,
+                        //       //   cursorWidth: 5,
+                        //       //   controller: TextEditingController(
+                        //       //       text: ref.watch(currentTranscriptProvider).offsetSeconds.toString()),
+                        //       //     onChanged: (value) => ref
+                        //       //         .read(currentTranscriptProvider.notifier).setOffsetSeconds(int.parse(value)),),
+                        //     ],
+                        //   ),
                       ],
                     );
                   },

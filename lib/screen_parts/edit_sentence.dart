@@ -15,6 +15,8 @@ import 'package:scriptus/providers/found_verses_provider.dart';
 import 'package:scriptus/providers/sentence_providers.dart';
 import 'package:scriptus/providers/variable_monitor.dart';
 import 'package:scriptus/services/kjv_fuzzy_search.dart';
+import 'package:scriptus/screen_parts/settings/settigns_dialog.dart';
+import 'package:scriptus/providers/settings_provider.dart';
 
 // import 'package:scriptus/constants.dart';
 
@@ -576,6 +578,7 @@ class EditSentence extends HookConsumerWidget {
     final clicks = ref.watch(variablemonitorProvider);
     // Create the TextEditingController without setting the initial text.
     final tec = useTextEditingController();
+    final settings = ref.watch(settingsProvider);
     print(clicks);
     // Update the TextEditingController's text when the provider's state changes.
     // This side effect runs every time the widget rebuilds.
@@ -927,15 +930,16 @@ class EditSentence extends HookConsumerWidget {
               tooltip: 'Add Quotes Small',
               onPressed: () => addQuotesSmall(ref, tec),
             ),
-            EditSegmentButtons(
-              // index: editedSegmentIndex ?? 0,
-              icon: const Icon(Icons.format_quote),
-              // ref: ref,
-              text: '#KJV',
-              tooltip:
-                  'Fuzzy search for selected text in KJV to return the verse in the clipboard',
-              onPressed: () => KJVsearch(ref, tec),
-            ),
+            if (settings.showKJV)
+              EditSegmentButtons(
+                // index: editedSegmentIndex ?? 0,
+                icon: const Icon(Icons.format_quote),
+                // ref: ref,
+                text: '#KJV',
+                tooltip:
+                    'Fuzzy search for selected text in KJV to return the verse in the clipboard',
+                onPressed: () => KJVsearch(ref, tec),
+              ),
             // const VerticalDivider(
             //   // height: 20,
             //   color: Colors.white,

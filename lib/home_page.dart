@@ -627,15 +627,15 @@ class HomePage extends ConsumerWidget {
                 //   height: 10,
                 // ),
 
-                if (settings.showFound)
+                if (settings.showKJV)
                   SelectableText.rich(TextSpan(
-                      text: "Search results:", // Additional static text
+                      text: "KJV Search Results:", // Additional static text
                       style: TextStyle(fontSize: 15, color: Colors.red))),
                 //if (settings.showFound) SelectableText(kjvInput),
-                if (settings.showFound)
+                if (settings.showKJV)
                   Container(
                     height: 400,
-                    width: 500, // Define the height for the Container
+                    width: 400, // Define the height for the Container
                     padding:
                         EdgeInsets.all(10), // Add padding around the ListView
                     decoration: BoxDecoration(
