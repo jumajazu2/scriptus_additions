@@ -1055,8 +1055,8 @@ class DocumentService {
     String fileName = selectedTranscript.fileName.split('.').first;
     // remove first 13 characters
     fileName = fileName.substring(13);
-    //final String transferredDir = '';
-    //String mp3filePath = '$transferredDir$dirName\\$fileName.mp3';
+    final String transferredDir = '/Users/miro/Downloads/transferred/';
+    String mp3filePath = '$transferredDir$dirName\\$fileName.mp3';
     // final audioPlayer = ref.watch(audioPlayerProvider);
     // final mp3url = audioPlayer.audioSource.uri.toString();
     // extract filename from mp3 url
@@ -1068,9 +1068,18 @@ class DocumentService {
 
     final sb = StringBuffer();
     MskDBProvider mskDBProvider = MskDBProvider();
-    // String title = 'test';
-    String title =
-        '–'; //extractSermonTitle(mp3filePath, language); // temporarily disabled extractSermonTitle and reference to transferredDir as it does not exist on my system and prevents Export to English HTML from working, Export to English HTML works now, just the title is not constructed
+    String title = '';
+    if (Platform.isMacOS) {
+      title = extractSermonTitle(
+          mp3filePath, language); //for Mac, use original code
+    } else if (Platform.isWindows) {
+      title =
+          '–'; //for Windows skip extractSermonTitle(mp3filePath, language) because it does not work, reference to transferredDir does not exist on my system
+    } else {
+      title =
+          '–'; //for other systems skip as reference to transferredDir likely will not exist
+    }
+
     String broadcastDate = dirName.substring(0, 10);
     String preachedOn = fileName.substring(0, 10);
     String preachedAt = fileName.substring(11, 15);
@@ -1322,7 +1331,6 @@ class DocumentService {
     }
   }
 }
-
 
 // import 'package:docx/docx.dart';
 // import 'package:file_picker/file_picker.dart';
