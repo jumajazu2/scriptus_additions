@@ -7,7 +7,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 // import 'dart:typed_data';
 import 'package:flutter/services.dart';
-// import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart'; //seems necessary for DB on Windows
 // import 'package:scriptus/models/favorite.dart';
 import 'package:scriptus/models/meeting.dart';
 import 'package:tuple/tuple.dart';
@@ -37,7 +37,7 @@ class MskDBProvider {
   _initDb() async {
     // print('_initDB');
     await _checkDB();
-    WidgetsFlutterBinding.ensureInitialized();
+    //WidgetsFlutterBinding.ensureInitialized(); already initialised in main.dart
     var databasesPath = await getDatabasesPath();
     print(databasesPath);
     var path = join(databasesPath, _databaseLocalName);
@@ -46,10 +46,14 @@ class MskDBProvider {
 
     Database? thedb; // open the database
     if (Platform.isWindows) {
-      // sqfliteFfiInit();
-      // thedb = await databaseFactoryFfi.openDatabase(path);
+      //sqfliteFfiInit();
+      thedb = await databaseFactoryFfi.openDatabase(path);
+      print(thedb);
+      print("DB open for Windows");
     } else {
       thedb = await openDatabase(path, readOnly: false);
+      print(thedb);
+      print("DB open for other platforms");
     }
     return thedb;
   }
@@ -80,11 +84,13 @@ class MskDBProvider {
 
   _checkDB() async {
     // print('checkDB');
-    WidgetsFlutterBinding.ensureInitialized();
+    //WidgetsFlutterBinding.ensureInitialized();
     String databasesPath = '';
     if (Platform.isWindows) {
-      // sqfliteFfiInit();
-      // databasesPath = await databaseFactoryFfi.getDatabasesPath();
+      sqfliteFfiInit();
+      databasesPath = await databaseFactoryFfi.getDatabasesPath();
+      print("database path for windows:");
+      print(databasesPath);
     } else {
       databasesPath = await getDatabasesPath();
     }

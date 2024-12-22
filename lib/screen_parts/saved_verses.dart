@@ -8,7 +8,14 @@ import 'package:scriptus/models/place.dart';
 import 'package:scriptus/providers/current_doc_provider.dart';
 import 'package:scriptus/providers/found_verses_provider.dart';
 import 'package:scriptus/providers/sentence_providers.dart';
+import 'package:scriptus/services/kjv_from_db.dart';
 import 'package:scriptus/services/meeting_service.dart';
+import 'package:scriptus/services/msk_db_service.dart';
+import 'dart:async';
+
+import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
 // import 'package:scriptus/screen_parts/segment_table.dart';
 
 // part 'saved_verses.g.dart';
@@ -79,6 +86,8 @@ class SavedVerses extends ConsumerWidget {
           places = List.from(places)
             ..sort((a, b) => parseDuration(a.timePosition)
                 .compareTo(parseDuration(b.timePosition)));
+          //print("Debug places loaded for a segment:");
+          //print(places);
 
           // places.sort((a, b) => parseDuration(a.timePosition)
           // .compareTo(parseDuration(b.timePosition)));
@@ -113,6 +122,29 @@ class SavedVerses extends ConsumerWidget {
                   itemCount: places.length,
                   itemBuilder: (context, index) {
                     Place place = places[index];
+
+                    //The following sends the SK places for the segment to getKJVVerseById when EN verses are retrieved from DB
+                    var idSK = place.verseStartId;
+                    var bookID = (place.bookId -
+                        69); //offset to move from SK book to EN book
+                    var language = place.language;
+                    var bibleID = 1; //1 for English
+                    var bookName = place.bookName;
+                    var chapterNumber = place.chapterNumber;
+                    var verseStartNumber = place.verseStartNumber;
+                    if (idSK != null && language == "sk") {
+                      print("result from getKJVVerseById:");
+                      print("$bookName $chapterNumber:$verseStartNumber");
+                      getKJVVerseById(
+                              bookID, chapterNumber, verseStartNumber, bibleID)
+                          .then((resultKJV) {
+                        String outputKJV = resultKJV ?? 'Default Value';
+
+                        print(
+                            outputKJV); // the output is to console for now, as the getKJVVerseById function is async and await/async cannot be used in this widget
+                      });
+                    }
+
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -144,8 +176,9 @@ class SavedVerses extends ConsumerWidget {
                                 color: Colors.blueGrey[600],
                                 margin: const EdgeInsets.all(0),
                                 padding: const EdgeInsets.all(10),
-                                child: Text(
+                                child: SelectableText(
                                   // "${place.bookName} ${place.chapterNumber}:${place.verseStartNumber}:
+                                  //outputKJV,
                                   place.verseText,
                                   style: const TextStyle(
                                     fontSize: 22,

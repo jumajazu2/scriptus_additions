@@ -635,7 +635,7 @@ class HomePage extends ConsumerWidget {
                 if (settings.showKJV)
                   Container(
                     height: 400,
-                    width: 400, // Define the height for the Container
+                    width: 400, // Define the height/width for the Container
                     padding:
                         EdgeInsets.all(10), // Add padding around the ListView
                     decoration: BoxDecoration(

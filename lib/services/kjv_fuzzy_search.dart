@@ -10,20 +10,18 @@ import 'package:scriptus/providers/variable_monitor.dart';
 import 'dart:convert';
 import 'dart:io';
 
+//Function performs fuzzy search in KJV.json and returns verses with match score above 75%
+
 List<String> kjvFuzzySearch(String kjvquery, WidgetRef ref, tec) {
   //final editedSegmentIndex = ref.watch(editedSegmentIndexProvider);
   List<String> searchReturn = []; // Initialize results
   print("selection passed to kjvFuzzySearch function:");
   print(kjvquery);
 
-  clicks = clicks + 1;
-  print(clicks);
+  clicks = clicks +
+      1; //increases whenever the function is called, used for updating widget viac variable_monitor.dart
+
   ref.read(variablemonitorProvider.notifier).state++;
-
-  //Map<String, dynamic> data = {}; // To store the JSON data from kjv.json
-
-// Load the JSON data from a file, change to read once at startup
-  //void loadData() async
 
   if (data.isEmpty) {
     String jsonString = File(
@@ -134,40 +132,3 @@ List<String> kjvFuzzySearch(String kjvquery, WidgetRef ref, tec) {
     return searchReturn;
   }
 }
-
-/*
-
-
-
-    // Simulate the clipboard content or user input with the launch code
-    String clipboardContent = "#KJVFS# John 3:16";
-
-    // If the launch code is detected in the clipboard content
-    if (clipboardContent.contains("#KJVFS#")) {
-      print("Launch code detected! Processing input...");
-
-      // Clean the content and scan for matching verses
-      String queryContent = clipboardContent.replaceAll("#KJVFS#", '').trim();
-      List<String> resultsVerses = scanAll(queryContent);
-
-      // Display results
-      if (resultsVerses.isEmpty) {
-        print("No match found.");
-      } else {
-        for (int i = 0; i < (resultsVerses.length / 2).round(); i++) {
-          print(resultsVerses[i]);
-          print("\n");
-        }
-      }
-    }
-  
-
-  // ref
-  //     .read(currentTranscriptProvider.notifier)
-  //     .updateText(editedSegmentIndex, tec.text);
-  // TranscriptSegment ts =
-  //     ref.watch(currentTranscriptProvider).segments[editedSegmentIndex];
-  // ref.read(sentenceProvider.notifier).state = ts;
-
-
-*/

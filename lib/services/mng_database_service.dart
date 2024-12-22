@@ -8,7 +8,7 @@ import 'package:scriptus/const/constants.dart';
 import 'package:sqflite/sqflite.dart';
 // import 'dart:typed_data';
 import 'package:flutter/services.dart';
-// import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart'; //likely necessary to use DB on Windows
 // import 'package:scriptus/models/favorite.dart';
 import 'package:scriptus/models/meeting.dart';
 import 'package:tuple/tuple.dart';
@@ -26,7 +26,7 @@ import '../models/bible_chapter.dart';
 
 class BibleDBProvider {
   static const _databaseMengeBibleName = 'mng-de.SQLite3';
-  // static const _databaseMengeBibleName = 'MENG.SQLite3';
+  //static const _databaseMengeBibleName = 'MENG.SQLite3';
   // static const _databaseMengeBibleName = 'versei.sqlite';
   static const _databaseLocalName = 'scriptus.db';
 
@@ -39,17 +39,19 @@ class BibleDBProvider {
   _initDb() async {
     // print('_initDB');
     await _checkDB();
-    WidgetsFlutterBinding.ensureInitialized();
+    //WidgetsFlutterBinding.ensureInitialized(); already initialised in main.dart
     var databasesPath = await getDatabasesPath();
+    print("Database path at init:");
     print(databasesPath);
     var path = join(databasesPath, _databaseLocalName);
     // await deleteDatabase(path);
     // var exists = await databaseExists(path);
 
-    Database? thedb; // open the database
+    Database?
+        thedb; // opens the database, alternative methods for Windows/others
     if (Platform.isWindows) {
-      // sqfliteFfiInit();
-      // thedb = await databaseFactoryFfi.openDatabase(path);
+      //sqfliteFfiInit();
+      thedb = await databaseFactoryFfi.openDatabase(path);
     } else {
       thedb = await openDatabase(path, readOnly: false);
     }
@@ -81,7 +83,6 @@ class BibleDBProvider {
   }
 
   void updateDatabase() async {
-    
     Database? thedb; // open the database
     var databasesPath = await getDatabasesPath();
     var path = join(databasesPath, _databaseLocalName);
@@ -337,10 +338,13 @@ class BibleDBProvider {
     WidgetsFlutterBinding.ensureInitialized();
     String databasesPath = '';
     if (Platform.isWindows) {
-      // sqfliteFfiInit();
-      // databasesPath = await databaseFactoryFfi.getDatabasesPath();
+      //sqfliteFfiInit();
+      databasesPath = await databaseFactoryFfi.getDatabasesPath();
+      print("DB for win");
+      print(databasesPath);
     } else {
       databasesPath = await getDatabasesPath();
+      print(databasesPath);
     }
 
     // var p = "/Users/miro/Projects/flutter/misiask/assets/database/all.sqlite";
@@ -383,8 +387,12 @@ class BibleDBProvider {
       }
 
       // Copy from asset
-      ByteData data = await rootBundle
-          .load(join("assets", "db", "bible", _databaseMengeBibleName));
+      //ByteData data = await rootBundle
+      //    .load(join("assets", "db", "bible", _databaseMengeBibleName)); // temporarily disabled as it fails to load the asset on Windows - possibly problem with slashes?
+      ByteData data = await rootBundle.load(
+          "assets/db/bible/mng-de.SQLite3"); // this loads this asset on Windows, did not work when the path was constructed using join("assets", "db", "bible", _databaseMengeBibleName)
+      //print("data from rootBundle:");
+      //print(data);
       // print('data.lengthInBytes');
       // print(data.lengthInBytes);
       List<int> bytes =

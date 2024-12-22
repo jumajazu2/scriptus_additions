@@ -18,11 +18,16 @@ import 'package:scriptus/home_page.dart';
 // import 'package:path/path.dart' as path;
 // import 'package:scriptus/screen_parts/edit_sentence.dart';
 // import 'package:tuple/tuple.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite_common_ffi/src/sqflite_ffi_io.dart';
 
 // import 'services/mng_database_service.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  sqfliteFfiInit();
+  databaseFactory = databaseFactoryFfi;
   runApp(const ProviderScope(child: MyApp()));
 }
 
