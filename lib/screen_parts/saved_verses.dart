@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scriptus/extensions/openAiApi.dart';
 import 'package:scriptus/extensions/utilities.dart';
+import 'package:scriptus/home_page.dart';
 import 'package:scriptus/models/bible_verse.dart';
 import 'package:scriptus/models/meeting.dart';
 import 'package:scriptus/models/place.dart';
@@ -11,6 +12,7 @@ import 'package:scriptus/providers/sentence_providers.dart';
 import 'package:scriptus/services/kjv_from_db.dart';
 import 'package:scriptus/services/meeting_service.dart';
 import 'package:scriptus/services/msk_db_service.dart';
+import 'package:scriptus/providers/variable_monitor.dart';
 import 'dart:async';
 
 import 'package:sqflite/sqflite.dart';
@@ -86,6 +88,12 @@ class SavedVerses extends ConsumerWidget {
           places = List.from(places)
             ..sort((a, b) => parseDuration(a.timePosition)
                 .compareTo(parseDuration(b.timePosition)));
+          if (places.isEmpty) {
+            fromAPItoKJV = [];
+            //clicks = clicks + 1;
+            //ref.read(variablemonitorProvider.notifier).state++;
+          }
+
           //print("Debug places loaded for a segment:");
           //print(places);
 
@@ -122,7 +130,7 @@ class SavedVerses extends ConsumerWidget {
                   itemCount: places.length,
                   itemBuilder: (context, index) {
                     Place place = places[index];
-
+                    if (index == 0) fromAPItoKJV = [];
                     //The following sends the SK places for the segment to getKJVVerseById when EN verses are retrieved from DB
                     var idSK = place.verseStartId;
                     var bookID = (place.bookId -
@@ -135,8 +143,8 @@ class SavedVerses extends ConsumerWidget {
                     if (idSK != null && language == "sk") {
                       print("result from getKJVVerseById:");
                       print("$bookName $chapterNumber:$verseStartNumber");
-                      getKJVVerseById(
-                              bookID, chapterNumber, verseStartNumber, bibleID)
+                      getKJVVerseById(bookID, bookName, chapterNumber,
+                              verseStartNumber, bibleID, ref)
                           .then((resultKJV) {
                         String outputKJV = resultKJV ?? 'Default Value';
 

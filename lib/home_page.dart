@@ -21,6 +21,7 @@ import 'package:scriptus/screen_parts/found_scriptures.dart';
 import 'package:scriptus/screen_parts/saved_verses.dart';
 import 'package:scriptus/screen_parts/search_widget.dart';
 import 'package:scriptus/screen_parts/settings/settigns_dialog.dart';
+import 'package:scriptus/services/kjv_from_db.dart';
 import 'package:scriptus/services/meeting_service.dart';
 
 import 'screen_parts/object_viewer.dart';
@@ -33,6 +34,9 @@ List<String> searchReturn = []; //initialise object to return search results
 Map<String, dynamic> data = {}; //initialise object to load kjv json
 var clicks =
     0; //initialize variable for variableMonitorProvider to update the result widget
+List<dynamic> fromAPItoKJV = [
+  "Nothing found yet..."
+]; //init variable to store all results from kjv_from_db
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key, required this.title});
@@ -659,7 +663,70 @@ class HomePage extends ConsumerWidget {
                             //fontWeight: FontWeight
                            */ //    .bold, // Optional: Customize font weight),
                   ),
-
+                if (settings.showKJV) //display fromAPItoKJV results
+                  Container(
+                    height: 400,
+                    width: 400, // Define the height/width for the Container
+                    padding:
+                        EdgeInsets.all(10), // Add padding around the ListView
+                    decoration: BoxDecoration(
+                      // Background color
+                      border: Border.all(
+                          color: Colors.blue, width: 2), // Border styling
+                    ),
+                    child: ListView.builder(
+                        itemCount:
+                            fromAPItoKJV.length, // Number of items in the list
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                              title: SelectableText(
+                                  fromAPItoKJV[index]), // Display each item
+                              leading: Icon(Icons.star));
+                        }),
+                    /*style: TextStyle(
+                            fontSize: 20, // Set the desired font size here
+                            color:
+                                Colors.white, // Optional: Customize text color
+                            //fontWeight: FontWeight
+                           */ //    .bold, // Optional: Customize font weight),
+                  ),
+/*Experimental part to add FutureBuilder to show results from kjv_from_db.dart
+                if (settings.showKJV)
+                  Container(
+                    height: 200,
+                    width: 400, // Define the height/width for the Container
+                    padding:
+                        EdgeInsets.all(10), // Add padding around the ListView
+                    decoration: BoxDecoration(
+                      // Background color
+                      border: Border.all(
+                          color: Colors.blue, width: 2), // Border styling
+                    ),
+                    child: FutureBuilder<List<String>>(
+        future = getKJVVerseById(1, 1, 1, 1), // Fetching the list asynchronously
+        builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+          // Handle the different states of the Future
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator()); // Show loading indicator
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}')); // Error handling
+          } else if (snapshot.hasData) {
+            // If the Future has data, show the list
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(snapshot.data![index]), // Display each item
+                );
+              },
+            );
+          } else {
+            return Center(child: Text('No data available')); // In case there's no data
+          }
+        },
+      ),
+//end of experimental part
+*/
                 const SizedBox(
                   height: 10,
                 ),

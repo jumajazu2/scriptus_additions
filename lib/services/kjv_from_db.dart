@@ -1,12 +1,15 @@
 import 'package:path/path.dart';
+import 'package:scriptus/home_page.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scriptus/services/msk_db_service.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:scriptus/providers/variable_monitor.dart';
 
 //Function returns the string with a verse from versei.db based on bible ID, book, chapter, verse No.
 
-Future<String?> getKJVVerseById(
-    int bookNumber, int chapterNumber, int verseNumber, int bibleID) async {
+Future<String?> getKJVVerseById(int bookNumber, String bookName,
+    int chapterNumber, int verseNumber, int bibleID, WidgetRef ref) async {
   // Get the path to the database file
   MskDBProvider mskDBProvider = MskDBProvider();
 
@@ -35,7 +38,16 @@ Future<String?> getKJVVerseById(
 
     // Check if a result was found
     if (result.isNotEmpty) {
-      print(result.first['content']);
+      //print(result.first['content']);
+      fromAPItoKJV.add("$bookName $chapterNumber:$verseNumber");
+      fromAPItoKJV.add(result.first['content']);
+      print("*****************");
+      print(fromAPItoKJV);
+      print("*****************");
+      clicks = clicks +
+          1; //increases whenever the function is called, used for updating widget viac variable_monitor.dart
+
+      ref.read(variablemonitorProvider.notifier).state++;
       return result.first['content'] as String; // Return the verse content
     } else {
       return null; // No verse found for the given ID
