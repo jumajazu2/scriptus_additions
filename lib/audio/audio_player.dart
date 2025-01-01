@@ -261,14 +261,45 @@ class ControlButtons extends StatelessWidget {
         StreamBuilder<Duration>(
           stream: player.positionStream,
           builder: (context, snapshot) {
+            final currentPosition = snapshot.data ?? Duration.zero;
+            final totalDuration = player.duration ?? Duration.zero;
+            final remainingTime = totalDuration - currentPosition;
             // var l = snapshot.data.isNull ? 0 : snapshot.data?.toString().length;
             // var o = l >= 7 ? l : l;
-            return snapshot.data != null
+            // Helper function to format Duration as MM:SS
+            String formatDuration(Duration duration) {
+              final minutes =
+                  duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+              final seconds =
+                  duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+              return "$minutes:$seconds";
+            }
+
+            return currentPosition != null
                 ? IconButton(
                     iconSize: 60,
-                    icon: Text("${snapshot.data?.toString()}".substring(0, 7),
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 14.0)),
+                    icon: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Display remaining time in MM:SS
+                        Text(
+                          "-${formatDuration(currentPosition)}",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14.0,
+                          ),
+                        ),
+                        const SizedBox(width: 10), // Space between texts
+                        // Display current position in MM:SS
+                        Text(
+                          formatDuration(remainingTime),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14.0,
+                          ),
+                        ),
+                      ],
+                    ),
                     onPressed: () {
                       showDialog<void>(
                         context: context,
