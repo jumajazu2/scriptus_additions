@@ -272,7 +272,8 @@ class ControlButtons extends StatelessWidget {
                   duration.inMinutes.remainder(60).toString().padLeft(2, '0');
               final seconds =
                   duration.inSeconds.remainder(60).toString().padLeft(2, '0');
-              return "$minutes:$seconds";
+              final hours = duration.inHours.toString().padLeft(1, '0');
+              return "$hours:$minutes:$seconds";
             }
 
             return currentPosition != null
@@ -283,7 +284,7 @@ class ControlButtons extends StatelessWidget {
                       children: [
                         // Display remaining time in MM:SS
                         Text(
-                          "-${formatDuration(currentPosition)}",
+                          "${formatDuration(currentPosition)}",
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14.0,
@@ -292,7 +293,7 @@ class ControlButtons extends StatelessWidget {
                         const SizedBox(width: 10), // Space between texts
                         // Display current position in MM:SS
                         Text(
-                          formatDuration(remainingTime),
+                          "-${formatDuration(remainingTime)}",
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14.0,
