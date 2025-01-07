@@ -28,6 +28,7 @@ class SettingsModel with _$SettingsModel {
     @Default(false) bool showSearch,
     @Default(true) bool showFound,
     @Default(true) bool showKJV,
+    @Default(true) bool showContext,
     @Default(false) bool showAssignedOne,
     @Default(false) bool showAssignedAll,
     @Default(false) bool showSavedFromApi,

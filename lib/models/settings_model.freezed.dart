@@ -27,6 +27,7 @@ mixin _$SettingsModel {
   bool get showSearch => throw _privateConstructorUsedError;
   bool get showFound => throw _privateConstructorUsedError;
   bool get showKJV => throw _privateConstructorUsedError;
+  bool get showContext => throw _privateConstructorUsedError;
   bool get showAssignedOne => throw _privateConstructorUsedError;
   bool get showAssignedAll => throw _privateConstructorUsedError;
   bool get showSavedFromApi => throw _privateConstructorUsedError;
@@ -52,6 +53,7 @@ abstract class $SettingsModelCopyWith<$Res> {
       bool showSearch,
       bool showFound,
       bool showKJV,
+      bool showContext,
       bool showAssignedOne,
       bool showAssignedAll,
       bool showSavedFromApi,
@@ -78,6 +80,7 @@ class _$SettingsModelCopyWithImpl<$Res, $Val extends SettingsModel>
     Object? showSearch = null,
     Object? showFound = null,
     Object? showKJV = null,
+    Object? showContext = null,
     Object? showAssignedOne = null,
     Object? showAssignedAll = null,
     Object? showSavedFromApi = null,
@@ -108,6 +111,10 @@ class _$SettingsModelCopyWithImpl<$Res, $Val extends SettingsModel>
       showKJV: null == showKJV
           ? _value.showKJV
           : showKJV // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showContext: null == showContext
+          ? _value.showContext
+          : showContext // ignore: cast_nullable_to_non_nullable
               as bool,
       showAssignedOne: null == showAssignedOne
           ? _value.showAssignedOne
@@ -148,6 +155,7 @@ abstract class _$$SettingsModelImplCopyWith<$Res>
       bool showSearch,
       bool showFound,
       bool showKJV,
+      bool showContext,
       bool showAssignedOne,
       bool showAssignedAll,
       bool showSavedFromApi,
@@ -172,6 +180,7 @@ class __$$SettingsModelImplCopyWithImpl<$Res>
     Object? showSearch = null,
     Object? showFound = null,
     Object? showKJV = null,
+    Object? showContext = null,
     Object? showAssignedOne = null,
     Object? showAssignedAll = null,
     Object? showSavedFromApi = null,
@@ -202,6 +211,10 @@ class __$$SettingsModelImplCopyWithImpl<$Res>
       showKJV: null == showKJV
           ? _value.showKJV
           : showKJV // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showContext: null == showContext
+          ? _value.showContext
+          : showContext // ignore: cast_nullable_to_non_nullable
               as bool,
       showAssignedOne: null == showAssignedOne
           ? _value.showAssignedOne
@@ -237,6 +250,7 @@ class _$SettingsModelImpl extends _SettingsModel {
       this.showSearch = false,
       this.showFound = true,
       this.showKJV = true,
+      this.showContext = false,
       this.showAssignedOne = false,
       this.showAssignedAll = false,
       this.showSavedFromApi = false,
@@ -277,6 +291,9 @@ class _$SettingsModelImpl extends _SettingsModel {
   final bool showKJV;
   @override
   @JsonKey()
+  final bool showContext;
+  @override
+  @JsonKey()
   final bool showObject;
   @override
   @JsonKey()
@@ -303,6 +320,8 @@ class _$SettingsModelImpl extends _SettingsModel {
             (identical(other.showFound, showFound) ||
                 other.showFound == showFound) &&
             (identical(other.showKJV, showKJV) || other.showKJV == showKJV) &&
+            (identical(other.showContext, showContext) ||
+                other.showContext == showContext) &&
             (identical(other.showAssignedOne, showAssignedOne) ||
                 other.showAssignedOne == showAssignedOne) &&
             (identical(other.showAssignedAll, showAssignedAll) ||
@@ -327,6 +346,7 @@ class _$SettingsModelImpl extends _SettingsModel {
       showSearch,
       showFound,
       showKJV,
+      showContext,
       showAssignedOne,
       showAssignedAll,
       showSavedFromApi,
@@ -355,6 +375,7 @@ abstract class _SettingsModel extends SettingsModel {
       final bool showSearch,
       final bool showFound,
       final bool showKJV,
+      final bool showContext,
       final bool showAssignedOne,
       final bool showAssignedAll,
       final bool showSavedFromApi,
@@ -377,6 +398,8 @@ abstract class _SettingsModel extends SettingsModel {
   bool get showFound;
   @override
   bool get showKJV;
+  @override
+  bool get showContext;
   @override
   bool get showAssignedOne;
   @override

@@ -23,6 +23,7 @@ import 'package:scriptus/screen_parts/search_widget.dart';
 import 'package:scriptus/screen_parts/settings/settigns_dialog.dart';
 import 'package:scriptus/services/kjv_from_db.dart';
 import 'package:scriptus/services/meeting_service.dart';
+import 'package:scriptus/services/show_context.dart';
 
 import 'screen_parts/object_viewer.dart';
 import 'screen_parts/segment_table.dart';
@@ -630,7 +631,11 @@ class HomePage extends ConsumerWidget {
                 // const SizedBox(
                 //   height: 10,
                 // ),
-
+                if (settings.showFound)
+                  const Expanded(
+                    /// Segment Places found through OpenAI API
+                    child: FoundScriptures(),
+                  ),
                 if (settings.showKJV)
                   SelectableText.rich(TextSpan(
                       text: "KJV Search Results:", // Additional static text
@@ -638,7 +643,7 @@ class HomePage extends ConsumerWidget {
                 //if (settings.showFound) SelectableText(kjvInput),
                 if (settings.showKJV)
                   Container(
-                    height: 400,
+                    height: 200,
                     width: 400, // Define the height/width for the Container
                     padding:
                         EdgeInsets.all(10), // Add padding around the ListView
@@ -665,7 +670,7 @@ class HomePage extends ConsumerWidget {
                   ),
                 if (settings.showKJV) //display fromAPItoKJV results
                   Container(
-                    height: 400,
+                    height: 200,
                     width: 400, // Define the height/width for the Container
                     padding:
                         EdgeInsets.all(10), // Add padding around the ListView
@@ -749,6 +754,20 @@ class HomePage extends ConsumerWidget {
               ],
             ),
           ),
+          if (settings.showContext)
+            Container(
+              color: const Color.fromARGB(255, 62, 81, 90), // Set background color
+              child: SizedBox(
+                width: 300, // Set fixed width
+
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ShowContext(), //Display Bible Context - Scriptures before and after a selected Scripture
+                  ],
+                ),
+              ),
+            )
         ],
       ),
       // ),

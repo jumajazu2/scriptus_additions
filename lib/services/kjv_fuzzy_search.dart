@@ -12,9 +12,11 @@ import 'dart:io';
 
 //Function performs fuzzy search in KJV.json and returns verses with match score above 75%
 
-List<String> kjvFuzzySearch(String kjvquery, WidgetRef ref, tec) {
+List<String> kjvFuzzySearch(
+    String kjvquery, String language, WidgetRef ref, tec) {
   //final editedSegmentIndex = ref.watch(editedSegmentIndexProvider);
   List<String> searchReturn = []; // Initialize results
+  print(language);
   print("selection passed to kjvFuzzySearch function:");
   print(kjvquery);
 

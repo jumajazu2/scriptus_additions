@@ -90,6 +90,9 @@ class SavedVerses extends ConsumerWidget {
                 .compareTo(parseDuration(b.timePosition)));
           if (places.isEmpty) {
             fromAPItoKJV = [];
+            print(
+                "fromAPItoKJV list cleared as there are no verses for the current segment: $fromAPItoKJV ***");
+
             //clicks = clicks + 1;
             //ref.read(variablemonitorProvider.notifier).state++;
           }

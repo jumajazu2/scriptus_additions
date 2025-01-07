@@ -103,7 +103,24 @@ class SettingsDialog extends StatelessWidget {
                                                 .showKJV))),
                           ],
                         ),
-
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('Show Bible Context'),
+                            const Spacer(),
+                            Checkbox(
+                                value: ref.watch(settingsProvider).showContext,
+                                onChanged: (_) => ref
+                                    .read(settingsProvider.notifier)
+                                    .updateSettings(ref
+                                        .watch(settingsProvider)
+                                        .copyWith(
+                                            showContext: !ref
+                                                .watch(settingsProvider)
+                                                .showContext))),
+                          ],
+                        ),
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
