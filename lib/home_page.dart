@@ -36,8 +36,11 @@ Map<String, dynamic> data = {}; //initialise object to load kjv json
 var clicks =
     0; //initialize variable for variableMonitorProvider to update the result widget
 List<dynamic> fromAPItoKJV = [
-  "Nothing found yet..."
+  "Nothing retrieved yet..."
 ]; //init variable to store all results from kjv_from_db
+List<dynamic> contextFromDB = [
+  "Nothing loaded yet..."
+]; //init variable to load Bible context from DB
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key, required this.title});
@@ -684,9 +687,20 @@ class HomePage extends ConsumerWidget {
                             fromAPItoKJV.length, // Number of items in the list
                         itemBuilder: (context, index) {
                           return ListTile(
-                              title: SelectableText(
-                                  fromAPItoKJV[index]), // Display each item
-                              leading: Icon(Icons.star));
+                            title: SelectableText(
+                                fromAPItoKJV[index]), // Display each item
+                            //leading: Icon(Icons.star),
+                            onTap: () {
+                              // Action when the item is clicked
+                              //print('Item clicked: ${fromAPItoKJV[index]}');
+                              contextFromDB = [];
+
+                              var passVerse = fromAPItoKJV[index];
+                              var init = contextByID(passVerse, 100, 20, ref);
+                              print('Item clicked: ${fromAPItoKJV[index]}');
+                              // Add your custom logic here
+                            },
+                          );
                         }),
                     /*style: TextStyle(
                             fontSize: 20, // Set the desired font size here
@@ -756,7 +770,8 @@ class HomePage extends ConsumerWidget {
           ),
           if (settings.showContext)
             Container(
-              color: const Color.fromARGB(255, 62, 81, 90), // Set background color
+              color:
+                  const Color.fromARGB(255, 62, 81, 90), // Set background color
               child: SizedBox(
                 width: 300, // Set fixed width
 

@@ -14,6 +14,7 @@ import 'package:scriptus/services/meeting_service.dart';
 import 'package:scriptus/services/msk_db_service.dart';
 import 'package:scriptus/providers/variable_monitor.dart';
 import 'dart:async';
+import 'dart:io';
 
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -67,6 +68,7 @@ class SavedVerses extends ConsumerWidget {
         m = ms.firstWhere((metting) => metting.id == td.meetingId);
         print('m: ${m.id}');
         print('m.places!.length: ${m.places!.length}');
+        print(m.places);
         if (m.places != null) {
           // List<Place> places = // ... your list of Place objects
           List<Place> uniquePlaces = const Place().removeDuplicates(m.places!);
@@ -167,15 +169,19 @@ class SavedVerses extends ConsumerWidget {
                         //       )),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            '${place.timePosition} - ${place.bookName} ${place.chapterNumber}:${place.verseStartNumber} - ${place.verseEndNumber != place.verseStartNumber ? place.verseEndNumber : ""} - ${place.id} - ${place.sermonId != null ? "DURI" : "MIRO"}',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: place.language == 'de'
-                                  ? Colors.red
-                                  : Colors.white,
-                            ),
-                          ),
+                          child: (place.language == "sk" &&
+                                  Platform
+                                      .isWindows) //only displays found place when in Slovak, German places will be ignored on Windows
+                              ? Text(
+                                  '${place.timePosition} - ${place.bookName} ${place.chapterNumber}:${place.verseStartNumber} - ${place.verseEndNumber != place.verseStartNumber ? place.verseEndNumber : ""} - ${place.id} - ${place.sermonId != null ? "DURI" : "MIRO"}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: place.language == 'de'
+                                        ? Colors.red
+                                        : Colors.white,
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
                         ),
                         apiCallStatus == ApiCallStatus.loading
                             ? const Center(
@@ -187,15 +193,17 @@ class SavedVerses extends ConsumerWidget {
                                 color: Colors.blueGrey[600],
                                 margin: const EdgeInsets.all(0),
                                 padding: const EdgeInsets.all(10),
-                                child: SelectableText(
-                                  // "${place.bookName} ${place.chapterNumber}:${place.verseStartNumber}:
-                                  //outputKJV,
-                                  place.verseText,
-                                  style: const TextStyle(
-                                    fontSize: 22,
-                                    fontFamily: 'Cambria',
-                                  ),
-                                ),
+                                child: (place.language == "sk" &&
+                                        Platform
+                                            .isWindows) //only displays found place when in Slovak, German places will be ignored on Windows only
+                                    ? SelectableText(
+                                        place.verseText,
+                                        style: const TextStyle(
+                                          fontSize: 22,
+                                          fontFamily: 'Cambria',
+                                        ),
+                                      )
+                                    : const SizedBox.shrink(),
                               ),
                         // Row(
                         //   // buttonPadding: const EdgeInsets.all(0),

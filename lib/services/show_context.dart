@@ -26,19 +26,26 @@ import 'package:scriptus/home_page.dart';
 import 'package:scriptus/services/show_context.dart';
 
 class ShowContext extends ConsumerWidget {
-  /// Displays a wide context of Scriptures before and after a selected scripture.
+  /// Displays a wider context of Scriptures before and after a selected scripture.
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Generate a list of numbers from 1 to 10
 
+    final contextDisplay = contextByID(
+        'Who have said, With our tongue will we prevail; our lips are our own: who is lord over us?',
+        100,
+        20,
+        ref);
+
     return Flexible(
       child: ListView.builder(
-          itemCount: fromAPItoKJV.length, // Number of items in the list
+          itemCount: contextFromDB.length, // Number of items in the list
           itemBuilder: (context, index) {
             return ListTile(
-                title: SelectableText(fromAPItoKJV[index]), // Display each item
-                leading: Icon(Icons.star));
+              title: SelectableText(contextFromDB[index]), // Display each item
+              //leading: Icon(Icons.star)
+            );
           }),
     );
   }
