@@ -112,7 +112,7 @@ class HomePage extends ConsumerWidget {
     final deepLCallStatusProvider = ref.watch(deepLCallStatusPProvider);
     final settings = ref.watch(settingsProvider);
     final sentenceState = ref.watch(sentenceProvider);
-    final clicks = ref.watch(variablemonitorProvider);
+    var clicks = ref.watch(variablemonitorProvider);
 
     return Scaffold(
       backgroundColor: const Color(0xffffffff),
@@ -646,10 +646,10 @@ class HomePage extends ConsumerWidget {
                 //if (settings.showFound) SelectableText(kjvInput),
                 if (settings.showKJV)
                   Container(
-                    height: 200,
+                    height: 250,
                     width: 400, // Define the height/width for the Container
-                    padding:
-                        EdgeInsets.all(10), // Add padding around the ListView
+                    padding: EdgeInsets.symmetric(
+                        vertical: 12.0), // Add padding around the ListView
                     decoration: BoxDecoration(
                       // Background color
                       border: Border.all(
@@ -660,9 +660,21 @@ class HomePage extends ConsumerWidget {
                             searchReturn.length, // Number of items in the list
                         itemBuilder: (context, index) {
                           return ListTile(
-                              title: SelectableText(
-                                  searchReturn[index]), // Display each item
-                              leading: Icon(Icons.star));
+                            title: SelectableText(
+                                searchReturn[index]), // Display each item
+                            leading: Icon(Icons.arrow_right),
+                            onTap: () {
+                              // Action when the item is clicked
+                              //print('Item clicked: ${fromAPItoKJV[index]}');
+                              contextFromDB = [];
+
+                              if (searchReturn[index].length > 20) {
+                                var init =
+                                    contextByID(searchReturn[index], 6, ref);
+                                print('Item clicked: ${searchReturn[index]}');
+                              }
+                            },
+                          );
                         }),
                     /*style: TextStyle(
                             fontSize: 20, // Set the desired font size here
@@ -673,10 +685,10 @@ class HomePage extends ConsumerWidget {
                   ),
                 if (settings.showKJV) //display fromAPItoKJV results
                   Container(
-                    height: 200,
+                    height: 250,
                     width: 400, // Define the height/width for the Container
-                    padding:
-                        EdgeInsets.all(10), // Add padding around the ListView
+                    padding: EdgeInsets.symmetric(
+                        vertical: 12.0), // Add padding around the ListView
                     decoration: BoxDecoration(
                       // Background color
                       border: Border.all(
@@ -689,16 +701,18 @@ class HomePage extends ConsumerWidget {
                           return ListTile(
                             title: SelectableText(
                                 fromAPItoKJV[index]), // Display each item
-                            //leading: Icon(Icons.star),
+                            leading: Icon(
+                                Icons.arrow_right), //leading: Icon(Icons.star),
                             onTap: () {
                               // Action when the item is clicked
                               //print('Item clicked: ${fromAPItoKJV[index]}');
                               contextFromDB = [];
 
-                              var passVerse = fromAPItoKJV[index];
-                              var init = contextByID(passVerse, 100, 20, ref);
-                              print('Item clicked: ${fromAPItoKJV[index]}');
-                              // Add your custom logic here
+                              if (fromAPItoKJV[index].length > 20) {
+                                var init =
+                                    contextByID(fromAPItoKJV[index], 6, ref);
+                                print('Item clicked: ${fromAPItoKJV[index]}');
+                              }
                             },
                           );
                         }),

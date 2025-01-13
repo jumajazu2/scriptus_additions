@@ -68,7 +68,7 @@ class SavedVerses extends ConsumerWidget {
         m = ms.firstWhere((metting) => metting.id == td.meetingId);
         print('m: ${m.id}');
         print('m.places!.length: ${m.places!.length}');
-        print(m.places);
+        //print(m.places);
         if (m.places != null) {
           // List<Place> places = // ... your list of Place objects
           List<Place> uniquePlaces = const Place().removeDuplicates(m.places!);

@@ -15,9 +15,7 @@ enum ApiCallStatus {
 }
 
 // gemini setup
-class GeminiService { 
-
-
+class GeminiService {
   String replaceWithMap(String original) {
     final List<Map<String, String>> replacements = [
       {'Gen': '1Mo'},
@@ -56,28 +54,100 @@ class GeminiService {
   //       'end_verse_number': Schema(SchemaType.string,
   //           description: 'Ending Verse Number'),
   //     });
-      
+
   final getScriptureVersesTool = FunctionDeclaration(
     'getScriptureVerses',
     'Function will retrieve Bible verse text and return an array of verses based on book_short_name, chapter_number, start_verse_number and end_verse_number parameters in UTF-8 encoding',
-    Schema(SchemaType.array, 
-      items: Schema(SchemaType.object, properties: {
-        'book_short_name': Schema(SchemaType.string,enumValues: ["1Mo","2Mo","3Mo","4Mo","5Mo","Jos","Ri","Rt","1Sam","2Sam","1Kö","2Kö","1Chr","2Chr","Esr","Neh","Est","Hi","Ps","Spr","Pred","Hl","Jes","Jer","Kla","Hes","Dan","Hos","Joe","Am","Ob","Jon","Mi","Nah","Hab","Zeph","Hag","Sach","Mal","Mt","Mk","Lk","Joh","Apg","Rm","1Kor","2Kor","Gal","Eph","Phil","Kol","1Th","2Th","1Tim","2Tim","Tit","Phlm","Hebr","Jak","1Pt","2Pt","1Jo","2Jo","3Jo","Jud","Offb"],
-            description: 'Abbreviation of bible book name must be strictly from these values: "1Mo","2Mo","3Mo","4Mo","5Mo","Jos","Ri","Rt","1Sam","2Sam","1Kö","2Kö","1Chr","2Chr","Esr","Neh","Est","Hi","Ps","Spr","Pred","Hl","Jes","Jer","Kla","Hes","Dan","Hos","Joe","Am","Ob","Jon","Mi","Nah","Hab","Zeph","Hag","Sach","Mal","Mt","Mk","Lk","Joh","Apg","Rm","1Kor","2Kor","Gal","Eph","Phil","Kol","1Th","2Th","1Tim","2Tim","Tit","Phlm","Hebr","Jak","1Pt","2Pt","1Jo","2Jo","3Jo","Jud","Offb".'),
-        'chapter_number': Schema(SchemaType.string,
-            description: 'Chapter Number of bible book'),
-        'start_verse_number': Schema(SchemaType.string,
-            description: 'Starting Verse Number'),
-        'end_verse_number': Schema(SchemaType.string,
-            description: 'Ending Verse Number'),
-      }, requiredProperties: [
-        'book_short_name',
-        'chapter_number',
-        'start_verse_number',
-      ],
+    Schema(
+      SchemaType.array,
+      items: Schema(
+        SchemaType.object,
+        properties: {
+          'book_short_name': Schema(SchemaType.string,
+              enumValues: [
+                "1Mo",
+                "2Mo",
+                "3Mo",
+                "4Mo",
+                "5Mo",
+                "Jos",
+                "Ri",
+                "Rt",
+                "1Sam",
+                "2Sam",
+                "1Kö",
+                "2Kö",
+                "1Chr",
+                "2Chr",
+                "Esr",
+                "Neh",
+                "Est",
+                "Hi",
+                "Ps",
+                "Spr",
+                "Pred",
+                "Hl",
+                "Jes",
+                "Jer",
+                "Kla",
+                "Hes",
+                "Dan",
+                "Hos",
+                "Joe",
+                "Am",
+                "Ob",
+                "Jon",
+                "Mi",
+                "Nah",
+                "Hab",
+                "Zeph",
+                "Hag",
+                "Sach",
+                "Mal",
+                "Mt",
+                "Mk",
+                "Lk",
+                "Joh",
+                "Apg",
+                "Rm",
+                "1Kor",
+                "2Kor",
+                "Gal",
+                "Eph",
+                "Phil",
+                "Kol",
+                "1Th",
+                "2Th",
+                "1Tim",
+                "2Tim",
+                "Tit",
+                "Phlm",
+                "Hebr",
+                "Jak",
+                "1Pt",
+                "2Pt",
+                "1Jo",
+                "2Jo",
+                "3Jo",
+                "Jud",
+                "Offb"
+              ],
+              description:
+                  'Abbreviation of bible book name must be strictly from these values: "1Mo","2Mo","3Mo","4Mo","5Mo","Jos","Ri","Rt","1Sam","2Sam","1Kö","2Kö","1Chr","2Chr","Esr","Neh","Est","Hi","Ps","Spr","Pred","Hl","Jes","Jer","Kla","Hes","Dan","Hos","Joe","Am","Ob","Jon","Mi","Nah","Hab","Zeph","Hag","Sach","Mal","Mt","Mk","Lk","Joh","Apg","Rm","1Kor","2Kor","Gal","Eph","Phil","Kol","1Th","2Th","1Tim","2Tim","Tit","Phlm","Hebr","Jak","1Pt","2Pt","1Jo","2Jo","3Jo","Jud","Offb".'),
+          'chapter_number': Schema(SchemaType.string,
+              description: 'Chapter Number of bible book'),
+          'start_verse_number':
+              Schema(SchemaType.string, description: 'Starting Verse Number'),
+          'end_verse_number':
+              Schema(SchemaType.string, description: 'Ending Verse Number'),
+        },
+        requiredProperties: [
+          'book_short_name',
+          'chapter_number',
+          'start_verse_number',
+        ],
       ),
 
-      
       // properties: {
       //   'verses': Schema(SchemaType.array, items: Schema(SchemaType.object, properties: {
       //     'book_short_name': Schema(SchemaType.string,
@@ -101,11 +171,84 @@ class GeminiService {
   final schema = Schema.array(
       description: 'List of bible verses',
       items: Schema.object(properties: {
-        'book_short_name':
-            Schema.enumString(enumValues: ["1Mo","2Mo","3Mo","4Mo","5Mo","Jos","Ri","Rt","1Sam","2Sam","1Kö","2Kö","1Chr","2Chr","Esr","Neh","Est","Hi","Ps","Spr","Pred","Hl","Jes","Jer","Kla","Hes","Dan","Hos","Joe","Am","Ob","Jon","Mi","Nah","Hab","Zeph","Hag","Sach","Mal","Mt","Mk","Lk","Joh","Apg","Rm","1Kor","2Kor","Gal","Eph","Phil","Kol","1Th","2Th","1Tim","2Tim","Tit","Phlm","Hebr","Jak","1Pt","2Pt","1Jo","2Jo","3Jo","Jud","Offb"], description: 'German abbreviation of bible book name striclty from enum values.', nullable: false),
-        'chapter_number': Schema.string(description: 'Chapter Number of bible book', nullable: false),
-        'start_verse_number': Schema.string(description: 'Starting Verse Number', nullable: false),
-        'end_verse_number': Schema.string(description: 'Ending Verse Number', nullable: false),
+        'book_short_name': Schema.enumString(
+            enumValues: [
+              "1Mo",
+              "2Mo",
+              "3Mo",
+              "4Mo",
+              "5Mo",
+              "Jos",
+              "Ri",
+              "Rt",
+              "1Sam",
+              "2Sam",
+              "1Kö",
+              "2Kö",
+              "1Chr",
+              "2Chr",
+              "Esr",
+              "Neh",
+              "Est",
+              "Hi",
+              "Ps",
+              "Spr",
+              "Pred",
+              "Hl",
+              "Jes",
+              "Jer",
+              "Kla",
+              "Hes",
+              "Dan",
+              "Hos",
+              "Joe",
+              "Am",
+              "Ob",
+              "Jon",
+              "Mi",
+              "Nah",
+              "Hab",
+              "Zeph",
+              "Hag",
+              "Sach",
+              "Mal",
+              "Mt",
+              "Mk",
+              "Lk",
+              "Joh",
+              "Apg",
+              "Rm",
+              "1Kor",
+              "2Kor",
+              "Gal",
+              "Eph",
+              "Phil",
+              "Kol",
+              "1Th",
+              "2Th",
+              "1Tim",
+              "2Tim",
+              "Tit",
+              "Phlm",
+              "Hebr",
+              "Jak",
+              "1Pt",
+              "2Pt",
+              "1Jo",
+              "2Jo",
+              "3Jo",
+              "Jud",
+              "Offb"
+            ],
+            description:
+                'German abbreviation of bible book name striclty from enum values.',
+            nullable: false),
+        'chapter_number': Schema.string(
+            description: 'Chapter Number of bible book', nullable: false),
+        'start_verse_number': Schema.string(
+            description: 'Starting Verse Number', nullable: false),
+        'end_verse_number':
+            Schema.string(description: 'Ending Verse Number', nullable: false),
       }, requiredProperties: [
         'book_short_name',
         'chapter_number',
@@ -119,26 +262,28 @@ class GeminiService {
       Bible book name must be strictly one of these values: "1Mo","2Mo","3Mo","4Mo","5Mo","Jos","Ri","Rt","1Sam","2Sam","1Kö","2Kö","1Chr","2Chr","Esr","Neh","Est","Hi","Ps","Spr","Pred","Hl","Jes","Jer","Kla","Hes","Dan","Hos","Joe","Am","Ob","Jon","Mi","Nah","Hab","Zeph","Hag","Sach","Mal","Mt","Mk","Lk","Joh","Apg","Rm","1Kor","2Kor","Gal","Eph","Phil","Kol","1Th","2Th","1Tim","2Tim","Tit","Phlm","Hebr","Jak","1Pt","2Pt","1Jo","2Jo","3Jo","Jud","Offb".'),
       ''';
 
-  Future<List<BibleVerse>> getGermanBibleReference(WidgetRef ref, String text, int index) async {
+  Future<List<BibleVerse>> getGermanBibleReference(
+      WidgetRef ref, String text, int index) async {
     final apiCallStatusNotifier = ref.read(apiCallStatusProvider.notifier);
     apiCallStatusNotifier.set(ApiCallStatus.loading);
     final model = GenerativeModel(
-      model: 'gemini-1.5-flash',
-      apiKey: geminiApiKey,
-      // tools: [
-      //   Tool(functionDeclarations: [getScriptureVersesTool])
-      // ],
-      generationConfig: GenerationConfig(
-        temperature: 0,
-        topK: 64,
-        topP: 0.95,
-        maxOutputTokens: 1000,
-        responseMimeType: 'application/json', 
-        responseSchema: schema,
-      ),
-      systemInstruction: Content.system('The assistant is a helpful and precise German Bible researcher. He uses Menge or Luther translation of the Bible.')
+        model: 'gemini-1.5-flash',
+        apiKey: geminiApiKey,
+        // tools: [
+        //   Tool(functionDeclarations: [getScriptureVersesTool])
+        // ],
+        generationConfig: GenerationConfig(
+          temperature: 0,
+          topK: 64,
+          topP: 0.95,
+          maxOutputTokens: 1000,
+          responseMimeType: 'application/json',
+          responseSchema: schema,
+        ),
+        systemInstruction: Content.system(
+            'The assistant is a helpful and precise German Bible researcher. He uses Menge or Luther translation of the Bible.')
 //  It responds strictly in following json format: {[ "book_short_name": "", "chapter_number": "", "start_verse_number": "", "end_verse_number": ""}]'),
-    );
+        );
 
     // final chat = model.startChat();
     // final chat = model.startChat(history: [
@@ -152,8 +297,10 @@ class GeminiService {
     // final message = 'INSERT_INPUT_HERE';
     // final content = Content.text(text);
     // var response = await chat.sendMessage(Content.text(text));
-    var response = await model.generateContent([Content.text(text)],);
-      // toolConfig: ToolConfig(functionCallingConfig: FunctionCallingConfig(mode: FunctionCallingMode.any)));
+    var response = await model.generateContent(
+      [Content.text(text)],
+    );
+    // toolConfig: ToolConfig(functionCallingConfig: FunctionCallingConfig(mode: FunctionCallingMode.any)));
     // tool_config={'function_calling_config':'ANY'})
     // final functionCalls = response.functionCalls.toList();
     // if (functionCalls.isNotEmpty) {
@@ -163,7 +310,10 @@ class GeminiService {
     // final response = await chat.sendMessage(content);
     print(response.text);
     // clean the response text from any non-json content like ```json and ``` ]
-    final cleanedText = response.text!.replaceAll('```json', '').replaceAll('\n', '').replaceAll('```', '');
+    final cleanedText = response.text!
+        .replaceAll('```json', '')
+        .replaceAll('\n', '')
+        .replaceAll('```', '');
     final decodedVerses = jsonDecode(cleanedText);
     // final decodedVerses = jsonDecode(response.text ?? '');
     // final decodedVerses = decoded['verses'];
@@ -216,7 +366,7 @@ class GeminiService {
         // Tuple3<String, String, String> t = Tuple3(b, c, sv);
         // BibleVerse v = await DBProvider().getBibleVerseFromReference(t);
         // verses.add(v);
-      }      
+      }
     }
     ref
         .read(currentTranscriptProvider.notifier)
@@ -224,9 +374,7 @@ class GeminiService {
     apiCallStatusNotifier.set(ApiCallStatus.success);
     return verses;
   }
-
 }
-
 
 final apiCallStatusProvider =
     StateNotifierProvider<ApiCallStatusNotifier, ApiCallStatus>((ref) {
@@ -248,7 +396,6 @@ class OpenAIService {
     const apiKey = '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';
     const url = 'https://api.openai.com/v1/chat/completions';
 
-
     // final prompt =
     //     'USER: The assistant is a helpful and precise German Bible researcher. He uses Menge or Luther translation of Bible\n\nHuman: Find 3 verses in german Bible closest matching to following text: $text\nOutput format should be comma-separated values of "Bible Book Chapter:Verse"';
 
@@ -266,7 +413,7 @@ class OpenAIService {
                 "book_short_name": {
                   "type": "string",
                   "description":
-                      "German abbreviation of bible book name striclty from enum values.",
+                      "German abbreviation of bible book name strictly from enum values.",
                   "enum": [
                     "1Mo",
                     "2Mo",
@@ -410,7 +557,7 @@ class OpenAIService {
     // print(response.data);
     // print(response.data.usage);
 
-    if (response.data['choices'][0]['message']['content'] == Null ){
+    if (response.data['choices'][0]['message']['content'] == Null) {
       print('response is null');
     }
     final responseData =

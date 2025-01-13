@@ -21,7 +21,7 @@ List<String> kjvFuzzySearch(
   print(kjvquery);
 
   clicks = clicks +
-      1; //increases whenever the function is called, used for updating widget viac variable_monitor.dart
+      1; //increases whenever the function is called, used for updating widget via variable_monitor.dart
 
   ref.read(variablemonitorProvider.notifier).state++;
 

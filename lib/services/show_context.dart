@@ -30,14 +30,6 @@ class ShowContext extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Generate a list of numbers from 1 to 10
-
-    final contextDisplay = contextByID(
-        'Who have said, With our tongue will we prevail; our lips are our own: who is lord over us?',
-        100,
-        20,
-        ref);
-
     return Flexible(
       child: ListView.builder(
           itemCount: contextFromDB.length, // Number of items in the list
