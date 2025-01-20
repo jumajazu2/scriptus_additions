@@ -11,11 +11,12 @@ import 'package:scriptus/providers/variable_monitor.dart';
 Future<String?> getKJVVerseById(int bookNumber, String bookName,
     int chapterNumber, int verseNumber, int bibleID, WidgetRef ref) async {
   // Get the path to the database file
-  MskDBProvider mskDBProvider = MskDBProvider();
+  //MskDBProvider mskDBProvider = MskDBProvider();
 
   final databasePath = await getDatabasesPath();
 
-  final dbPath = join(databasePath, 'versei.db'); // Adjust the database name
+  final dbPath =
+      join(databasePath, 'versei_mengeAdd.db'); // Adjust the database name
   //print(dbPath);
   // Open the database
   final Database db = await databaseFactoryFfi.openDatabase(dbPath);
@@ -38,8 +39,11 @@ Future<String?> getKJVVerseById(int bookNumber, String bookName,
 
     // Check if a result was found
     if (result.isNotEmpty) {
-      //print(result.first['content']);
-      fromAPItoKJV.add("$bookName $chapterNumber:$verseNumber");
+      //convert bookName
+      var convertedNameAbbr = getBookInfo(bookNumber - 1, workingLanguage);
+      var convertedName = convertedNameAbbr['name'];
+
+      fromAPItoKJV.add("$convertedName $chapterNumber:$verseNumber");
       fromAPItoKJV.add(result.first['content']);
       print("*****************");
       print(fromAPItoKJV);
@@ -62,10 +66,22 @@ Future<String?> getKJVVerseById(int bookNumber, String bookName,
   }
 }
 
+/*String removePunctuation(String input) {
+  // Removes all characters except letters, numbers, and spaces
+  return input.replaceAll(RegExp(r'[^\w\s]'), '');
+}
+*/
+
+String removePunctuation(String input) {
+  // Removes full stops, commas, and semicolons + any trailing space
+  return input.replaceAll(RegExp(r'[.,;-]'), '').trimRight();
+}
+
 Future<String?> contextByID(String verseText, int scope, WidgetRef ref) async {
-  MskDBProvider mskDBProvider = MskDBProvider();
+  // MskDBProvider mskDBProvider = MskDBProvider();
   final databasePath = await getDatabasesPath();
-  final dbPath = join(databasePath, 'versei.db'); // Adjust the database name
+  final dbPath =
+      join(databasePath, 'versei_mengeAdd.db'); // Adjust the database name
 
   // Open the database
   final Database db = await databaseFactoryFfi.openDatabase(dbPath);
@@ -73,12 +89,28 @@ Future<String?> contextByID(String verseText, int scope, WidgetRef ref) async {
   try {
     // Get verse ID from DB for a verse text
     int? IDVerse = 0;
+    /*
     final List<Map<String, dynamic>> resultID = await db.query(
       'msk_bible_verses', // Table name
       columns: ['ID'], // Columns to retrieve
-      where: 'content = ?', // WHERE clause
-      whereArgs: [verseText], // Arguments for the WHERE clause
+      where: 'content LIKE ? COLLATE NOCASE', // Use LIKE instead of =
+      whereArgs: ['%$verseText%'], // Arguments for the WHERE clause
     );
+  */
+    String normalisedVerseText = removePunctuation(verseText);
+    print("PreNormalised: --$verseText--");
+    print("Normalised: --$normalisedVerseText--");
+    final List<Map<String, dynamic>> resultID = await db.rawQuery(
+      '''
+  SELECT ID 
+  FROM msk_bible_verses
+  WHERE REPLACE(REPLACE(REPLACE(REPLACE(content, ".", ""), ",", ""), ";", ""), "-", "") LIKE ? COLLATE NOCASE
+  ''',
+      [
+        '%$normalisedVerseText%'
+      ], // DB search ignoring punctuation/case/leading-trailing spaces
+    );
+
     IDVerse = resultID.first['ID'] as int;
 // Check if the result is not empty
     /*
@@ -117,14 +149,17 @@ Future<String?> contextByID(String verseText, int scope, WidgetRef ref) async {
       //contextFromDB.add(result.first['content']);
       contextFromDB = [];
       for (int i = 0; i < result.length; i++) {
-        print(i);
+        //print(i);
         //print(result.length);
         //print(result[i]['content']);
         var content = result[i]['content'];
         var bookDB = result[i]['book_id'];
+        if (bookDB >= 70 && bookDB <= 136) {
+          bookDB = bookDB - 69;
+        } //adjust for Slovak books from API, show English book names instead
         bookDB = bookDB - 1;
-        Map<String, String> bookInfo = getBookInfo(
-            bookDB, 1); //1 for English/2 for German + add auto recognition
+        Map<String, String> bookInfo = getBookInfo(bookDB,
+            workingLanguage); 
 
         String abbr = bookInfo["abbr"] ?? "N/A"; // Default value if null
         var chapterDB = result[i]['bible_chapter'];
@@ -140,10 +175,10 @@ Future<String?> contextByID(String verseText, int scope, WidgetRef ref) async {
 
         contextFromDB.add(preparedContent);
       }
-      print("******CONTEXT***********");
+      //print("******CONTEXT***********");
       //print(startContext);
       //print(contextFromDB);
-      print("******CONTEXT*****");
+      // print("******CONTEXT*****");
 
       ref.read(variablemonitorProvider.notifier).state++;
       //ref.read(variablemonitorProvider.notifier).state++; //reloading in loop when used
@@ -161,9 +196,9 @@ Future<String?> contextByID(String verseText, int scope, WidgetRef ref) async {
   }
 }
 
-Map<String, String> getBookInfo(int bookID, int languageCode) {
+Map<String, String> getBookInfo(int bookID, String languageCode) {
   // Validate the language code to ensure it is 1 (English) or 2 (German)
-  if (languageCode != 1 && languageCode != 2) {
+  if (languageCode != "en" && languageCode != "de") {
     throw ArgumentError(
         "Invalid language code. Please use 1 for English or 2 for German.");
   }
@@ -308,11 +343,16 @@ Map<String, String> getBookInfo(int bookID, int languageCode) {
   ];
 
   // Fetch the appropriate list based on the language code
-  var books = languageCode == 2 ? booksGerman : booksEnglish;
+  bookID = languageCode == "de"
+      ? bookID = bookID - 136
+      : bookID; //book ID adjusted for DE, add for other languages, change to text code
+
+  var books = languageCode == "de" ? booksGerman : booksEnglish;
 
   // Ensure bookID is valid and within bounds of the list
   if (bookID < 0 || bookID >= books.length) {
-    throw ArgumentError("Invalid book ID.");
+    //throw ArgumentError("Invalid book ID.");
+    return {"abbr": "--", "name": "--"};
   }
 
   // Return the abbreviation and name for the specified book ID

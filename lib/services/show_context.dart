@@ -30,15 +30,41 @@ class ShowContext extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ScrollController _scrollController = ScrollController();
+
+    // Initialize scroll position to center the middle item
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      int totalCharacters = contextFromDB
+          .where((item) => item is String) // Ensure the item is a String
+          .map((item) => (item as String).length) // Cast to String
+          .fold<int>(0, (sum, length) => sum + length); // Sum up lengths
+      final middleIndex = contextFromDB.length ~/ 2;
+      final middleOffset = totalCharacters /
+          2.8; // approximated on the number of characters in the whole list
+      //_scrollController.jumpTo(middleIndex);
+      //print(totalCharacters);
+      //print(middleOffset);
+      _scrollController.animateTo(middleOffset,
+          duration: Duration(seconds: 1), curve: Curves.easeInOut);
+    });
+
     return Flexible(
       child: ListView.builder(
-          itemCount: contextFromDB.length, // Number of items in the list
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: SelectableText(contextFromDB[index]), // Display each item
-              //leading: Icon(Icons.star)
-            );
-          }),
+        controller: _scrollController, // Attach the controller
+        itemCount: contextFromDB.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: SelectableText(
+              contextFromDB[index],
+              style: TextStyle(
+                fontWeight: (index == (contextFromDB.length ~/ 2))
+                    ? FontWeight.bold
+                    : FontWeight.normal,
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

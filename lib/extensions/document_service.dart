@@ -12,6 +12,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:scriptus/audio/audio_player.dart';
 // import 'package:path_provider/path_provider.dart';
 import 'package:scriptus/extensions/utilities.dart';
+import 'package:scriptus/home_page.dart';
 import 'package:scriptus/models/bible_verse.dart';
 import 'package:scriptus/models/sermon.dart';
 import 'package:scriptus/models/transcript_data.dart';
@@ -246,15 +247,18 @@ class DocumentService {
       // set language to 'de' if no language is found
       String language = 'de';
       String mp3Language = 'deutsch';
+      workingLanguage = language;
       if (fileName.toLowerCase().contains('french')) {
         language = 'fr';
+        workingLanguage = language;
         mp3Language = 'french';
       }
       if (fileName.toLowerCase().contains('english')) {
         language = 'en';
+        workingLanguage = language;
         mp3Language = 'english';
       }
-
+      print("Work Lang init: $workingLanguage");
       TranscriptData td = ref.watch(currentTranscriptProvider.notifier).state;
       td = td.copyWith(
         originalText: input,

@@ -78,6 +78,7 @@ class TranscriptData //extends DataModel<TranscriptData>
       // Construct the path to the Downloads directory.
       final downloadsDirectoryPath = join(homeDirectoryPath, 'Downloads');
       final downloadsDirectory = Directory(downloadsDirectoryPath);
+      print(homeDirectoryPath);
       print(downloadsDirectory);
 
       // Check if the Downloads directory exists, if not, throw an error.
@@ -646,8 +647,10 @@ class TranscriptData //extends DataModel<TranscriptData>
     // loop through all segments
     for (TranscriptSegment segment in newSegments) {
       // translate segment
-      String cleanedDe = TextCleaner().cleanText(segment.text, language: ref.watch(currentTranscriptProvider).language);
-      String cleanedSk = TextCleaner().cleanText(segment.textSk, language: 'sk');
+      String cleanedDe = TextCleaner().cleanText(segment.text,
+          language: ref.watch(currentTranscriptProvider).language);
+      String cleanedSk =
+          TextCleaner().cleanText(segment.textSk, language: 'sk');
 
       // create new segment with translated text
       final newSegment = segment.copyWith(text: cleanedDe, textSk: cleanedSk);

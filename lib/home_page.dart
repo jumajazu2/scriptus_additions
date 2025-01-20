@@ -41,6 +41,8 @@ List<dynamic> fromAPItoKJV = [
 List<dynamic> contextFromDB = [
   "Nothing loaded yet..."
 ]; //init variable to load Bible context from DB
+String workingLanguage =
+    ""; //init variable to hold language for language-specific selections (search, context)
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key, required this.title});
@@ -641,7 +643,7 @@ class HomePage extends ConsumerWidget {
                   ),
                 if (settings.showKJV)
                   SelectableText.rich(TextSpan(
-                      text: "KJV Search Results:", // Additional static text
+                      text: "Search Results:", // Additional static text
                       style: TextStyle(fontSize: 15, color: Colors.red))),
                 //if (settings.showFound) SelectableText(kjvInput),
                 if (settings.showKJV)
@@ -662,18 +664,29 @@ class HomePage extends ConsumerWidget {
                           return ListTile(
                             title: SelectableText(
                                 searchReturn[index]), // Display each item
-                            leading: Icon(Icons.arrow_right),
-                            onTap: () {
-                              // Action when the item is clicked
-                              //print('Item clicked: ${fromAPItoKJV[index]}');
-                              contextFromDB = [];
+                            trailing: searchReturn[index].length >
+                                    20 // Conditional check
+                                ? GestureDetector(
+                                    onTap: () {
+                                      print('Leading icon tapped!');
+                                      contextFromDB = [];
 
-                              if (searchReturn[index].length > 20) {
-                                var init =
-                                    contextByID(searchReturn[index], 6, ref);
-                                print('Item clicked: ${searchReturn[index]}');
-                              }
-                            },
+                                      if (searchReturn[index].length > 20) {
+                                        var init = contextByID(
+                                            searchReturn[index],
+                                            12,
+                                            ref); //scope for context, -X verses/+X verses
+                                        print(
+                                            'Item clicked through leading icon: ${searchReturn[index]}');
+                                      }
+                                    },
+                                    child: Tooltip(
+                                      message:
+                                          'Press Arrow to Show Context for Scripture', // Tooltip message
+                                      child: Icon(Icons.arrow_right),
+                                    ))
+                                : null,
+                            // If condition is false, no leading widget,
                           );
                         }),
                     /*style: TextStyle(
@@ -701,19 +714,28 @@ class HomePage extends ConsumerWidget {
                           return ListTile(
                             title: SelectableText(
                                 fromAPItoKJV[index]), // Display each item
-                            leading: Icon(
-                                Icons.arrow_right), //leading: Icon(Icons.star),
-                            onTap: () {
-                              // Action when the item is clicked
-                              //print('Item clicked: ${fromAPItoKJV[index]}');
-                              contextFromDB = [];
+                            trailing: fromAPItoKJV[index].length > 20
+                                ? GestureDetector(
+                                    //leading: Icon(Icons.star),
+                                    onTap: () {
+                                      print('Leading icon tapped!');
+                                      contextFromDB = [];
 
-                              if (fromAPItoKJV[index].length > 20) {
-                                var init =
-                                    contextByID(fromAPItoKJV[index], 6, ref);
-                                print('Item clicked: ${fromAPItoKJV[index]}');
-                              }
-                            },
+                                      if (fromAPItoKJV[index].length > 20) {
+                                        var init = contextByID(
+                                            fromAPItoKJV[index],
+                                            12,
+                                            ref); //scope for context, -X verses/+X verses
+                                        print(
+                                            'Item clicked: ${fromAPItoKJV[index]}');
+                                      }
+                                    },
+                                    child: Tooltip(
+                                      message:
+                                          'Press Arrow to Show Context for Scripture', // Tooltip message
+                                      child: Icon(Icons.arrow_right),
+                                    ))
+                                : null,
                           );
                         }),
                     /*style: TextStyle(

@@ -519,7 +519,7 @@ class EditSentence extends HookConsumerWidget {
         //    '#KJVFS# $selectedText'; //adds activation code to python search app that will monitor the clipboard, this will be removed when search is done in Scriptus
         //Clipboard.setData(ClipboardData(text: queryToClipboard));
         print("selection passed");
-        searchReturn = kjvFuzzySearch(selectedText, "en", ref, tec);
+        searchReturn = kjvFuzzySearch(selectedText, workingLanguage, ref, tec);
         print("searchReturn passed to calling function: $searchReturn");
         if (searchReturn[0] != "No results found") {
           Clipboard.setData(ClipboardData(text: searchReturn[1]));
@@ -542,7 +542,7 @@ class EditSentence extends HookConsumerWidget {
         //    '#KJVFS# $wholeSegment'; //adds activation code to python search app that will monitor the clipboard, this will be removed when search is done in Scriptus
         //Clipboard.setData(ClipboardData(text: queryToClipboard));
         print("whole segment passed");
-        searchReturn = kjvFuzzySearch(wholeSegment, "en", ref, tec);
+        searchReturn = kjvFuzzySearch(wholeSegment, workingLanguage, ref, tec);
         print("searchReturn passed to calling function: $searchReturn");
         if (searchReturn[0] != "No results found") {
           Clipboard.setData(ClipboardData(text: searchReturn[1]));
@@ -580,6 +580,7 @@ class EditSentence extends HookConsumerWidget {
     final tec = useTextEditingController();
     final settings = ref.watch(settingsProvider);
     print(clicks);
+    print("Work Lang: $workingLanguage"); //;
     // Update the TextEditingController's text when the provider's state changes.
     // This side effect runs every time the widget rebuilds.
     if (tec.text != sentenceState.text.trim()) {

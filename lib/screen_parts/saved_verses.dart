@@ -136,7 +136,7 @@ class SavedVerses extends ConsumerWidget {
                   itemBuilder: (context, index) {
                     Place place = places[index];
                     if (index == 0) fromAPItoKJV = [];
-                    //The following sends the SK places for the segment to getKJVVerseById when EN verses are retrieved from DB
+                    //The following sends the SK places for the segment to getKJVVerseById to retrieve corresponding EN verses from DB
                     var idSK = place.verseStartId;
                     var bookID = (place.bookId -
                         69); //offset to move from SK book to EN book
@@ -146,15 +146,13 @@ class SavedVerses extends ConsumerWidget {
                     var chapterNumber = place.chapterNumber;
                     var verseStartNumber = place.verseStartNumber;
                     if (idSK != null && language == "sk") {
-                      print("result from getKJVVerseById:");
-                      print("$bookName $chapterNumber:$verseStartNumber");
+                      print(
+                          "result from getKJVVerseById: $bookName $chapterNumber:$verseStartNumber");
+
                       getKJVVerseById(bookID, bookName, chapterNumber,
                               verseStartNumber, bibleID, ref)
                           .then((resultKJV) {
                         String outputKJV = resultKJV ?? 'Default Value';
-
-                        print(
-                            outputKJV); // the output is to console for now, as the getKJVVerseById function is async and await/async cannot be used in this widget
                       });
                     }
 
@@ -170,8 +168,8 @@ class SavedVerses extends ConsumerWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: (place.language == "sk" &&
-                                  Platform
-                                      .isWindows) //only displays found place when in Slovak, German places will be ignored on Windows
+                                  workingLanguage ==
+                                      "en") //only displays found place when in Slovak and sermon language is English, German places will be displayed for German sermons only
                               ? Text(
                                   '${place.timePosition} - ${place.bookName} ${place.chapterNumber}:${place.verseStartNumber} - ${place.verseEndNumber != place.verseStartNumber ? place.verseEndNumber : ""} - ${place.id} - ${place.sermonId != null ? "DURI" : "MIRO"}',
                                   style: TextStyle(
@@ -193,18 +191,41 @@ class SavedVerses extends ConsumerWidget {
                                 color: Colors.blueGrey[600],
                                 margin: const EdgeInsets.all(0),
                                 padding: const EdgeInsets.all(10),
-                                child: (place.language == "sk" &&
-                                        Platform
-                                            .isWindows) //only displays found place when in Slovak, German places will be ignored on Windows only
-                                    ? SelectableText(
-                                        place.verseText,
-                                        style: const TextStyle(
-                                          fontSize: 22,
-                                          fontFamily: 'Cambria',
-                                        ),
+                                child: (place.language == "sk" ||
+                                        place.language == "de" &&
+                                            workingLanguage == "en")
+                                    ? Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: SelectableText(
+                                              place.verseText,
+                                              style: const TextStyle(
+                                                fontSize: 22,
+                                                fontFamily: 'Cambria',
+                                              ),
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                              onTap: () {
+                                                // Your function when the arrow is tapped
+                                                print("Right arrow tapped!");
+                                                contextFromDB = [];
+                                                var init = contextByID(
+                                                    place.verseText, 12, ref);
+                                                print(
+                                                    'Item clicked and passed to show Context: ${place.verseText}');
+                                              },
+                                              child: Tooltip(
+                                                message:
+                                                    'Press Arrow to Show Context for Scripture', // Tooltip message
+                                                child: Icon(Icons.arrow_right),
+                                              )),
+                                        ],
                                       )
                                     : const SizedBox.shrink(),
-                              ),
+                              )
                         // Row(
                         //   // buttonPadding: const EdgeInsets.all(0),
                         //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
