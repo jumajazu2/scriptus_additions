@@ -521,7 +521,7 @@ class EditSentence extends HookConsumerWidget {
         print("selection passed");
         searchReturn = kjvFuzzySearch(selectedText, workingLanguage, ref, tec);
         print("searchReturn passed to calling function: $searchReturn");
-        if (searchReturn[0] != "No results found") {
+        if (searchReturn[0] != "No results found" || searchReturn.length >= 2) {
           Clipboard.setData(ClipboardData(text: searchReturn[1]));
           print(
               "searchReturn passed to Clipboard - 1st result in list: $searchReturn");
@@ -544,7 +544,7 @@ class EditSentence extends HookConsumerWidget {
         print("whole segment passed");
         searchReturn = kjvFuzzySearch(wholeSegment, workingLanguage, ref, tec);
         print("searchReturn passed to calling function: $searchReturn");
-        if (searchReturn[0] != "No results found") {
+        if (searchReturn[0] != "No results found" || searchReturn.length >= 2) {
           Clipboard.setData(ClipboardData(text: searchReturn[1]));
           print(
               "searchReturn passed to Clipboard - 1st result in list: $searchReturn");
@@ -936,9 +936,8 @@ class EditSentence extends HookConsumerWidget {
                 // index: editedSegmentIndex ?? 0,
                 icon: const Icon(Icons.format_quote),
                 // ref: ref,
-                text: '#KJV',
-                tooltip:
-                    'Fuzzy search for selected text in KJV to return the verse in the clipboard',
+                text: 'Find',
+                tooltip: 'Fuzzy search for selection/whole segment',
                 onPressed: () => KJVsearch(ref, tec),
               ),
             // const VerticalDivider(

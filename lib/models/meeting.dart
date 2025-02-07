@@ -12,7 +12,8 @@ import 'package:scriptus/models/place.dart';
 // import 'package:scriptus/models/meeting_place.dart';
 // import 'package:flutter_data/flutter_data.dart';
 // import 'package:json_annotation/json_annotation.dart';
-
+//import 'package:scriptus/services/load_from_DB.dart';
+//import 'package:scriptus/home_page.dart';
 part 'meeting.freezed.dart';
 part 'meeting.g.dart';
 
@@ -141,6 +142,7 @@ class Meeting with _$Meeting {
     if (meetingStart != null) {
       var dateFormat = DateFormat("yyyy-MM-dd-HHmm")
           .format(DateTime.parse(meetingStart ?? '0000-00-00 00:00:00'));
+
       return dateFormat;
     } else {
       return 'Select a Meeting…';

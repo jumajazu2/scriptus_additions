@@ -158,8 +158,7 @@ Future<String?> contextByID(String verseText, int scope, WidgetRef ref) async {
           bookDB = bookDB - 69;
         } //adjust for Slovak books from API, show English book names instead
         bookDB = bookDB - 1;
-        Map<String, String> bookInfo = getBookInfo(bookDB,
-            workingLanguage); 
+        Map<String, String> bookInfo = getBookInfo(bookDB, workingLanguage);
 
         String abbr = bookInfo["abbr"] ?? "N/A"; // Default value if null
         var chapterDB = result[i]['bible_chapter'];
@@ -200,7 +199,7 @@ Map<String, String> getBookInfo(int bookID, String languageCode) {
   // Validate the language code to ensure it is 1 (English) or 2 (German)
   if (languageCode != "en" && languageCode != "de") {
     throw ArgumentError(
-        "Invalid language code. Please use 1 for English or 2 for German.");
+        "Invalid language code. Please use en for English or de for German.");
   }
 
   // Lists of Bible books for English and German
@@ -344,11 +343,11 @@ Map<String, String> getBookInfo(int bookID, String languageCode) {
 
   // Fetch the appropriate list based on the language code
   bookID = languageCode == "de"
-      ? bookID = bookID - 136
+      ? bookID = bookID //- 136
       : bookID; //book ID adjusted for DE, add for other languages, change to text code
 
   var books = languageCode == "de" ? booksGerman : booksEnglish;
-
+  print("getBookInfo-bookID:$bookID, $workingLanguage");
   // Ensure bookID is valid and within bounds of the list
   if (bookID < 0 || bookID >= books.length) {
     //throw ArgumentError("Invalid book ID.");

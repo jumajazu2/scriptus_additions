@@ -89,7 +89,7 @@ class SettingsDialog extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text('Show KJV Search'),
+                            const Text('Show Bible Search'),
                             const Spacer(),
                             Checkbox(
                                 value: ref.watch(settingsProvider).showKJV,

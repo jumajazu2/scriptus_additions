@@ -21,6 +21,7 @@ import 'package:scriptus/services/meeting_service.dart';
 import 'package:scriptus/services/mng_database_service.dart';
 import 'package:tuple/tuple.dart';
 import 'transcript_segment.dart';
+import 'package:scriptus/home_page.dart';
 // import 'package:path/path.dart' as path;
 
 part 'transcript_data.freezed.dart';
@@ -131,6 +132,24 @@ class TranscriptData //extends DataModel<TranscriptData>
 
     File file = File(result.files.single.path!);
     final String transcriptDataJson = await file.readAsString();
+
+//read working language for fuzzy search and context display
+
+    var fileName = result.files.single.name;
+    if (fileName.toLowerCase().contains('french')) {
+      workingLanguage = 'fr';
+      language = 'fr';
+    }
+    if (fileName.toLowerCase().contains('english')) {
+      language = 'en';
+      workingLanguage = 'en';
+    }
+    if (fileName.toLowerCase().contains('deutsch')) {
+      language = 'de';
+      workingLanguage = 'de';
+    }
+    print("Work Lang for edited json: $workingLanguage");
+
     final Map<String, dynamic> transcriptDataMap =
         jsonDecode(transcriptDataJson);
     TranscriptData td = TranscriptData.fromJson(transcriptDataMap);

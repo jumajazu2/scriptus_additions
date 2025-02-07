@@ -248,6 +248,7 @@ class DocumentService {
       String language = 'de';
       String mp3Language = 'deutsch';
       workingLanguage = language;
+      print("Work Lang init: $workingLanguage");
       if (fileName.toLowerCase().contains('french')) {
         language = 'fr';
         workingLanguage = language;
@@ -257,6 +258,11 @@ class DocumentService {
         language = 'en';
         workingLanguage = language;
         mp3Language = 'english';
+      }
+      if (fileName.toLowerCase().contains('deutsch')) {
+        language = 'de';
+        workingLanguage = language;
+        mp3Language = 'deutsch';
       }
       print("Work Lang init: $workingLanguage");
       TranscriptData td = ref.watch(currentTranscriptProvider.notifier).state;

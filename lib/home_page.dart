@@ -24,13 +24,13 @@ import 'package:scriptus/screen_parts/settings/settigns_dialog.dart';
 import 'package:scriptus/services/kjv_from_db.dart';
 import 'package:scriptus/services/meeting_service.dart';
 import 'package:scriptus/services/show_context.dart';
+import 'package:scriptus/services/load_from_DB.dart';
 
 import 'screen_parts/object_viewer.dart';
 import 'screen_parts/segment_table.dart';
 import 'main.dart';
 
-//final dataclipboard = await Clipboard.getData(Clipboard.kTextPlain);
-
+//global variables init for fuzzy search and Bible context display
 List<String> searchReturn = []; //initialise object to return search results
 Map<String, dynamic> data = {}; //initialise object to load kjv json
 var clicks =
@@ -43,12 +43,15 @@ List<dynamic> contextFromDB = [
 ]; //init variable to load Bible context from DB
 String workingLanguage =
     ""; //init variable to hold language for language-specific selections (search, context)
+String language = "";
+List<Map<String, dynamic>>?
+    searchScopeDB; //initialise map to store Bible from DB for fuzzy searches
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key, required this.title});
-
+  //var init = loadFromDB(); // at startup, load Bible for working language to |Map for fuzzy search
   final String title;
-
+  //var init = main();
 //   @override
 //   HomePageState createState() => HomePageState();
 // }

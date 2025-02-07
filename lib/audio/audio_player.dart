@@ -24,7 +24,9 @@ final audioPlayerControllerProvider =
         (ref) => AudioPlayerController());
 
 final audioPlayerProvider = Provider<AudioPlayer>((ref) {
-  final player = ref.watch(audioPlayerControllerProvider.notifier).state;
+  final player = ref
+      .watch(audioPlayerControllerProvider.notifier)
+      .state; //change "ref.watch" to "ref.read" may be needed for toggling player with ESC
   return player;
 });
 // StateNotifierProvider<AudioPlayer, AudioPlayer>(
