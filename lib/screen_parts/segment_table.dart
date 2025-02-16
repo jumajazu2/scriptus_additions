@@ -15,10 +15,23 @@ import 'package:scriptus/providers/sentence_providers.dart';
 import 'package:scriptus/providers/settings_provider.dart';
 import 'package:scriptus/screen_parts/edit_sentence.dart';
 import '../models/transcript_data.dart';
+import 'package:scriptus/home_page.dart';
 
 @riverpod
 final translationProvider = StateProvider<String>((ref) => '');
+final ScrollController scrollControllerTab = ScrollController();
 
+void scrollToEditedSegment(int index) {
+  if (scrollControllerTab.hasClients) {
+    scrollControllerTab.animateTo((index * 152.0) - 300,
+        duration: Duration(milliseconds: 400), curve: Curves.easeInOut
+        // Adjust based on item height
+        );
+    print(" scroll to edited segment: $index");
+  } else {
+    debugPrint("scrollcontrollerTab not attached");
+  }
+}
 // @riverpod
 // class CurrentHeightProvider extends StateNotifier<double> {
 //   CurrentHeightProvider() : super(152);
@@ -57,6 +70,7 @@ class SegmentTable extends ConsumerWidget {
     // Update the provider with the response
     ref.read(foundVersesProvider.notifier).state = response;
   }
+
   Future<void> callOpenAiApi(
       WidgetRef ref, TranscriptSegment s, int index) async {
     // Make the API call
@@ -78,6 +92,7 @@ class SegmentTable extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // WidgetRef ref; // Get this from your build method or somewhere else
+    // Listen to changes in editedSegmentIndexProvider
 
     // ref
     //     .read(audioPlayerControllerProvider.notifier)
@@ -91,12 +106,15 @@ class SegmentTable extends ConsumerWidget {
     //     ref.watch(audioPlayerProvider);
     final player = ref.read(audioPlayerControllerProvider.notifier);
     final searchValue = ref.watch(searchValueProvider);
-
+    //final ScrollController scrollControllerTab = ScrollController();
     // if settings.showSearch is enabled, show the filtered segments from td.segments, otherwise show all
     // List<MapEntry<int,TranscriptSegment>> segments = [];
     List<MapEntry<int, TranscriptSegment>> segments =
         td.segments.asMap().entries.toList();
     List<MapEntry<int, TranscriptSegment>> filteredSegments = segments;
+    filteredSegmentsShortcuts = filteredSegments
+        .map((entry) => entry.value)
+        .toList(); //creates a list of all segments in filteredSegmentsShortcuts, for use to move to next segment using CTRL+TAB
     if (settings.showSearch) {
       // print('ss: $searchValue');
       // print('ss2: $indexedSegments');
@@ -114,12 +132,16 @@ class SegmentTable extends ConsumerWidget {
     // final List<BibleVerse> bv = ref.watch(foundVersesProvider);
     return ListView.builder(
       shrinkWrap: true,
+      controller: scrollControllerTab,
       itemCount: filteredSegments.length,
       // itemExtent: 152,
       itemBuilder: (context, index) {
         final s = filteredSegments[index].value;
+
         final originalIndex = filteredSegments[index].key;
+
         String sText = s.isBrRuss ? "Br. Russ: ${s.text}" : s.text;
+        //debugPrint("sText=$sText");
         // padding: const EdgeInsets.all(0),
         // children: <Widget>[
         // for (var s in td.segments)
@@ -239,6 +261,7 @@ class SegmentTable extends ConsumerWidget {
                       children: [
                         // const SizedBox(width: 13),
                         Container(
+                          clipBehavior: Clip.none,
                           padding: const EdgeInsets.all(5),
                           width: 50,
                           decoration: const BoxDecoration(
@@ -393,7 +416,7 @@ class SegmentTable extends ConsumerWidget {
                                             ? "\"$sText\""
                                             : (s.isSong
                                                 ? "\u{1F3B5}$sText\u{1F3B5}"
-                                                : sText),
+                                                : sText), //rends segment text in non-editing mode
                                         style: TextStyle(
                                           // overflow: TextOverflow.ellipsis,
                                           height: 1.6,
@@ -439,11 +462,12 @@ class SegmentTable extends ConsumerWidget {
                                               //     TextLeadingDistribution.proportional,
                                               fontFamily: 'Courier New',
                                               color: s.places.isNotEmpty
-                                              ? Colors.blue
-                                              : Theme.of(context).brightness ==
-                                                      Brightness.dark
-                                                  ? Colors.grey[300]
-                                                  : Colors.grey[800],
+                                                  ? Colors.blue
+                                                  : Theme.of(context)
+                                                              .brightness ==
+                                                          Brightness.dark
+                                                      ? Colors.grey[300]
+                                                      : Colors.grey[800],
                                               fontStyle:
                                                   s.isScripture || s.isSong
                                                       ? FontStyle.italic
@@ -544,7 +568,8 @@ class SegmentTableButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TranscriptData selectedTranscript = ref.watch(currentTranscriptProvider);
+    final TranscriptData selectedTranscript =
+        ref.watch(currentTranscriptProvider);
     return SizedBox(
         // color: Colors.red,
         width: 33,
@@ -564,18 +589,17 @@ class SegmentTableButton extends StatelessWidget {
               onPressed();
               selectedTranscript.exportTranscriptToJson(ref);
               DocumentService().exportToHtml(
-                    selectedTranscript.fileName,
-                    selectedTranscript.filePath,
-                    selectedTranscript.segments,
-                    'de',
-                    ref);
+                  selectedTranscript.fileName,
+                  selectedTranscript.filePath,
+                  selectedTranscript.segments,
+                  'de',
+                  ref);
               DocumentService().exportToHtml(
-                    selectedTranscript.fileName,
-                    selectedTranscript.filePath,
-                    selectedTranscript.segments,
-                    'sk',
-                    ref);
-
+                  selectedTranscript.fileName,
+                  selectedTranscript.filePath,
+                  selectedTranscript.segments,
+                  'sk',
+                  ref);
             },
           ),
         ));

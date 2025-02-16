@@ -24,8 +24,46 @@ import 'package:sqflite_common_ffi/src/sqflite_ffi_io.dart';
 import 'package:scriptus/services/load_from_DB.dart';
 import 'package:scriptus/extensions/keyboard_shortcuts.dart';
 
-// import 'services/mng_database_service.dart';
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  sqfliteFfiInit();
+  databaseFactory = databaseFactoryFfi;
 
+  runApp(const ProviderScope(child: MyApp())); // Move logic inside MyApp
+}
+
+
+
+class MyApp extends ConsumerWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return KeyboardShortcuts(
+      ref: ref, // Now ref is available inside MyApp
+      //tec: tec,
+      // Initialize tec
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Scriptus',
+        theme: ThemeData(
+          useMaterial3: true,
+          colorSchemeSeed: Colors.green[700],
+          brightness: Brightness.dark,
+        ),
+        home: const HomePage(title: 'Scriptus'),
+      ),
+    );
+  }
+}
+
+
+
+
+
+
+// import 'services/mng_database_service.dart';
+/*
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   sqfliteFfiInit();
@@ -33,8 +71,7 @@ void main() {
 
   runApp(
     const ProviderScope(
-      child: KeyboardShortcuts(
-        //for keyboard shortcut detection in the whole app
+      child: KeyboardShortcuts( //for keyboard shortcut detection in the whole app
         // Wrap the entire app
         child: MyApp(),
       ),
@@ -62,3 +99,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+*/

@@ -17,13 +17,18 @@ import 'package:scriptus/providers/variable_monitor.dart';
 import 'package:scriptus/services/kjv_fuzzy_search.dart';
 import 'package:scriptus/screen_parts/settings/settigns_dialog.dart';
 import 'package:scriptus/providers/settings_provider.dart';
-
+import 'package:scriptus/extensions/keyboard_shortcuts.dart';
 // import 'package:scriptus/constants.dart';
 
 // create a riverpod provider to hold CMD button pressed status
 // final cmdPressedProvider = StateProvider<bool>((ref) {
 //   return false;
 // });
+
+void searchKJV(WidgetRef ref, tec) {
+  print("Searching Bible...");
+  EditSentence().KJVsearch(ref, tec);
+}
 
 class EditSentence extends HookConsumerWidget {
   // EditSentence({Key? key}) : super(key: key);
@@ -491,10 +496,10 @@ class EditSentence extends HookConsumerWidget {
     }
   }
 
-//jumajazu2 added - send whole segment/selection to clipboard to kjvFuzzySearch amd to Clipboard where it can be intercepted by external code
+//send whole segment/selection to kjvFuzzySearch
   void KJVsearch(WidgetRef ref, tec) {
     final editedSegmentIndex = ref.watch(editedSegmentIndexProvider);
-
+    
     clicks = clicks + 1;
 
     ref.read(variablemonitorProvider.notifier).state++;
@@ -508,16 +513,6 @@ class EditSentence extends HookConsumerWidget {
         String selectedText =
             tec.text.substring(selection.start, selection.end);
 
-        // Make the first letter uppercase
-        // if (selectedText.isNotEmpty) {
-        //   selectedText =
-        //       selectedText[0].toUpperCase() + selectedText.substring(1);
-        // }
-
-        // Add quotation marks
-        //String queryToClipboard =
-        //    '#KJVFS# $selectedText'; //adds activation code to python search app that will monitor the clipboard, this will be removed when search is done in Scriptus
-        //Clipboard.setData(ClipboardData(text: queryToClipboard));
         print("selection passed");
         searchReturn = kjvFuzzySearch(selectedText, workingLanguage, ref, tec);
         print("searchReturn passed to calling function: $searchReturn");
@@ -526,21 +521,9 @@ class EditSentence extends HookConsumerWidget {
           print(
               "searchReturn passed to Clipboard - 1st result in list: $searchReturn");
         }
-
-        // Replace the selected text with the new text
-        //tec.text =
-        //    tec.text.replaceRange(selection.start, selection.end, newText);
-
-        // Update the selection to keep it in the correct place
-        //tec.selection = TextSelection(
-        //  baseOffset: selection.start,
-        //  extentOffset: selection.start + newText.length,
-        //);
       } else {
         String wholeSegment = tec.text;
-        //String queryToClipboard =
-        //    '#KJVFS# $wholeSegment'; //adds activation code to python search app that will monitor the clipboard, this will be removed when search is done in Scriptus
-        //Clipboard.setData(ClipboardData(text: queryToClipboard));
+
         print("whole segment passed");
         searchReturn = kjvFuzzySearch(wholeSegment, workingLanguage, ref, tec);
         print("searchReturn passed to calling function: $searchReturn");
@@ -578,6 +561,7 @@ class EditSentence extends HookConsumerWidget {
     final clicks = ref.watch(variablemonitorProvider);
     // Create the TextEditingController without setting the initial text.
     final tec = useTextEditingController();
+    passTec = tec; //pass tex for shortcut handling
     final settings = ref.watch(settingsProvider);
     print(clicks);
     print("Work Lang: $workingLanguage"); //;
@@ -937,7 +921,7 @@ class EditSentence extends HookConsumerWidget {
                 icon: const Icon(Icons.format_quote),
                 // ref: ref,
                 text: 'Find',
-                tooltip: 'Fuzzy search for selection/whole segment',
+                tooltip: 'Fuzzy search for selection/whole segment, CTRL+F',
                 onPressed: () => KJVsearch(ref, tec),
               ),
             // const VerticalDivider(

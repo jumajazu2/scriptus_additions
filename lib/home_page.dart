@@ -10,6 +10,7 @@ import 'package:scriptus/extensions/document_service.dart';
 import 'package:scriptus/extensions/file_services.dart';
 import 'package:scriptus/models/meeting.dart';
 import 'package:scriptus/models/transcript_data.dart';
+import 'package:scriptus/models/transcript_segment.dart';
 import 'package:scriptus/providers/current_doc_provider.dart';
 import 'package:scriptus/providers/meeting_provider.dart';
 import 'package:scriptus/providers/sentence_providers.dart';
@@ -46,6 +47,8 @@ String workingLanguage =
 String language = "";
 List<Map<String, dynamic>>?
     searchScopeDB; //initialise map to store Bible from DB for fuzzy searches
+var filteredSegmentsShortcuts; //pass filtered segments for use in shortcuts
+var passTec; //for shortcuts, pass "tec"
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key, required this.title});
