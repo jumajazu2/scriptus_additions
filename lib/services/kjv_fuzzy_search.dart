@@ -137,7 +137,7 @@ List<String> kjvFuzzySearch(
   //searchReturn = scanAll(kjvquery);
   searchReturn = fuzzyBibleSearch(kjvquery, language, ref, tec) ?? [];
 
-  print("searchReturn_from_DBSearch: $searchReturn");
+  //print("searchReturn_from_DBSearch: $searchReturn");
   if (searchReturn.isEmpty) {
     return ["No results found"];
   } else {
@@ -174,13 +174,14 @@ List<String>? fuzzyBibleSearch(
     if (searchScopeDB!.isNotEmpty) {
       print(searchScopeDB!.length);
       List<String> resultsVerses = [];
+      List<String> priorityResults = [];
       for (int indexScope = 0;
           indexScope < searchScopeDB!.length;
           indexScope++) {
         searchWords = cleanList(searchScopeDB![indexScope]['content']);
-        double score = compare(queryWords, searchWords);
+        double score = compare2(queryWords, searchWords);
 
-        if (score > 0.75) {
+        if (score > 0.70) {
           var bookDB = searchScopeDB![indexScope]['book_id'];
           if (bookDB >= 70 && bookDB <= 136) {
             bookDB = bookDB - 69;
@@ -192,20 +193,43 @@ List<String>? fuzzyBibleSearch(
           var chapterDB = searchScopeDB![indexScope]['bible_chapter'];
           var verseDB = searchScopeDB![indexScope]['verse'];
 
-          var preparedRef = "$abbr $chapterDB:$verseDB ";
+          var preparedRef = "$abbr $chapterDB:$verseDB";
+          int priorityResult = (score >= 0.90) ? 1 : 0;
+          int preparedScore = ((score * 100).toInt());
+/*        
 
           resultsVerses.add(preparedRef);
           resultsVerses.add(searchScopeDB![indexScope]['content']);
           resultsVerses.add(((score * 100).toStringAsFixed(0)) + " %");
+*/
+
+          List<String> preparedResult = [
+            preparedRef,
+            searchScopeDB![indexScope]['content'],
+            preparedScore.toStringAsFixed(0)
+          ]; //add function to highlight found words, move score to the same line as Reference, increase box height if settings.found OFF
+
+          if (priorityResult == 1) {
+            priorityResults.addAll(preparedResult);
+          }
+
+          print("preparedResult = $preparedResult");
+
+          resultsVerses.addAll(preparedResult);
         }
       }
+      priorityResults.addAll(["**********************************"]);
+      priorityResults.addAll(
+          resultsVerses); //make a list where the first verses are those with score above 90, then a separator followed by all results
+
+      resultsVerses = priorityResults;
       //var printResult = resultsVerses[1];
       //print("1-10 from DB search: $printResult");
       ref.read(variablemonitorProvider.notifier).state++;
 
       searchReturn = resultsVerses;
-      print(searchReturn);
-      print(resultsVerses);
+      //print(searchReturn);
+      //print(resultsVerses);
 
       return searchReturn; // Return the verse content
     } else {
@@ -236,11 +260,86 @@ List<String> cleanList(String queryString) {
 // Compare the query string with the base string
 double compare(List queryString, List baseString) {
   int totalFound = 0;
+
   for (var word in queryString) {
     if (baseString.contains(word)) {
       totalFound++;
     }
   }
 
-  return queryString.isEmpty ? 0.0 : totalFound / queryString.length;
+  var compWithQuery = (totalFound / queryString.length);
+
+  var compWithBase = (totalFound / baseString.length);
+  if (compWithBase > 0.7 || compWithQuery > 0.7) {
+    print("compWithQuery=$compWithQuery----compWithBase=$compWithBase ");
+    print(queryString.length);
+    print(queryString);
+    print(baseString.length);
+    print(baseString);
+    print(totalFound);
+  }
+  if (compWithBase > compWithQuery) {
+    return compWithBase;
+  } else {
+    return compWithQuery;
+  }
+
+  //return queryString.isEmpty ? 0.0 : totalFound / queryString.length;
 }
+
+double compare2(
+    List queryString,
+    List
+        baseString) //check how many words from baseString is found in queryString, effective when more scriptures contained in one segment
+{
+  int totalFound_query = 0;
+  int totalFound_base = 0;
+
+  //count how many words from queryString is found in each Bible scripture, compWithBase is the percentage of all found words to each Scriture
+  //effective when a longer query contains a scripture that is only a short part of the query
+  for (var word in baseString) {
+    if (queryString.contains(word)) {
+      totalFound_base++;
+    }
+  }
+  var compWithBase = (totalFound_base / baseString.length);
+
+//count how many words from each Bible Scripture is found in queryString
+//effective to return Scriptures containing the whole or most of the query
+  for (var word in queryString) {
+    if (baseString.contains(word)) {
+      totalFound_query++;
+    }
+  }
+
+  var compWithQuery = (totalFound_query / queryString.length);
+
+  if (compWithBase > 0.75) {
+    /* print("compWithQuery=$compWithQuery----compWithBase=$compWithBase ");
+    print(queryString.length);
+    print(queryString);
+    print(baseString.length);
+    print(baseString);
+    print(totalFound_base);
+    print(totalFound_query);
+*/
+    return compWithBase;
+  } else if (compWithQuery > 0.75) {
+    /* print("compWithQuery=$compWithQuery----compWithBase=$compWithBase ");
+    print(queryString.length);
+    print(queryString);
+    print(baseString.length);
+    print(baseString);
+    print(totalFound_base);
+    print(totalFound_query);
+*/
+    return compWithQuery;
+  } else {
+    return 0;
+  }
+}
+
+
+
+  //return queryString.isEmpty ? 0.0 : totalFound / queryString.length;
+
