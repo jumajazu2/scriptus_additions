@@ -33,6 +33,7 @@ import 'main.dart';
 
 //global variables init for fuzzy search and Bible context display
 List<String> searchReturn = []; //initialise object to return search results
+List<TextSpan> spanResults = [];
 Map<String, dynamic> data = {}; //initialise object to load kjv json
 var clicks =
     0; //initialize variable for variableMonitorProvider to update the result widget
@@ -47,8 +48,34 @@ String workingLanguage =
 String language = "";
 List<Map<String, dynamic>>?
     searchScopeDB; //initialise map to store Bible from DB for fuzzy searches
+
 var filteredSegmentsShortcuts; //pass filtered segments for use in shortcuts
 var passTec; //for shortcuts, pass "tec"
+
+TextSpan _buildTextSpan(String sentence) {
+  List<String> parse = sentence.split('@@@');
+  String sentenceParsed = parse[0];
+  //var boldWordsParsed = parse[1];
+
+  List<TextSpan> spans = [];
+  var boldWordsParsed = parse[1].split(', ').map((e) => e.trim()).toList();
+  print("Found words as input of _buildTextSpan: $boldWordsParsed");
+  print(boldWordsParsed.length);
+
+  sentenceParsed.split(" ").forEach((word) {
+    String wordNoPunctuation = word.replaceAll(RegExp(r'[.,;:?!"\-\!]'), '');
+    bool isBold = boldWordsParsed
+        .map((e) => e.toLowerCase())
+        .contains(wordNoPunctuation.toLowerCase());
+    spans.add(TextSpan(
+      text: "$word ",
+      style:
+          TextStyle(fontWeight: isBold ? FontWeight.bold : FontWeight.normal),
+    ));
+  });
+  print("Output of _buildTextSpan: $spans");
+  return TextSpan(children: spans, style: TextStyle(fontSize: 16));
+}
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key, required this.title});
@@ -325,6 +352,16 @@ class HomePage extends ConsumerWidget {
               onPressed: () => DocumentService().importJson3(ref),
               // child: const Text('Open JSON …'),
               child: const Icon(Icons.folder_open_sharp),
+            ),
+          ),
+
+          Tooltip(
+            message: 'Open JSON 11Labs',
+            waitDuration: const Duration(seconds: 1),
+            child: MaterialButton(
+              onPressed: () => DocumentService().importJson11Labs(ref),
+              // child: const Text('Open JSON …'),
+              child: const Icon(Icons.folder_open_outlined),
             ),
           ),
           // const SizedBox(
@@ -668,10 +705,11 @@ class HomePage extends ConsumerWidget {
                             searchReturn.length, // Number of items in the list
                         itemBuilder: (context, index) {
                           return ListTile(
-                            title: SelectableText(
-                                searchReturn[index]), // Display each item
-                            trailing: searchReturn[index].length >
-                                    20 // Conditional check
+                            title: SelectableText.rich(_buildTextSpan(
+                                searchReturn[index])), // Display each item
+                            trailing: (searchReturn[index].length > 20 &&
+                                    !searchReturn[index].contains("***"))
+                                // Conditional check
                                 ? GestureDetector(
                                     onTap: () {
                                       print('Leading icon tapped!');

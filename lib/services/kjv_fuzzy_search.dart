@@ -23,7 +23,8 @@ import 'package:path/path.dart';
 List<String> kjvFuzzySearch(
     String kjvquery, String language, WidgetRef ref, tec) {
   //final editedSegmentIndex = ref.watch(editedSegmentIndexProvider);
-  List<String> searchReturn = []; // Initialize results
+  List<String> searchReturn = [];
+  // Initialize results
   print(language);
   print("selection passed to kjvFuzzySearch function:");
   print(kjvquery);
@@ -84,8 +85,8 @@ List<String> kjvFuzzySearch(
     String cleanedString = queryString.replaceAll(
         RegExp(r'[.,;?!"\-\!]'), ''); // Remove punctuation
     List<String> queryList = cleanedString.split(' ');
-    queryList.removeWhere(
-        (word) => word == "THE" || word == "A" || word == "#KJVFS#");
+    //queryList.removeWhere(
+    //    (word) => word == "THE" || word == "A" || word == "#KJVFS#");
     return queryList;
   }
 
@@ -148,6 +149,7 @@ List<String> kjvFuzzySearch(
 List<String>? fuzzyBibleSearch(
     String query, String language, WidgetRef ref, tec) {
   //final editedSegmentIndex = ref.watch(editedSegmentIndexProvider);
+
   if (searchScopeDB == null) {
     loadFromDB();
     print("searchScopeDB is empty, loading content from DB");
@@ -166,6 +168,7 @@ List<String>? fuzzyBibleSearch(
   List<String> queryWords = cleanList(
       query); //turns the query string into a list of uppercase words, special characters removed
   List<String> searchWords;
+
   print("Querywords: $queryWords");
   print(searchScopeDB?.length);
 
@@ -179,9 +182,9 @@ List<String>? fuzzyBibleSearch(
           indexScope < searchScopeDB!.length;
           indexScope++) {
         searchWords = cleanList(searchScopeDB![indexScope]['content']);
-        double score = compare2(queryWords, searchWords);
+        var score = compare2(queryWords, searchWords);
 
-        if (score > 0.70) {
+        if (score[0] > 0.70) {
           var bookDB = searchScopeDB![indexScope]['book_id'];
           if (bookDB >= 70 && bookDB <= 136) {
             bookDB = bookDB - 69;
@@ -193,34 +196,56 @@ List<String>? fuzzyBibleSearch(
           var chapterDB = searchScopeDB![indexScope]['bible_chapter'];
           var verseDB = searchScopeDB![indexScope]['verse'];
 
-          var preparedRef = "$abbr $chapterDB:$verseDB";
-          int priorityResult = (score >= 0.90) ? 1 : 0;
-          int preparedScore = ((score * 100).toInt());
+          int priorityResult = (score[0] >= 0.90) ? 1 : 0;
+          int preparedScore = ((score[0] * 100).toInt());
+
+          String scoreStr = preparedScore.toStringAsFixed(0);
+          var preparedRef =
+              "$abbr $chapterDB:$verseDB                 : $scoreStr %  @@@___";
+          var foundWords = score[1];
+          print(
+              "coming from compare2 in List<dynamic>, score and the list of found words: $score");
+
+          //   var highlightedResult = highlightFoundWords(
+          //       searchScopeDB![indexScope]['content'],
+          //       score[
+          //           1]); //returns the resultant string bold-formatted with all found words from query
 /*        
 
           resultsVerses.add(preparedRef);
           resultsVerses.add(searchScopeDB![indexScope]['content']);
           resultsVerses.add(((score * 100).toStringAsFixed(0)) + " %");
 */
-
+          String foundWordsStr = foundWords.join(", ");
+          String combinedCF = searchScopeDB![indexScope]['content'] +
+              "@@@" +
+              foundWordsStr; //combined result strings: Found Stripture+"@@@"+Found Words as CSV
           List<String> preparedResult = [
             preparedRef,
-            searchScopeDB![indexScope]['content'],
-            preparedScore.toStringAsFixed(0)
+            combinedCF
           ]; //add function to highlight found words, move score to the same line as Reference, increase box height if settings.found OFF
 
           if (priorityResult == 1) {
             priorityResults.addAll(preparedResult);
+            print("adding priority result: $preparedResult");
           }
 
-          print("preparedResult = $preparedResult");
+          print("adding standard preparedResult = $preparedResult");
 
           resultsVerses.addAll(preparedResult);
         }
       }
-      priorityResults.addAll(["**********************************"]);
-      priorityResults.addAll(
-          resultsVerses); //make a list where the first verses are those with score above 90, then a separator followed by all results
+
+      if (resultsVerses.length > 3 && priorityResults.isNotEmpty) {
+        priorityResults
+            .addAll(["**********************************************"]);
+        priorityResults.addAll(resultsVerses);
+        print(
+            "adding separator a all standard results after prioritz results: $priorityResults"); //make a list where the first verses are those with score above 90, then a separator followed by all results
+      } else {
+        priorityResults = resultsVerses;
+        print("only one result found: $resultsVerses");
+      }
 
       resultsVerses = priorityResults;
       //var printResult = resultsVerses[1];
@@ -252,12 +277,12 @@ List<String> cleanList(String queryString) {
   String cleanedString = queryString.replaceAll(
       RegExp(r'[.:,;?!"\-\!]'), ''); // Remove punctuation
   List<String> queryList = cleanedString.split(' ');
-  queryList
-      .removeWhere((word) => word == "THE" || word == "A" || word == "#KJVFS#");
+  // queryList
+  //     .removeWhere((word) => word == "THE" || word == "A" || word == "#KJVFS#");
   return queryList;
 }
 
-// Compare the query string with the base string
+/* Compare the query string with the base string
 double compare(List queryString, List baseString) {
   int totalFound = 0;
 
@@ -279,15 +304,17 @@ double compare(List queryString, List baseString) {
     print(totalFound);
   }
   if (compWithBase > compWithQuery) {
+    print("returning substring result -compWithBase is: $compWithBase");
     return compWithBase;
   } else {
+    print("returning whole-string result -compWithQuery is: $compWithQuery");
     return compWithQuery;
   }
 
   //return queryString.isEmpty ? 0.0 : totalFound / queryString.length;
 }
-
-double compare2(
+*/
+List<dynamic> compare2(
     List queryString,
     List
         baseString) //check how many words from baseString is found in queryString, effective when more scriptures contained in one segment
@@ -295,20 +322,38 @@ double compare2(
   int totalFound_query = 0;
   int totalFound_base = 0;
 
+  List foundWords1 = [];
+  List foundWords2 = [];
   //count how many words from queryString is found in each Bible scripture, compWithBase is the percentage of all found words to each Scriture
   //effective when a longer query contains a scripture that is only a short part of the query
   for (var word in baseString) {
     if (queryString.contains(word)) {
-      totalFound_base++;
+      if (word != "THE" || word != "THE") {
+        totalFound_base++;
+      }
+      foundWords1.add(
+          word); //show which words contributed to the score, will be shown in bold
     }
   }
   var compWithBase = (totalFound_base / baseString.length);
 
+/*
+  List<dynamic> commonElements =
+      baseString.where((item) => queryString.contains(item)).toList();
+  bool substring;
+  if (commonElements.length / baseString.length > 0.9) {
+    substring = true;
+  }
+*/
 //count how many words from each Bible Scripture is found in queryString
 //effective to return Scriptures containing the whole or most of the query
   for (var word in queryString) {
     if (baseString.contains(word)) {
-      totalFound_query++;
+      if (word != "THE" || word != "THE") {
+        totalFound_query++;
+      }
+
+      foundWords2.add(word);
     }
   }
 
@@ -323,7 +368,14 @@ double compare2(
     print(totalFound_base);
     print(totalFound_query);
 */
-    return compWithBase;
+
+    print(
+        "returning substring result, compWithQuery=$compWithQuery----compWithBase=$compWithBase ");
+    print(baseString);
+    print(foundWords1);
+    print(baseString.length);
+    print(totalFound_base);
+    return [compWithBase, foundWords1];
   } else if (compWithQuery > 0.75) {
     /* print("compWithQuery=$compWithQuery----compWithBase=$compWithBase ");
     print(queryString.length);
@@ -333,11 +385,45 @@ double compare2(
     print(totalFound_base);
     print(totalFound_query);
 */
-    return compWithQuery;
-  } else {
-    return 0;
+    print(
+        "returning whole-string result, compWithQuery=$compWithQuery----compWithBase=$compWithBase ");
+    return [compWithQuery, foundWords2];
+  } /*else if (substring = true) {
+    print("substring found: $commonElements");
+    return 0.90;*/
+  else {
+    return [0, ""];
   }
 }
+
+TextSpan highlightFoundWords(returnedResult, foundWords) {
+  List<TextSpan> spans = [];
+
+  // Using RegExp to split text while keeping punctuation
+  RegExp exp = RegExp(r"(\b\w+\b|[^\s])");
+
+  for (var match in exp.allMatches(returnedResult)) {
+    String word = match.group(0)!; // Extract word or punctuation
+
+    // Check case-insensitive match
+    bool isBold =
+        foundWords.map((e) => e.toLowerCase()).contains(word.toLowerCase());
+
+    spans.add(TextSpan(
+      text: "$word ", // Preserve spacing
+      style:
+          TextStyle(fontWeight: isBold ? FontWeight.bold : FontWeight.normal),
+    ));
+  }
+
+  print("TextSpan created for: \"$returnedResult\" highlighting: $foundWords");
+  print(spans);
+  return TextSpan(children: spans);
+}
+
+
+
+
 
 
 
