@@ -8,6 +8,13 @@ final meetingsProvider = FutureProvider<List<Meeting>>((ref) async {
   return service.getMeetings();
 });
 
+final meetingByDateProvider =
+    FutureProvider.family<Meeting, DateTime>((ref, date) async {
+  print('meetingByDateProvider');
+  final service = ref.watch(meetingServiceProvider);
+  return service.getMeetingByDate(date);
+});
+
 final meetingServiceProvider = Provider<MeetingService>((ref) {
   final repository = ref.watch(meetingRepositoryProvider);
   return MeetingService(repository);
@@ -26,5 +33,15 @@ class MeetingService {
     // TODO: Apply any necessary business logic
 
     return meetings;
+  }
+
+  Future<Meeting> getMeetingByDate(DateTime date) async {
+    print('getMeetingByDate');
+    // Fetch the meetings from the repository
+    Meeting meeting = await repository.fetchMeetingByDate(date);
+
+    // TODO: Apply any necessary business logic
+
+    return meeting;
   }
 }

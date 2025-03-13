@@ -30,6 +30,19 @@ class MeetingRepository {
   //     throw Exception('Failed to load meetings');
   //   }
   // }
+  // load meeting by date from the api
+  Future<Meeting> fetchMeetingByDate(DateTime date) async {
+    Response response = await ApiService().dio.get(
+        '/meetings/find_by_date.json',
+        queryParameters: {'date': date.toString()});
+    if (response.statusCode == 200) {
+      print(response.data);
+      var map = response.data[0];
+      return Meeting.fromMap(map);
+    } else {
+      throw Exception('Failed to load meetings');
+    }
+  }
 
   Future<List<Meeting>> fetchMeetings() async {
     Response response = await ApiService().dio.get('/meetings.json');

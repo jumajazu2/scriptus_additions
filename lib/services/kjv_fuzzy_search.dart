@@ -140,7 +140,7 @@ List<String> kjvFuzzySearch(
 
   //print("searchReturn_from_DBSearch: $searchReturn");
   if (searchReturn.isEmpty) {
-    return ["No results found"];
+    return ["No results found@@@___"];
   } else {
     return searchReturn;
   }
@@ -201,7 +201,7 @@ List<String>? fuzzyBibleSearch(
 
           String scoreStr = preparedScore.toStringAsFixed(0);
           var preparedRef =
-              "$abbr $chapterDB:$verseDB                 : $scoreStr %  @@@___";
+              "$abbr $chapterDB:$verseDB                 [$scoreStr %]  @@@___";
           var foundWords = score[1];
           print(
               "coming from compare2 in List<dynamic>, score and the list of found words: $score");
@@ -219,7 +219,7 @@ List<String>? fuzzyBibleSearch(
           String foundWordsStr = foundWords.join(", ");
           String combinedCF = searchScopeDB![indexScope]['content'] +
               "@@@" +
-              foundWordsStr; //combined result strings: Found Stripture+"@@@"+Found Words as CSV
+              foundWordsStr; //combined result string: Found Stripture+"@@@"+Found Words as CSV
           List<String> preparedResult = [
             preparedRef,
             combinedCF
@@ -238,10 +238,10 @@ List<String>? fuzzyBibleSearch(
 
       if (resultsVerses.length > 3 && priorityResults.isNotEmpty) {
         priorityResults
-            .addAll(["**********************************************"]);
+            .addAll(["**********************************************@@@***"]);
         priorityResults.addAll(resultsVerses);
         print(
-            "adding separator a all standard results after prioritz results: $priorityResults"); //make a list where the first verses are those with score above 90, then a separator followed by all results
+            "adding separator before all standard results after priority results: $priorityResults"); //make a list where the first verses are those with score above 90, then a separator followed by all results
       } else {
         priorityResults = resultsVerses;
         print("only one result found: $resultsVerses");
@@ -263,7 +263,7 @@ List<String>? fuzzyBibleSearch(
     }
   } catch (e) {
     print('Error retrieving verse: $e');
-    searchReturn = ['No results...'];
+    searchReturn = ['No results...@@@___'];
     return searchReturn;
   } finally {
     // Close the database
@@ -328,7 +328,7 @@ List<dynamic> compare2(
   //effective when a longer query contains a scripture that is only a short part of the query
   for (var word in baseString) {
     if (queryString.contains(word)) {
-      if (word != "THE" || word != "THE") {
+      if (word != "xTHE" || word != "xTHE") {
         totalFound_base++;
       }
       foundWords1.add(
@@ -349,7 +349,7 @@ List<dynamic> compare2(
 //effective to return Scriptures containing the whole or most of the query
   for (var word in queryString) {
     if (baseString.contains(word)) {
-      if (word != "THE" || word != "THE") {
+      if (word != "xTHE" || word != "xTHE") {
         totalFound_query++;
       }
 
@@ -419,6 +419,25 @@ TextSpan highlightFoundWords(returnedResult, foundWords) {
   print("TextSpan created for: \"$returnedResult\" highlighting: $foundWords");
   print(spans);
   return TextSpan(children: spans);
+}
+
+void insertRefAtCursor(WidgetRef ref, String reference) {
+  final segmentIndex = ref.watch(editedSegmentIndexProvider); //current segment
+  final segment = ref.watch(sentenceProvider); //content of current segment
+  final segmentText = segment.text; //text of current segment
+  //final newText = '$segmentText [$reference]';
+  var cursorPos = ref.watch(
+      editedTextCursorPositionProvider); //reads cursor position - place ref at curson position, newText, split segmentText
+  print("cursorPosition = $cursorPos");
+
+  final newText = segmentText.substring(0, cursorPos) +
+      " [$reference]" +
+      segmentText.substring(cursorPos);
+  ref
+      .read(currentTranscriptProvider.notifier)
+      .updateText(segmentIndex!, newText);
+
+  ref.read(sentenceProvider.notifier).state = segment.copyWith(text: newText);
 }
 
 

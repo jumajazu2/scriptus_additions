@@ -173,7 +173,7 @@ class SavedVerses extends ConsumerWidget {
                               ? Text(
                                   '${place.timePosition} - ${place.bookName} ${place.chapterNumber}:${place.verseStartNumber} - ${place.verseEndNumber != place.verseStartNumber ? place.verseEndNumber : ""} - ${place.id} - ${place.sermonId != null ? "DURI" : "MIRO"}',
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     color: place.language == 'de'
                                         ? Colors.red
                                         : Colors.white,
@@ -202,7 +202,7 @@ class SavedVerses extends ConsumerWidget {
                                             child: SelectableText(
                                               place.verseText,
                                               style: const TextStyle(
-                                                fontSize: 22,
+                                                fontSize: 18,
                                                 fontFamily: 'Cambria',
                                               ),
                                             ),
@@ -219,7 +219,7 @@ class SavedVerses extends ConsumerWidget {
                                               },
                                               child: Tooltip(
                                                 message:
-                                                    'Press Arrow to Show Context for Scripture', // Tooltip message
+                                                    'Click Arrow to Show Context for Scripture', // Tooltip message
                                                 child: Icon(Icons.arrow_right),
                                               )),
                                         ],

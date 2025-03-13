@@ -17,6 +17,7 @@ import 'package:scriptus/models/bible_verse.dart';
 import 'package:scriptus/models/sermon.dart';
 import 'package:scriptus/models/transcript_data.dart';
 import 'package:scriptus/models/transcript_segment.dart';
+import 'package:scriptus/models/meeting.dart';
 import 'package:scriptus/providers/current_doc_provider.dart';
 import 'package:scriptus/providers/meeting_provider.dart';
 import 'package:scriptus/providers/settings_provider.dart';
@@ -24,6 +25,8 @@ import 'package:scriptus/services/msk_db_service.dart';
 // import 'package:docx_template/docx_template.dart';
 import 'package:process_run/process_run.dart';
 import 'package:mp3_info/mp3_info.dart';
+import 'package:scriptus/services/meeting_service.dart';
+import 'package:scriptus/repositories/meetings_repo.dart';
 
 import '../models/place.dart';
 
@@ -40,6 +43,207 @@ class DocumentService {
   String fileName = '';
   String filePath = '';
   String returnedText = '';
+
+  void importJson11Labs(ref) async {
+    _json = [];
+    list = [];
+    _csv = [];
+    segments = [];
+    paragraphBreaks = [];
+    input = '';
+    const segmentCharacterLimit = 500;
+
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      PlatformFile file = result.files.first;
+
+      var f = File(file.path as String);
+
+      try {
+        final bytes = await File(file.path as String).readAsBytes();
+        input = utf8.decode(bytes, allowMalformed: true);
+      } catch (e) {
+        print('An error occurred while reading the file: $e');
+      }
+
+      filePath = file.path as String;
+      fileName = file.name;
+      Map<String, dynamic> rawJsonData = json.decode(input);
+
+      // Extract words from 11Labs format
+      List<dynamic> words = rawJsonData['words'];
+
+      // Filter out spacing entries and only keep word entries
+      List<Map<String, dynamic>> wordEntries = words
+          .where((word) => word['type'] == 'word')
+          .map((word) => word as Map<String, dynamic>)
+          .toList();
+
+      String text = '';
+      int startTmp = 0;
+      String startTimeTmp = '00:00:00';
+
+      // Process words to create segments
+      int currentIndex = 0;
+      while (currentIndex < wordEntries.length) {
+        int startIndex = currentIndex;
+        String segmentText = '';
+        double segmentStart = wordEntries[startIndex]['start'].toDouble();
+
+        // Accumulate words until we reach a sentence end or character limit
+        while (currentIndex < wordEntries.length) {
+          String wordText = wordEntries[currentIndex]['text'];
+          segmentText +=
+              wordText + (currentIndex < wordEntries.length - 1 ? ' ' : '');
+
+          bool isEndOfSentence = wordText.isNotEmpty &&
+              (['.', '!', '?'].contains(wordText[wordText.length - 1]) ||
+                  wordText.endsWith('."') ||
+                  wordText.endsWith('!"') ||
+                  wordText.endsWith('?"'));
+
+          currentIndex++;
+
+          // If we've reached the end of a sentence or the character limit, break
+          if (isEndOfSentence ||
+              segmentText.length > segmentCharacterLimit ||
+              currentIndex == wordEntries.length) {
+            break;
+          }
+        }
+
+        // Create segment
+        if (segmentText.isNotEmpty) {
+          double segmentEnd = wordEntries[currentIndex - 1]['end'].toDouble();
+
+          // Convert start and end times to milliseconds for consistency with importJson3
+          int start = (segmentStart * 1000).round();
+          int end = (segmentEnd * 1000).round();
+
+          // Format timestamps as HH:MM:SS
+          String startTime = _formatTime(Duration(milliseconds: start));
+          String endTime = _formatTime(Duration(milliseconds: end));
+
+          Map<String, dynamic> segment = {
+            'text': segmentText.trim(),
+            'originalText': segmentText.trim(),
+            'start': start,
+            'end': end,
+            'startTime': startTime,
+            'endTime': endTime
+          };
+
+          segments.add(TranscriptSegment.fromJson(segment));
+        }
+      }
+
+      // Determine language from language_code in the JSON
+      String language = 'de'; // Default
+      String mp3Language = 'deutsch'; // Default
+
+      if (rawJsonData['language_code'] != null) {
+        String langCode = rawJsonData['language_code'];
+
+        // Map language codes to our internal codes
+        switch (langCode) {
+          case 'eng':
+            language = 'en';
+            mp3Language = 'english';
+            break;
+          case 'deu':
+            language = 'de';
+            mp3Language = 'deutsch';
+            break;
+          case 'fra':
+            language = 'fr';
+            mp3Language = 'french';
+            break;
+          case 'slk':
+            language = 'sk';
+            mp3Language = 'slovak';
+            break;
+          default:
+            // Keep defaults
+            break;
+        }
+      }
+
+      // Also check filename for language indicators as a fallback
+      if (fileName.toLowerCase().contains('french')) {
+        language = 'fr';
+        mp3Language = 'french';
+      }
+      if (fileName.toLowerCase().contains('english')) {
+        language = 'en';
+        mp3Language = 'english';
+      }
+      if (fileName.toLowerCase().contains('slovak')) {
+        language = 'sk';
+        mp3Language = 'slovak';
+      }
+
+      TranscriptData td = ref.watch(currentTranscriptProvider.notifier).state;
+      td = td.copyWith(
+        originalText: input,
+        text: input,
+        segments: segments,
+        language: language,
+        mp3Language: mp3Language,
+        filePath: filePath,
+        fileName: fileName,
+      );
+
+      ref.read(currentTranscriptProvider.notifier).state = td;
+
+      DateTime date =
+          DocumentService().parseMeetingDateAndTimefromFileName(ref);
+      final selectedTranscriptNotifier =
+          ref.read(currentTranscriptProvider.notifier);
+      Meeting s = await ref.refresh(meetingByDateProvider(date).future);
+      selectedTranscriptNotifier.setMeetingId(s?.id ?? 1);
+      ref.read(selectedMeetingProvider.notifier).setMeeting(s!);
+
+      if (ref.watch(selectedMeetingProvider).mp3LinkBase != '') {
+        ref.read(audioPlayerControllerProvider).setAudioSource(AudioSource.uri(
+            Uri.parse(
+                "${ref.watch(selectedMeetingProvider).mp3LinkBase}-$mp3Language.mp3")));
+      }
+    } else {
+      print('canceled');
+    }
+  }
+
+  DateTime parseMeetingDateAndTimefromFileName(ref) {
+    String fileName = ref.watch(currentTranscriptProvider).fileName;
+    RegExp regex = RegExp(r'(\d{4})-(\d{2})-(\d{2})-(\d{2})(\d{2})');
+    Match? match = regex.firstMatch(fileName);
+
+    if (match == null) {
+      throw FormatException(
+          'Invalid filename format. Expected YYYY-MM-DD-HHMM');
+    }
+
+    String year = match.group(1)!;
+    String month = match.group(2)!;
+    String day = match.group(3)!;
+    String hour = match.group(4)!;
+    String minute = match.group(5)!;
+
+    // Create DateTime in local timezone
+    DateTime result = DateTime(
+      int.parse(year),
+      int.parse(month),
+      int.parse(day),
+      int.parse(hour),
+      int.parse(minute),
+      0, // seconds
+      0, // milliseconds
+      // true, // isUtc = false for local time
+    );
+    print(result);
+    return result;
+  }
 
   void importJson3(ref) async {
     _json = [];

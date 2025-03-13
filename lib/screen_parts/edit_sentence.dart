@@ -499,7 +499,7 @@ class EditSentence extends HookConsumerWidget {
 //send whole segment/selection to kjvFuzzySearch
   void KJVsearch(WidgetRef ref, tec) {
     final editedSegmentIndex = ref.watch(editedSegmentIndexProvider);
-    
+
     clicks = clicks + 1;
 
     ref.read(variablemonitorProvider.notifier).state++;
@@ -516,10 +516,12 @@ class EditSentence extends HookConsumerWidget {
         print("selection passed");
         searchReturn = kjvFuzzySearch(selectedText, workingLanguage, ref, tec);
         print("searchReturn passed to calling function: $searchReturn");
-        if (searchReturn[0] != "No results found" || searchReturn.length >= 2) {
-          Clipboard.setData(ClipboardData(text: searchReturn[1]));
-          print(
-              "searchReturn passed to Clipboard - 1st result in list: $searchReturn");
+        if (searchReturn[0].split('@@@')[0] != "No results found" &&
+                searchReturn[0].split('@@@')[0] != "No results..." ||
+            searchReturn.length >= 2) {
+          Clipboard.setData(
+              ClipboardData(text: searchReturn[1].split('@@@')[0]));
+          print("searchReturn passed to Clipboard - 1st result in list");
         }
       } else {
         String wholeSegment = tec.text;
@@ -527,10 +529,13 @@ class EditSentence extends HookConsumerWidget {
         print("whole segment passed");
         searchReturn = kjvFuzzySearch(wholeSegment, workingLanguage, ref, tec);
         print("searchReturn passed to calling function: $searchReturn");
-        if (searchReturn[0] != "No results found" || searchReturn.length >= 2) {
-          Clipboard.setData(ClipboardData(text: searchReturn[1]));
-          print(
-              "searchReturn passed to Clipboard - 1st result in list: $searchReturn");
+
+        if (searchReturn[0].split('@@@')[0] != "No results found" &&
+                searchReturn[0].split('@@@')[0] != "No results..." ||
+            searchReturn.length >= 2) {
+          Clipboard.setData(
+              ClipboardData(text: searchReturn[1].split('@@@')[0]));
+          print("searchReturn passed to Clipboard - 1st result in list");
         }
       } //Passes to the search function the whole segment if nothing is selected
       // if (editedSegmentIndex != null) {

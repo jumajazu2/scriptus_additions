@@ -23,6 +23,7 @@ import 'package:scriptus/screen_parts/saved_verses.dart';
 import 'package:scriptus/screen_parts/search_widget.dart';
 import 'package:scriptus/screen_parts/settings/settigns_dialog.dart';
 import 'package:scriptus/services/kjv_from_db.dart';
+import 'package:scriptus/services/kjv_fuzzy_search.dart';
 import 'package:scriptus/services/meeting_service.dart';
 import 'package:scriptus/services/show_context.dart';
 import 'package:scriptus/services/load_from_DB.dart';
@@ -32,7 +33,10 @@ import 'screen_parts/segment_table.dart';
 import 'main.dart';
 
 //global variables init for fuzzy search and Bible context display
-List<String> searchReturn = []; //initialise object to return search results
+List<String> searchReturn = [
+  " @@@ ",
+  " @@@ "
+]; //initialise object to return search results
 List<TextSpan> spanResults = [];
 Map<String, dynamic> data = {}; //initialise object to load kjv json
 var clicks =
@@ -59,21 +63,38 @@ TextSpan _buildTextSpan(String sentence) {
 
   List<TextSpan> spans = [];
   var boldWordsParsed = parse[1].split(', ').map((e) => e.trim()).toList();
-  print("Found words as input of _buildTextSpan: $boldWordsParsed");
-  print(boldWordsParsed.length);
-
+  //print("Found words as input of _buildTextSpan: $boldWordsParsed");
+  //print(boldWordsParsed.length);
+  int position = 1;
+  int sentenceParsedWords = sentenceParsed.trim().split(RegExp(r'\s+')).length;
+  //print(
+  //    "Number of words in the sentence $sentenceParsed = $sentenceParsedWords");
   sentenceParsed.split(" ").forEach((word) {
     String wordNoPunctuation = word.replaceAll(RegExp(r'[.,;:?!"\-\!]'), '');
     bool isBold = boldWordsParsed
         .map((e) => e.toLowerCase())
         .contains(wordNoPunctuation.toLowerCase());
-    spans.add(TextSpan(
-      text: "$word ",
-      style:
-          TextStyle(fontWeight: isBold ? FontWeight.bold : FontWeight.normal),
-    ));
+
+    //print(position);
+    (sentenceParsedWords ==
+            position) //for the last word in TextSpan, remove space after the word
+        ? {
+            spans.add(TextSpan(
+              text: word.trimRight(),
+              style: TextStyle(
+                  fontWeight: isBold ? FontWeight.bold : FontWeight.normal),
+            ))
+          }
+        : {
+            spans.add(TextSpan(
+              text: "$word ",
+              style: TextStyle(
+                  fontWeight: isBold ? FontWeight.bold : FontWeight.normal),
+            ))
+          };
+    position = position + 1;
   });
-  print("Output of _buildTextSpan: $spans");
+  //print("Output of _buildTextSpan: $spans");
   return TextSpan(children: spans, style: TextStyle(fontSize: 16));
 }
 
@@ -684,14 +705,14 @@ class HomePage extends ConsumerWidget {
                     /// Segment Places found through OpenAI API
                     child: FoundScriptures(),
                   ),
-                if (settings.showKJV)
-                  SelectableText.rich(TextSpan(
-                      text: "Search Results:", // Additional static text
-                      style: TextStyle(fontSize: 15, color: Colors.red))),
+                //if (settings.showKJV)
+                //  SelectableText.rich(TextSpan(
+                //text: "Search Results:", // Additional static text
+                //      style: TextStyle(fontSize: 15, color: Colors.red))),
                 //if (settings.showFound) SelectableText(kjvInput),
                 if (settings.showKJV)
                   Container(
-                    height: 250,
+                    height: settings.showFound ? 250 : 350,
                     width: 400, // Define the height/width for the Container
                     padding: EdgeInsets.symmetric(
                         vertical: 12.0), // Add padding around the ListView
@@ -705,33 +726,80 @@ class HomePage extends ConsumerWidget {
                             searchReturn.length, // Number of items in the list
                         itemBuilder: (context, index) {
                           return ListTile(
-                            title: SelectableText.rich(_buildTextSpan(
-                                searchReturn[index])), // Display each item
-                            trailing: (searchReturn[index].length > 20 &&
-                                    !searchReturn[index].contains("***"))
-                                // Conditional check
-                                ? GestureDetector(
-                                    onTap: () {
-                                      print('Leading icon tapped!');
-                                      contextFromDB = [];
+                              title: SelectableText.rich(_buildTextSpan(
+                                  searchReturn[index])), // Display each item
+                              trailing: (searchReturn[index].contains(
+                                      "___")) //condition to identify item containing Reference+Score
+                                  // Conditional check
+                                  ? Row(
+                                      mainAxisSize: MainAxisSize
+                                          .min, // Ensures the row takes up minimal space
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            print(
+                                                'Left arrow icon tapped to add reference at cursor!');
+                                            insertRefAtCursor(
+                                                ref,
+                                                searchReturn[index]
+                                                    .split('[')[0]
+                                                    .trimRight());
+                                          },
+                                          child: Tooltip(
+                                            message:
+                                                'Click to add Reference at Cursor',
+                                            child: Icon(Icons.arrow_left),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                            width:
+                                                2), // Space between the icons
+                                        GestureDetector(
+                                          onTap: () {
+                                            Clipboard.setData(ClipboardData(
+                                                text: searchReturn[index + 1]
+                                                    .split('@@@')[0]));
+                                            print(
+                                                'Bookmark icon tapped to copy content to Clipboard!');
+                                            // Add another action here (e.g., bookmarking or highlighting)
+                                          },
+                                          child: Tooltip(
+                                            message:
+                                                'Click to copy content to Clipboard',
+                                            child: Icon(Icons.bookmark),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : (searchReturn[index].length > 20 &&
+                                          !searchReturn[index]
+                                              .contains("***") &&
+                                          !searchReturn[index].contains("___"))
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            print('Trailing icon tapped!');
+                                            contextFromDB = [];
 
-                                      if (searchReturn[index].length > 20) {
-                                        var init = contextByID(
-                                            searchReturn[index],
-                                            12,
-                                            ref); //scope for context, -X verses/+X verses
-                                        print(
-                                            'Item clicked through leading icon: ${searchReturn[index]}');
-                                      }
-                                    },
-                                    child: Tooltip(
-                                      message:
-                                          'Press Arrow to Show Context for Scripture', // Tooltip message
-                                      child: Icon(Icons.arrow_right),
-                                    ))
-                                : null,
-                            // If condition is false, no leading widget,
-                          );
+                                            if (searchReturn[index].length >
+                                                20) {
+                                              var init = contextByID(
+                                                  searchReturn[index]
+                                                      .split('@@@')[0],
+                                                  12,
+                                                  ref); //scope for context, -X verses/+X verses
+                                              print(
+                                                  'Item clicked through trailing icon: ${searchReturn[index]}');
+                                            }
+                                          },
+                                          child: Tooltip(
+                                            message:
+                                                'Click Arrow to Show Context for Scripture', // Tooltip message
+                                            child:
+                                                Icon(Icons.arrow_right_sharp),
+                                          ))
+                                      : null
+                              // If condition is false, no leading widget,s
+                              );
                         }),
                     /*style: TextStyle(
                             fontSize: 20, // Set the desired font size here
@@ -742,7 +810,7 @@ class HomePage extends ConsumerWidget {
                   ),
                 if (settings.showKJV) //display fromAPItoKJV results
                   Container(
-                    height: 250,
+                    height: settings.showFound ? 250 : 350,
                     width: 400, // Define the height/width for the Container
                     padding: EdgeInsets.symmetric(
                         vertical: 12.0), // Add padding around the ListView
@@ -776,7 +844,7 @@ class HomePage extends ConsumerWidget {
                                     },
                                     child: Tooltip(
                                       message:
-                                          'Press Arrow to Show Context for Scripture', // Tooltip message
+                                          'Click Arrow to Show Context for Scripture', // Tooltip message
                                       child: Icon(Icons.arrow_right),
                                     ))
                                 : null,

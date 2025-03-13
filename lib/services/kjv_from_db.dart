@@ -74,7 +74,7 @@ Future<String?> getKJVVerseById(int bookNumber, String bookName,
 
 String removePunctuation(String input) {
   // Removes full stops, commas, and semicolons + any trailing space
-  return input.replaceAll(RegExp(r'[.,;-]'), '').trimRight();
+  return input.replaceAll(RegExp(r'[.,;:-]'), '').trimRight();
 }
 
 Future<String?> contextByID(String verseText, int scope, WidgetRef ref) async {
@@ -104,7 +104,8 @@ Future<String?> contextByID(String verseText, int scope, WidgetRef ref) async {
       '''
   SELECT ID 
   FROM msk_bible_verses
-  WHERE REPLACE(REPLACE(REPLACE(REPLACE(content, ".", ""), ",", ""), ";", ""), "-", "") LIKE ? COLLATE NOCASE
+  WHERE REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(content, ".", ""), ",", ""), ";", ""), "-", ""), ":", "") LIKE ? COLLATE NOCASE
+
   ''',
       [
         '%$normalisedVerseText%'
