@@ -761,6 +761,8 @@ class HomePage extends ConsumerWidget {
                                                     .split('@@@')[0]));
                                             print(
                                                 'Bookmark icon tapped to copy content to Clipboard!');
+                                            print(searchReturn[index + 1]
+                                                .split('@@@')[0]);
                                             // Add another action here (e.g., bookmarking or highlighting)
                                           },
                                           child: Tooltip(

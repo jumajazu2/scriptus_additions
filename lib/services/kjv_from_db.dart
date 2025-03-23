@@ -113,19 +113,7 @@ Future<String?> contextByID(String verseText, int scope, WidgetRef ref) async {
     );
 
     IDVerse = resultID.first['ID'] as int;
-// Check if the result is not empty
-    /*
-    if (resultID.isNotEmpty) {
-      // Extract the ID from the first row
-      int IDVerse = resultID.first['ID'] as int;
-      print('Retrieved ID: $IDVerse');
-    } else {
-      // Handle the case where no rows match the query
-      print('No matching verse found for the given text.');
-    }
-*/
-    //verseID = IDVerse;
-    // use the verse ID to load Scripture
+
     print('Passed ID: $IDVerse');
     final List<Map<String, dynamic>> result = await db.query(
       'msk_bible_verses', // Table name
@@ -175,10 +163,6 @@ Future<String?> contextByID(String verseText, int scope, WidgetRef ref) async {
 
         contextFromDB.add(preparedContent);
       }
-      //print("******CONTEXT***********");
-      //print(startContext);
-      //print(contextFromDB);
-      // print("******CONTEXT*****");
 
       ref.read(variablemonitorProvider.notifier).state++;
       //ref.read(variablemonitorProvider.notifier).state++; //reloading in loop when used

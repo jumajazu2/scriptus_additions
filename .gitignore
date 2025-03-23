@@ -32,6 +32,7 @@ migrate_working_dir/
 .pub/
 /build/
 /Downloads/
+Downloads/
 C:\Users\Juraj\scriptus2\scriptus\Downloads
 # Symbolication related
 app.*.symbols
